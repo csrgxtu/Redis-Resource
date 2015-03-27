@@ -20,6 +20,10 @@
 module.exports.policies = {
   '*': 'isOperable',
 
+  SessionController: {
+    '*': true
+  },
+
   DataSyncController: {
     '*': true,
   },
@@ -32,14 +36,6 @@ module.exports.policies = {
     'save': true,
     'liveEndUpdate': true,
  },
-
-  GeoConvertController: {
-    '*': true,
-  },
-
-  OffLineDataGenerateController: {
-    '*': true,
-  },
 
   FireKeyUnitController: {
     'fireKeyUnitDataSync': true,
