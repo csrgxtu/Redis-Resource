@@ -49,6 +49,22 @@ module.exports.connections = {
     timezone: '08:00'
   },
 
+  Redis: {
+    adapter: 'sails-redis',
+    port: 6379,
+    host: 'localhost',
+    password: null,
+    database: null,
+    options: {
+      parser: 'hiredis',
+      return_buffers: false,
+      detect_buffers: false,
+      socket_nodelay: true,
+      no_ready_check: false,
+      enable_offline_queue: true
+    }
+  },
+
   /***************************************************************************
   *                                                                          *
   * MongoDB is the leading NoSQL database.                                   *
@@ -82,7 +98,6 @@ module.exports.connections = {
     password: 'YOUR_POSTGRES_PASSWORD',
     database: 'YOUR_POSTGRES_DB'
   }
-
 
   /***************************************************************************
   *                                                                          *
