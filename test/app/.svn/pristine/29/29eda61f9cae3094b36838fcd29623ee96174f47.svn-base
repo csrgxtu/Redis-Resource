@@ -1,0 +1,124 @@
+var mqtt = require('mqtt');
+var client = mqtt.createClient();
+module.exports = {
+    index: function (req, res) {
+        var info = req.session.loginInfo;
+        if (info == '' || info == null)
+            return res.redirect('/Authentication/index');
+        return res.view('xfjwt/index', { data: info, title: '首页', menu: 'index' });
+    },
+    userIndex: function (req, res) {
+        var title = '用户管理';
+        var menu = 'system';
+        return res.view('xfjwt/userManagement', { data: '', title: title, menu: menu });
+    },
+    login: function (req, res) {
+        var permission = [];
+        var sql = "select `jg`.`SJJGID` AS `SJJGID`,`ry`.`SJJGID` AS `OrganizationId`,`jg`.`JGJC` " 
+				+ "AS `OrgName`,`dm`.`DMMC` AS `Status`,count(1) AS `Cnt` " 
+				+ "from (((`RYXX_RYJBXX` `ry` join `DM_SJZD` `dm` on(((`dm`.`DMZ` = `ry`.`ZWQKDM`) " 
+				+ "and (`dm`.`JLZT` = 1)))) join `DM_SJZDZB` `zb` on(((`zb`.`ID` = `dm`.`DM_SJZD_ID`) " 
+                + "and (`zb`.`ZDDM` = 'ZWQK') and (`zb`.`JLZT` = 1)))) join `JGXX_XFJG` `jg` " 
+                + "on((`ry`.`SJJGID` = `jg`.`ID`))) where (`ry`.`SJJGID` in " 
+                + "(select `JGXX_XFJG`.`ID` from `JGXX_XFJG` where (((`JGXX_XFJG`.`JGLB` = '1') " 
+                + "and (`JGXX_XFJG`.`JGTREE` like concat((select `JGXX_XFJG`.`JGTREE` from `JGXX_XFJG` " 
+                + "where (`JGXX_XFJG`.`ID` = '380c59ba34aa4e879f60d3fb228bb934')),'%'))) or " 
+                + "(`JGXX_XFJG`.`ID` = '380c59ba34aa4e879f60d3fb228bb934'))) and (`ry`.`JLZT` = 1) " 
+                + "and ((`jg`.`JGXZDM` like '03%') or (`jg`.`JGXZDM` like '05%') or " 
+                + "(`jg`.`JGXZDM` like '09%'))) group by `ry`.`SJJGID`,`jg`.`JGJC`,`dm`.`DMMC` " 
+                + "order by `ry`.`SJJGID`,`jg`.`JGJC`,`dm`.`DMMC`";
+        
+        var sql0 = " select ID,SJJGID,JGMC from JGXX_XFJG where JLZT = 1 and (JGXZDM like '03%' or JGXZDM like '05%' or JGXZDM like '09%') and (  JGLB='1' and JGTREE like " 
+				+ "(concat(( select JGTREE from JGXX_XFJG where ID='380c59ba34aa4e879f60d3fb228bb934'),'%' )) " 
+	            + "or ID='380c59ba34aa4e879f60d3fb228bb934')";
+        console.log(sql0);
+        JGXX_XFJG.query(sql0, function (err, r) {
+            if (err)
+                return res.send({ code: 500, msg: 'database err', data: err });
+            if (r.length == 0)
+                return res.send({ code: 404, msg: 'there is nothing', data: 'nothing' });
+            for (var i = 0; i < r.length; i++) {
+                permission.push(r[i])
+            }
+            var info = {
+                Name: 'dishy',
+                OrganiztionId: '380c59ba34aa4e879f60d3fb228bb934',
+                OrgName: '岳阳支队',
+                Permission: permission
+            }
+            //console.log(cookies);
+            //var clo = req.cookies
+            req.session.info = info;
+            //console.log(info);
+            return res.send(info);
+        })
+		
+    },
+    index2: function (req, res) {
+        return res.view('index', { erroInfo: '', title: '值班信息及出勤人员状况统计', layout: null });
+    },  
+    //应急联动单位
+    yjld: function (req, res) {
+        return res.view('yjld', { erroInfo: '', title: '应急联动单位信息', layout: null });
+    },  
+    //战勤保障单位及保障能力
+    bznl: function (req, res) {
+        return res.view('bznl', { erroInfo: '', title: '战勤保障单位及保障能力', layout: null });
+    },  
+    //内部专家信息
+    nbzj: function (req, res) {
+        return res.view('nbzj', { erroInfo: '', title: '内部专家信息', layout: null });
+    },  
+    //外部专家信息
+    wbzj: function (req, res) {
+        return res.view('wbzj', { erroInfo: '', title: '外部专家信息', layout: null });
+    },  
+    //车辆作战功能及随车器材信息
+    
+    scqc: function (req, res) {
+        return res.view('scqc', { erroInfo: '', title: '车辆作战功能及随车器材信息', layout: null });
+    },  
+    
+    clzb: function (req, res) {
+        return res.view('clzb', { erroInfo: '', title: '车辆作战功能及随车器材信息', layout: null });
+    },
+    lianlist: function (req, res) {
+        return res.view('lianlist', { erroInfo: '', title: '案件信息列表', layout: null });
+    },
+    liandetail: function (req, res) {
+        return res.view('liandetail', { erroInfo: '', title: '案件详细', layout: null });
+    },
+    appindex: function (req, res) {
+        return res.view('appindex', { erroInfo: '', title: '首页', layout: null });
+    },
+    mhyj: function (req, res) {
+        return res.view('mhyj', { erroInfo: '', title: '灭火药剂信息', layout: null });
+    },
+    sendTextMsg: function(req,res){
+        var createdTime = UtilityService.getCurrentTime();
+        var dataMsg = req.param('dataMsg');
+        if(dataMsg == null || dataMsg == '')
+            return res.send({code: 404,msg: 'param is null',data: ''});
+        var dataMsgObj = JSON.parse(dataMsg);
+        var users = dataMsgObj.users;
+        var msgText = dataMsgObj.msgText;
+        var createdBy = dataMsgObj.createdBy;
+        var usersMembers = users.split(",");
+        if(usersMembers == null || usersMembers == '')
+            return res.send({code: 403,msg: "number is null"});
+        var info = {};
+        info.createdBy = createdBy;
+        info.createdTime = createdTime;
+        info.messageCategory = "文字消息";
+        info.messageContent = msgText;
+        for(var i = 0;i < usersMembers.length;i++){
+            client.publish(sails.config.values.textMsgTopic + usersMembers[i],JSON.stringify(info),{qos: 2},function(err){
+                if(err){
+                    console.log("err="+err);
+                }else{
+                    console.log("yes:"+i);
+                }
+            })
+        } 
+    }
+}

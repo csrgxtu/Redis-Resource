@@ -1,0 +1,150 @@
+ 
+body{
+	margin:0 auto;
+	background: #fff url(/images/header/header.png) repeat-x left top;
+}
+
+.two{
+	background:#ffffff;
+}
+
+.header{
+	margin:0 auto;
+}
+ 
+.left{
+	float:left;
+	width:70%;
+	height:104px;
+	background: url(/images/header/header_h1.jpg) no-repeat ;
+}
+
+.right{
+	float:right;
+	width:20%;
+	height:32px;
+	background: url(/images/header/operation.png) no-repeat;
+}
+ 
+/*Çå³ý¸¡¶¯´úÂë*/
+.clearfloat{
+	clear:both
+}
+
+A {
+	TEXT-DECORATION: none;
+}
+
+a:hover{
+	color: #E56E64;
+	TEXT-DECORATION: none;
+}
+
+.right  a {
+    color: #bfe1ff;
+	margin:3px 0px;
+	font-size:85%;
+}
+
+.right span{
+	color:#bfe1ff;
+	margin:3px 0px;
+	font-size:85%;
+}
+
+.welcome{
+	color:#fffafa;
+	text-align:left;
+}
+
+
+.menu{
+	height:32px;
+	background:  #A6C7ED url(/images/header/nav_welcome.gif) no-repeat;
+	border-bottom: 2px solid #EDE2F4 ;
+	padding-left:180px;
+}
+
+ul#nav{
+    margin: 0;
+    text-align:left;
+    padding:0;
+    list-style: none;
+    z-index:99;
+  	width:1024px;
+    display:block;
+    clear:both;
+}
+
+ul#nav li {
+    position: relative;
+    z-index:999;
+    float:left;
+	width:110px;
+	text-align:center; 
+}
+ul#nav ul li{
+    display:block;
+	text-align:left;
+}
+ul#nav ul {
+    position: absolute;
+    text-align:left;
+    display: none;
+    border:solid 1px #37719F;
+	margin: 0 0;
+    text-align:left;
+    padding: 3px 0px ;
+    list-style: none;
+    z-index:99;
+}
+
+
+.nava{
+  font-size:14px;
+	color:#000000;
+  font-weight:bold;
+  display: block;
+	padding:7px 10px 0 10px;
+	height:24px;
+	border-right:1px solid #bfe1ff;
+  background: url(/images/header/menubg.png) no-repeat;
+}
+
+.nava:hover{
+	background:url(/images/header/menuhover.png) no-repeat;
+}
+
+ul#nav ul li a{
+  font-size:14px;
+	color:#464F4F;
+  display: block;
+	background:#ffffff;
+}
+
+ul#nav ul li a:hover{
+		background: #F9C8BD;
+}
+
+ul#nav ul li{
+    width:auto;
+    border:0;
+}
+
+/* Fix IE. Hide from IE Mac \*/
+* html ul#nav li { float: left; height: 17px; }
+* html ul#nav li a {  height: 17px; }
+ul#nav ul a { padding: 4px 0px 2px  10px;border:0;width:150px; } 
+ul#nav li:hover ul,ul#nav  li.over ul { display: block; } 
+
+
+.select{
+    font-size:14px;
+    display: block;
+    padding:7px 10px 0 10px;
+    height:24px;
+    border-right:1px solid #bfe1ff;
+    font-weight:bold;
+    color: #E2144A;
+    background: url(/images/header/menuhover.png) no-repeat;
+}

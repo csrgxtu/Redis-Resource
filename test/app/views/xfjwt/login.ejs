@@ -1,0 +1,85 @@
+﻿<html>
+<head>
+<meta content="text/html; charset=gb2312" http-equiv="Content-Type">
+<title>灭火救援辅助管理系统</title>
+<link href="/styles/alogin.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/js/MD5.js"></script>
+
+
+<!-- 引用jquery包，版本1.4.4-->
+<script type="text/javascript" src="/js/jquery.1.4.4.js"></script>
+<script type="text/javascript">
+	function getTestfy(){
+		alert("暂时不支持验证码");
+	}
+	
+	function submittologin(){
+		var obj=document.getElementById("loginto");
+		if($("#username").val()==""){
+    	alert("请输入用户名");
+    }else{
+    	if($("#password").val()==""){
+      	alert("请输入密码");
+      }else{
+				var  pass= $("#password").val().toUpperCase();
+				var	hash = calcMD5(pass);
+				$("#passwordSub").val(hash);
+				var name=$("#username").val().toUpperCase();
+				$("username").val(name);
+				obj.submit();
+			}
+    }
+	}
+	
+	function KeyDown(){
+		if(event.keyCode == 13)
+		    submittologin();
+	}
+</script>
+</head>
+<body>
+<div class="logo"></div>
+<form class="form-horizontal" action="/authentication/loginProcess" method="post" id="loginto">   
+    <div class="Main">
+        <ul>
+            <li class="top"></li>
+            <li class="top2"></li>
+            <li class="topA"></li>
+            <li class="topB">
+               <img src="/images/login/xiaofang.png" alt="" style="height:150px;width:160px;padding:0px 20px"  /></li>
+            <li class="topC"></li>
+            <li class="topD">
+                <ul class="login"><%- erroInfo %>
+                    <li><span class="left">用户名：</span> <span style="left">
+                        <input id="username" name="userName" type="text" class="txt" onkeydown="KeyDown()"/>  
+                     
+                    </span></li>
+                    <li><span class="left">密 码：</span> <span style="left">
+                       <input id="password" type="password" class="txt" onkeydown="KeyDown()" /> 
+											 <input id="passwordSub" name="password" type="hidden" > 
+                    </span></li>
+
+                    <li><span class="left">验证码：</span> <span style="left">
+                    	<input id="testifycode" type="text" class="txtCode" name="testifycode" onkeydown="KeyDown()"/> 
+                    <a href="javascript:getTestfy()" title="点击换一张"><img src="/images/login/testify.png" style="width:110px;height:30px;padding:3px 100px 5px 0px;float:right"/></a> 
+                    </span></li>
+                    
+                    
+                </ul>
+            </li>
+            <li class="topE"></li>
+            <li class="middle_A"></li>
+            <li class="middle_B"></li>
+            <li class="middle_C">
+	    	<a href="javascript:submittologin()"><img alt="" src="/images/login/btnlogin.gif" /></a>			
+            </li>
+            <li class="middle_D"></li>
+            <li class="bottom_A"></li>
+	    <li style="height:35px"></li>
+            <li style="float:right">Copyright © 2014 湖南亿邦通信有限公司</li>	
+		<li style="float:left">
+        </ul>
+    </div>
+</form>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<html>
+  <head>
+    <title> ImageSaveTest </title>
+  </head>
+  <body>
+    <center>
+      <form method="POST" action="http://localhost:1337/Image/save", enctype="multipart/form-data">
+        <input type="text" name="imageType">
+        <input type="text" name="category">
+        <input type="text" name="address">
+        <input type="text" name="baiduLat">
+        <input type="text" name="baiduLon">
+        <input type="file" name="image">
+        <input type="submit" value="submit">
+      </form>
+    </center>
+  </body>
+</html>

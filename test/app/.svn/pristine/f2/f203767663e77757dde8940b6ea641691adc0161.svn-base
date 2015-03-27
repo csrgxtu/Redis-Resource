@@ -1,0 +1,38 @@
+<style>
+	input {
+		padding-left:4px;	
+	}
+</style>
+<script>
+	var permissionStr = "<%=data%>";
+</script>
+<div data-options="region:'center'">
+	<div style="width:100%;height:100%" id="mapGps"></div>
+</div>
+
+<div data-options="region:'west',split:true,border:true,title:'当前接警/任务'" style="width:350px;">
+	<table  class="easyui-datagrid"  id="jieJingListTable" data-options="
+				rownumbers:true, 
+				singleSelect:true,
+				autoRowHeight:false,				
+				collapsible:false,				
+				remoteSort:false,
+				multiSort:true,
+				loadMsg:'正在加载数据，请稍等...',
+				striped:true,
+				fit:true,
+				pagination:true,
+				fitColumns:true
+				">
+		<thead>  	
+			<tr>
+				
+				<th data-options="field:'ZaiQingName',width:100,sortable:true">接警名</th>								
+				<th data-options="field:'Address',width:200,sortable:true">地址</th>				
+			</tr>
+		</thead>  
+	</table>
+</div>
+
+<script  src="http://api.map.baidu.com/getscript?v=2.0&ak=gpLv0NLU88Ujhig1wySTVV0l&services=&t=20131205043325"></script>
+<script  src="/js/baiduGpsXF.js"></script>

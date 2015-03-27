@@ -1,0 +1,315 @@
+/**
+ * Author: Archer Reilly
+ * File: ZaiQingController.js
+ * Date: 11/Jan/2014
+ * Desc: controller for XFJWT_ZaiQing
+ *
+ * Produced By Ebang.
+ */
+var mqtt = require('mqtt');
+var client = mqtt.createClient();
+module.exports = {
+  /**
+   * index
+   * view
+   */
+  index: function(req, res) {
+    var userId = req.session.loginInfo.userInfo.UserId;
+    var viewUrl = 'xfjwt/strikeAction';
+    var title = '灾情录入';
+    var menu = 'zaiqing';
+    ReviewService.getViewPass(res,userId,viewUrl,title,menu);
+  //  return res.view({title : 'arrange'}, 'xfjwt/showArrangePic');
+  },
+  zaiQingInfo: function(req,res){
+    var userId = req.session.loginInfo.userInfo.UserId;
+    var viewUrl = 'xfjwt/zaiQingInfo';
+    var title = '灾情信息';
+    var menu = 'zaiqing';
+    ReviewService.getViewPass(res,userId,viewUrl,title,menu);
+  },
+  /**
+   * save
+   * create or update according to the id
+   *
+   * @param zaiQingId int (optional)
+   * @param refZaiQingId string
+   * @param JGID string
+   * @param JGJC string
+   * @param phoneNumber string
+   * @param status string
+   * @param type string
+   * @param level string
+   * @param GIS_X float
+   * @param GIS_Y float
+   * @param GIS_H float
+   * @param baiduLat float
+   * @param baiduLon float
+   * @param keyUnitId string
+   * @param keyUnitName string
+   * @param address string
+   * @param description string
+   * @param sendTime datetime
+   * @param endTime datetime
+   * @return RESTful Json
+   */
+  save: function(req, res) {
+    var zaiQingId = req.param('zaiQingId');
+    var zaiQingName = req.param('zaiQingName');
+    var JGID = req.session.loginInfo.userInfo.OrganizationId;
+    var JGJC = req.session.loginInfo.userInfo.OrgName;
+    var BJR = req.param('BJR');
+    var phoneNumber = req.param('phoneNumber');
+    var baiduLat = req.param('baiduLat');
+    var baiduLon = req.param('baiduLon');
+    var keyUnitId = req.param('keyUnitId');
+    var keyUnitName = req.param('keyUnitName');
+    var address = req.param('address');
+    var description = req.param('description');
+    var status = req.param('status');
+    var endTime = req.param('endTime');
+    var diaoPaiDuiXiangIds = req.param('diaoPaiDuiXiangIds');
+    var createdBy = req.session.loginInfo.userInfo.UserName;
+    var updatedBy = createdBy;
+    var createdTime = UtilityService.getCurrentTime();
+    var updatedTime = createdTime;
+    if (zaiQingId == null || zaiQingId == '') {
+      if (JGID == null || JGID == '' || JGJC == null || JGJC == ''
+        || createdBy == '' || createdBy == null || zaiQingName == '' || zaiQingName == null
+        || createdTime == '' || createdTime == null || address == '' || address == null
+        || phoneNumber == '' || phoneNumber == null || keyUnitName == '' || keyUnitName == null) {
+        return res.send(sails.config.returnCode.INVALID_PARAM);
+      }
+      var createValues = {};
+      createValues.CreatedBy = createdBy;
+      createValues.CreatedTime = createdTime;
+      createValues.JGID = JGID;
+      createValues.JGJC = JGJC;
+      createValues.Baidu_Lat = baiduLat;
+      createValues.Baidu_Lon = baiduLon;
+      createValues.ZaiQingName = zaiQingName;
+      createValues.PhoneNumber = phoneNumber;
+      createValues.KeyUnitName = keyUnitName;
+      createValues.Address = address;
+      createValues.SendTime = createdTime;
+      createValues.Status = "接警";
+      if(BJR != null || BJR != '')
+        createValues.BJR = BJR;
+      if(description != null || description != '')
+        createValues.Description = description;
+      XFJWT_ZaiQing.create(createValues).exec(function(err, recs) {
+        if (err) {
+          sails.config.returnCode.DB_ERROR.data = err;
+          return res.send(sails.config.returnCode.DB_ERROR);
+        }
+        var ZQTBRY = "SELECT Description from xfjwt_SysCode where CodeCategory = '灾情通报' and CodeDisplayName = '灾情通报人员' and IsActive = 1";
+        XFJWT_ZaiQing.query(ZQTBRY,function(err,ZQTBRYResult){
+            if (err) {
+              sails.config.returnCode.DB_ERROR.data = err;
+              return res.send(sails.config.returnCode.DB_ERROR);
+            }
+            if(ZQTBRYResult.length == 0)
+              return res.send({code: 403,msg: 'zqtory is null',data: ''});
+            var list = ZQTBRYResult[0].Description.split(",");
+            for(var i = 0;i < list.length;i++){
+              console.log("i = " + i);
+              client.publish(sails.config.values.zaiQingTopicName+list[i], JSON.stringify(createValues),{qos: 2},function(err){
+                if(err){
+                  console.log("err="+err);
+                  }else{
+                  console.log("yes:"+i);
+                }
+              });
+            }
+            sails.config.returnCode.QUERY_OK.data = recs;
+            return res.send(sails.config.returnCode.QUERY_OK);
+        })
+      });
+    } else {
+      var updateValues = {};
+      updateValues.UpdatedBy = updatedBy;
+      updateValues.UpdatedTime = updatedTime;
+      if(zaiQingName !=  null && zaiQingName != '')
+        updateValues.ZaiQingName = zaiQingName;
+      if(phoneNumber != null && phoneNumber != '')
+        updateValues.PhoneNumber = phoneNumber;
+      if(keyUnitName !=  null && keyUnitName !=  '')
+        updateValues.KeyUnitName = keyUnitName;
+      if(address !=  null && address!=  '')
+        updateValues.Address = address;
+      if(status != null && status != '')
+        updateValues.Status = status;
+      if(description !=  null && description != '')
+        updateValues.Description = description;
+      if(endTime != null && endTime != '')
+        updateValues.EndTime = endTime;
+      console.log(updateValues);
+      XFJWT_ZaiQing.find({ZaiQingId: zaiQingId})
+      .exec(function(err,notUpdateResult){
+        if(err)
+          return res.send({code: 500,msg: 'databases err',data: ''});
+        if(notUpdateResult.length == 0)
+          return res.send({code: 403,msg: 'this data is missing',data: ''});
+        if(notUpdateResult[0].RefZaiQingId != '' && notUpdateResult[0].RefZaiQingId != null){
+          var mark = '提示：此数据为消防救援管理系统录入数据！！';
+          updateDiaoPaiInfo(diaoPaiDuiXiangIds,zaiQingId,res,mark);
+        }else{
+         
+          XFJWT_ZaiQing.query("BEGIN",function(err){
+            if(err)
+              return res.send({code: 500,msg: 'databases err',data: ''});
+            XFJWT_ZaiQing.update({
+            ZaiQingId: zaiQingId,
+            }, updateValues).exec(function(err, recs) {
+              if(err)
+                return res.send({code: 500,msg: 'databases err',data: ''});
+              updateDiaoPaiInfo(diaoPaiDuiXiangIds,zaiQingId,res,"");
+            });
+          })      
+        }
+      })
+    }
+    function updateDiaoPaiInfo(diaoPaiDuiXiangIds,zaiQingId,res,mark){
+      if(diaoPaiDuiXiangIds == '' || diaoPaiDuiXiangIds == null){
+        return res.send({code: 200,msg: 'successfully',data: ''});
+      }else{
+        var diaoPaiDuiXiangIds_array = [];
+        diaoPaiDuiXiangIds_array = diaoPaiDuiXiangIds.split(",");
+        XFJWT_ZaiQingDiaoPai.destroy({ZaiQingId: zaiQingId})
+        .exec(function(err,zaiQingIdDelResult){
+          if(err)
+            return res.send({code: 500,msg: 'databases err',data: ''});
+          var diaoPaiDuiXiangIds_Sql_Values = "";
+          for(var i = 0;i < diaoPaiDuiXiangIds_array.length;i++){
+          if(i == diaoPaiDuiXiangIds_array.length - 1){
+              diaoPaiDuiXiangIds_Sql_Values += "("+diaoPaiDuiXiangIds_array[i]+","+zaiQingId+",'人员','"+createdBy+"','"+createdTime+"')";
+            }else{
+              diaoPaiDuiXiangIds_Sql_Values += "("+diaoPaiDuiXiangIds_array[i]+","+zaiQingId+",'人员','"+createdBy+"','"+createdTime+"'),";
+            }
+          }
+          var role_Resources_sql = "insert into xfjwt_ZaiQingDiaoPai (DiaoPaiDuiXiangId,ZaiQingId,DiaoPaiDuiXiangLeiXing,CreatedBy,CreatedTime) "
+                                 + "values " + diaoPaiDuiXiangIds_Sql_Values;
+          XFJWT_ZaiQingDiaoPai.query(role_Resources_sql,function(err,createResult){
+            if(err)
+              return res.send({code: 500,msg: 'databases err',data: ''});
+            return res.send({code: 200,msg: mark,data: ''});
+          })
+        })
+      }
+    }
+  },
+  
+  /**
+   * read
+   * read records from XFJWT_ZaiQing
+   *
+   * @param pageIndex int
+   * @param pageSize int
+   * @return RESTful Json
+   */
+  read: function(req, res) {
+    var pageIndex = req.param('pageIndex');
+    var pageSize = req.param('pageSize');
+    var startTime = req.param('startTime');
+    var endTime = req.param('endTime');
+    var sourceType = req.param('sourceType');
+    if (pageIndex == null || pageIndex == '' || pageSize == null
+      || pageSize == '') {
+      return res.send(sails.config.returnCode.INVALID_PARAM);
+    }
+    if(startTime == null || startTime == '')
+      startTime = "2015-01-01 00:00:00";
+    if(endTime == null || endTime == '')
+      endTime = "2100-12-12 00:00:00";
+    var start = (pageIndex - 1) * pageSize;
+    if(sourceType == 'xfjwt'){
+      var sql = "SELECT count(*) as total FROM xfjwt_ZaiQing "
+              + " where SendTime > '"+startTime+"' and SendTime < '"+endTime+"' and RefZaiQingId is null";
+      var sqla = "SELECT *,if(RefZaiQingId,'消防救援管理系统','消防警务通') as DataSource FROM xfjwt_ZaiQing "
+              + " where SendTime > '"+startTime+"' and SendTime < '"+endTime+"' and RefZaiQingId is null "
+              + " order by SendTime desc limit "+start+","+pageSize;
+    }else if(sourceType == 'xfjygl'){
+      var sql = "SELECT count(*) as total FROM xfjwt_ZaiQing where RefZaiQingId is not null and SendTime > '"+startTime+"' and SendTime < '"+endTime+"' "
+      var sqla = "SELECT *,if(RefZaiQingId,'消防救援管理系统','消防警务通') as DataSource FROM xfjwt_ZaiQing "
+              + " where SendTime > '"+startTime+"' and SendTime < '"+endTime+"' and RefZaiQingId is not null "
+              + " order by SendTime desc limit "+start+","+pageSize;
+    }else{
+      var sql = "SELECT count(*) as total FROM xfjwt_ZaiQing where SendTime > '"+startTime+"' and SendTime < '"+endTime+"'";
+      var sqla = "SELECT *,if(RefZaiQingId,'消防救援管理系统','消防警务通') as DataSource  FROM xfjwt_ZaiQing "
+              + " where SendTime > '"+startTime+"' and SendTime < '"+endTime+"' order by SendTime desc "
+              + " limit "+start+","+pageSize;
+    }
+    XFJWT_ZaiQing.query(sql, function(err, recsTotal) {
+      if (err) {
+        sails.config.returnCode.DB_ERROR.data = err;
+        return res.send(sails.config.returnCode.DB_ERROR);
+      }
+      var total = recsTotal[0].total;
+      XFJWT_ZaiQing.query(sqla, function(err, recs) {
+        if (err) {
+          sails.config.returnCode.DB_ERROR.data = err;
+          return res.send(sails.config.returnCode.DB_ERROR);
+        }
+        sails.config.returnCode.QUERY_OK.data = {
+          'recs': recs,
+          'total': total,
+        };
+        return res.send(sails.config.returnCode.QUERY_OK);
+      });
+    });
+  },
+  getUserAndOrgByDiaoPaiId: function(req,res){
+    var zaiQingId = req.param('zaiQingId');
+    if(zaiQingId == null || zaiQingId == '')
+      return res.send({code: 403,msg: 'diaoPaiId is null',data: ''});
+    var sql = "select u.UserId,u.DisplayName,jg.JGJC,dp.DiaoPaiDuiXiangId from xfjwt_ZaiQingDiaoPai dp inner join xfjwt_User u "
+            + "on dp.DiaoPaiDuiXiangId = u.UserId "
+            + "inner join JGXX_XFJG jg on jg.ID = u.OrganizationId "
+            + "where dp.ZaiQingId = '"+zaiQingId+"'";
+    XFJWT_ZaiQing.query(sql,function(err,result){
+      if(err)
+        return res.send({code: 500,msg: 'databases err',data: ''});
+      return res.send({code: 200,msg: 'successfully',data: result});
+    })
+  },
+  getUnfinishZaiQing: function(req,res){
+    var permissionIDS = [];
+    var permission = req.session.loginInfo.userInfo.Permission;
+    for(var i = 0;i < permission.length; i++){
+      permissionIDS.push("'"+permission[i].ID+"'");
+    }
+    var str_p = permissionIDS.join(",");
+    var sql = "select ZaiQingId,ZaiQingName,Baidu_Lon as Lon,Baidu_Lat as Lat,Address from xfjwt_ZaiQing where Status != '完成' and JGID in ("+str_p+")";
+    console.log('sql = ' + sql);
+    XFJWT_ZaiQing.query(sql,function(err,result){
+      if(err)
+        return res.send({code: 500,msg: 'databases err',data: err});
+      return res.send({code: 200,msg: 'successfully',data: result});
+    })
+  },
+  /**
+   * delete
+   * delete record from XFJWT_ZaiQing
+   *
+   * @param zaiQingId int
+   * @return RESTful Json
+   */
+  delete: function(req, res) {
+    var zaiQingId = req.param('zaiQingId');
+    if (zaiQingId == null || zaiQingId == '') {
+      return res.send(sails.config.returnCode.INVALID_PARAM);
+    }
+    var sql = "update xfjwt_ZaiQing set IsActive = 0 WHERE ZaiQingId = "
+      + zaiQingId;
+    
+    XFJWT_ZaiQing.query(sql, function(err, recs) {
+      if (err) {
+        sails.config.returnCode.DB_ERROR.data = err;
+        return res.send(sails.config.returnCode.DB_ERROR);
+      }
+      sails.config.returnCode.QUERY_OK.data = recs;
+      return res.send(sails.config.returnCode.QUERY_OK);
+    });
+  },
+
+}

@@ -1,0 +1,192 @@
+﻿body {
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+    font-family: verdana,helvetica,arial,sans-serif;
+}
+
+div, h1, h2, h3, h4, p, ul, li, img, span, dl, dt, dd, form {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+.shortcut_item {
+    width: 173px;
+    height: 90px;
+    border: 1px solid;
+    border-color: #95B8E7;
+    position: relative;
+    float: left;
+    margin: 28px 10px 25px 0px;
+    cursor: hand;
+}
+
+    .shortcut_item:hover {
+        border: 1px solid #ff8800;
+        color: #ff8800;
+    }
+
+    .shortcut_item img {
+        width: 50px;
+        height: 50px;
+        margin: 20px 0px 0px 5px;
+        position: relative;
+        float: left;
+    }
+
+    .shortcut_item h2 {
+        line-height: 20px;
+        font: 14px "Microsoft YaHei","微软雅黑","SimSun","宋体","Arial";
+        font-weight: bold;
+        line-height: 24px;
+        padding: 0px 0px;
+        margin: 0px auto;
+        margin-top: 10px;
+        margin-left: 35px;
+        display: block;
+        position: relative;
+        float: left;
+    }
+
+    .shortcut_item p {
+        font-weight: bold;
+        color: #666;
+        line-height: 20px;
+        font: 12px "Microsoft YaHei","微软雅黑","SimSun","宋体","Arial";
+        padding: 0px 0px;
+        margin: 0px 0px;
+        font-size: 12px;
+        margin-top: 5px;
+        margin-left: 5px;
+        display: block;
+        position: relative;
+        width: 110px;
+        float: left;
+        text-align: center;
+    }
+
+        .shortcut_item p:hover {
+            color: #ff8800;
+        }
+
+.news {
+    margin: 0px auto;
+    padding: 5px;
+    width: 100%;
+    height: 20px;
+    position: relative;
+    cursor:hand;
+}
+
+    .news:hover {
+        /* border: 1px solid #ff8800;*/
+        color: #ff8800;
+    }
+
+.p1 {
+    position: relative;
+    float: left;
+    padding: 0px 0px;
+    margin: 0px 0px;
+    width: 80%;
+    height: 15px;
+    line-height: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: url(/images/dot_c.png) no-repeat left center;
+    padding-left:15px;
+}
+
+.p2 {
+    position: relative;
+    float: right;
+    padding: 0px 0px;
+    margin: 0px 0px;
+}
+
+.softList {
+    margin: 0px 0px;
+    padding: 0px 0px;
+}
+
+    .softList a {
+        font-size: 12px;
+        line-height: 14px;
+       /* color: #266392;*/
+        color: #000000;
+        text-decoration:none;
+    }
+      .softList a:hover {
+        font-size: 12px;
+        line-height: 14px;
+        font-weight: bold;
+        color: #ff8800;
+        text-decoration:none;
+    }
+
+    .softList span {
+        padding-left: 10px;
+        color: #828284;
+    }
+
+    .softList li .down {
+        float: right;
+overflow: hidden;
+    }
+
+.down a {
+    padding-left: 24px;
+    font-size: 12px;
+    line-height: 15px;
+    color: #266392;
+    text-decoration: underline;
+    font-weight: normal;
+    background: url(/images/down.png) 0 0px no-repeat;
+}
+
+.grid {
+    font-size: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+    .grid a {
+        float: left;
+    }
+
+    .grid span {
+        float: left;
+        padding:0px 0px;
+    }
+
+.info {
+    float: left;
+}
+
+ul {
+    list-style: none;
+    display: block;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    -webkit-padding-start: 40px;
+}
+
+.softList li {
+    padding: 3px 0 3px;
+    height: 20px;
+}
+.contact p {
+       padding: 3px 0 3px;
+       margin-top:10px;
+    height: 35px;
+}
+#mqholder p {
+    margin:5px 5px;padding:5px 0px;color:#266392;
+}

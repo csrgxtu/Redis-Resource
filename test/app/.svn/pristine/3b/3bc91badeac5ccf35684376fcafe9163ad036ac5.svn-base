@@ -1,0 +1,48 @@
+{
+  "name": "spawn-sync",
+  "version": "1.0.2",
+  "description": "Prollyfill for child_process.spawnSync",
+  "keywords": [],
+  "dependencies": {
+    "concat-stream": "^1.4.7",
+    "rimraf": "~2.2.5",
+    "try-thread-sleep": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ForbesLindesay/spawn-sync.git"
+  },
+  "author": {
+    "name": "ForbesLindesay"
+  },
+  "license": "MIT",
+  "gitHead": "d71ce6158049c858d8d42b0e4bf38f541f8451cd",
+  "bugs": {
+    "url": "https://github.com/ForbesLindesay/spawn-sync/issues"
+  },
+  "homepage": "https://github.com/ForbesLindesay/spawn-sync",
+  "_id": "spawn-sync@1.0.2",
+  "_shasum": "67e280288f01540dc5d14aac4e1b400fba19289a",
+  "_from": "spawn-sync@^1.0.1",
+  "_npmVersion": "1.5.0-alpha-4",
+  "_npmUser": {
+    "name": "forbeslindesay",
+    "email": "forbes@lindesay.co.uk"
+  },
+  "maintainers": [
+    {
+      "name": "forbeslindesay",
+      "email": "forbes@lindesay.co.uk"
+    }
+  ],
+  "dist": {
+    "shasum": "67e280288f01540dc5d14aac4e1b400fba19289a",
+    "tarball": "http://registry.npmjs.org/spawn-sync/-/spawn-sync-1.0.2.tgz"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/spawn-sync/-/spawn-sync-1.0.2.tgz"
+}

@@ -1,0 +1,11 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>AngularJS Email App</title>
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+  <body>
+    <script src="lib/jquery-v1.11.1.js"></script>
+    <script src="lib/jquery-v1.11.1.js"></script>
+  </body>
+</html>

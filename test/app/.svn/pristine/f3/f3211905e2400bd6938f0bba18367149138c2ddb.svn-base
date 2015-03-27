@@ -1,0 +1,92 @@
+<script>
+	var permissionStr="<%=data%>";
+</script>
+
+<style>
+	input {
+		padding-left:4px;
+	}
+</style>
+
+<div data-options="region:'west',split:true,border:true,title:'组织架构树状结构图'" style="width:350px;">
+	<ul id ="organizationTree" class="easyui-tree" data-options="lines:true,checkbox:false,animate:true"></ul>	
+
+</div>
+
+<div data-options="region:'center'">	
+	<table  class="easyui-datagrid"  id="organizationTable" title="组织架构基本信息列表" style="width:930px;height:528px" data-options="
+				rownumbers:true, 
+				singleSelect:true,
+				autoRowHeight:false,
+				pagination:true,
+				collapsible:false,
+				toolbar:'#toolbar',
+				remoteSort:false,
+				multiSort:true,
+				loadMsg:'正在加载数据，请稍等...',
+				striped:true,
+				fit:true,
+				fitColumns:true">
+		<thead>  	
+			<tr>
+				<th data-options="field:'zongdui',width:120,sortable:true">总队</th>
+				<th data-options="field:'zhidui',width:120,sortable:true">支队</th>
+				<th data-options="field:'dadui',width:120,sortable:true">大队</th>
+				<th data-options="field:'zhongdui',width:120,sortable:true">中队</th>
+				<th data-options="field:'lon',width:120,sortable:true">所在经度</th>
+				<th data-options="field:'lat',width:120,sortable:true">所在纬度</th>				
+			</tr>
+		</thead>
+	</table>
+	
+	<div id="toolbar" style="padding:5px;height:auto">
+		<div>		
+			总队:
+			<select style="width:130px;height:28px;border:#95B8E7 1px solid" id="zongduiSea">	
+			</select>
+			支队:			
+			<select  style="width:130px;height:28px;border:#95B8E7 1px solid" id="zhiduiSea">	
+			</select>		
+						
+			<a href="javascript:void(0)" id="searchOrganization" class="easyui-linkbutton" iconCls="icon-search">搜 索&nbsp;&nbsp;</a>
+		</div>
+	</div>
+</div>	
+
+<!--  弹出层   新增层-->
+<div id="organizationDiv" style="display:none;">
+	<input type="hidden" id="organizationId">
+	<table border='0' width="280px" style="padding:5 10;">
+		<tr height="31px">
+			<td style="width:40px;">总队:</td>
+			<td><input class="textbox" maxLength="12" style="width:200px;height:28px;"  id="zongduiInput"></td>
+		</tr>
+		<tr height="31px">
+			<td>支队:</td>
+			<td><input class="textbox" maxLength="12" style="width:200px;height:28px;" id="zhiduiInput"></td>
+		</tr>
+		<tr height="31px">
+			<td>大队:</td>
+			<td><input class="textbox" maxLength="12" style="width:200px;height:28px;" id="daduiInput"></td>
+		</tr>
+		<tr height="31px">
+			<td>纬度:</td>
+			<td><input class="textbox" maxLength="12" style="width:200px;height:28px;" id="latInput"></td>
+		</tr>
+		<tr height="31px">
+			<td>经度:</td>
+			<td><input class="textbox" maxLength="12" style="width:200px;height:28px;" id="lonInput"></td>
+		</tr>
+		<tr height="40px">
+			<td colspan="2" align="center">
+				<a href="javascript" onclick="return submitOrganizationSaveOrUpdate()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">&nbsp;保 存&nbsp;</a>
+				&nbsp;&nbsp;&nbsp;
+				<a href="javascript" onclick="Dialog.close()" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">&nbsp;取 消&nbsp;</a>			
+			</td>
+		</tr>
+		
+	</table>
+</div>
+
+<script type="text/javascript" src="/js/organization.js"></script>
+

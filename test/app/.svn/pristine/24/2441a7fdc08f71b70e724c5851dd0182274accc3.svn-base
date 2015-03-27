@@ -1,0 +1,65 @@
+{
+  "name": "in-n-out",
+  "description": "Geofence inclusion and exclusion library",
+  "homepage": "https://github.com/uber/in-n-out",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:uber/in-n-out.git"
+  },
+  "author": {
+    "name": "Alain Rodriguez",
+    "email": "eagle5command@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Aiden Scandella",
+      "email": "sc@ndella.com"
+    },
+    {
+      "name": "David Ellis",
+      "email": "d.f.ellis@ieee.org"
+    }
+  ],
+  "version": "0.0.14",
+  "scripts": {
+    "test": "./test/tests.sh"
+  },
+  "dependencies": {
+    "point-in-polygon": "0.0.0"
+  },
+  "devDependencies": {
+    "chai": "*",
+    "mocha": "*"
+  },
+  "engine": {
+    "node": "*"
+  },
+  "bugs": {
+    "url": "https://github.com/uber/in-n-out/issues"
+  },
+  "_id": "in-n-out@0.0.14",
+  "dist": {
+    "shasum": "564543b2fc84b298f54375ef4f506b3980e18ba1",
+    "tarball": "http://registry.npmjs.org/in-n-out/-/in-n-out-0.0.14.tgz"
+  },
+  "_from": "in-n-out@",
+  "_npmVersion": "1.4.3",
+  "_npmUser": {
+    "name": "dfellis",
+    "email": "d.f.ellis@ieee.org"
+  },
+  "maintainers": [
+    {
+      "name": "countrodrigo",
+      "email": "eagle5command@gmail.com"
+    },
+    {
+      "name": "dfellis",
+      "email": "d.f.ellis@ieee.org"
+    }
+  ],
+  "directories": {},
+  "_shasum": "564543b2fc84b298f54375ef4f506b3980e18ba1",
+  "_resolved": "https://registry.npmjs.org/in-n-out/-/in-n-out-0.0.14.tgz",
+  "readme": "ERROR: No README data found!"
+}

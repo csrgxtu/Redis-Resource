@@ -1,0 +1,173 @@
+<html>
+
+	<head>
+		<title>
+			<%- title %>
+		</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+		<link rel="stylesheet" type="text/css" href="/jqueryeasyui/css/easyui.css">
+		<link rel="stylesheet" type="text/css" href="/jqueryeasyui/css/icon.css">
+		<link rel="stylesheet" type="text/css" href="/jqueryeasyui/css/demo.css">
+		<script type="text/javascript" src="/jqueryeasyui/js/jquery.min.js"></script>
+		<script type="text/javascript" src="/jqueryeasyui/js/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="/jqueryeasyui/js/juqeryeasyui-my.js"></script>
+		<script type="text/javascript" src="/dialog/zDialog.js"></script>
+		<script type="text/javascript" src="/dialog/zDrag.js"></script>
+		<script type="text/javascript" src="/js/MD5.js"></script>
+
+		<script type="text/javascript" src="/js/socket.io.js"></script>
+		<script type="text/javascript" src="/js/sails.io.js"></script>
+		<script type="text/javascript" src="/js/app.js"></script>
+
+		<script type="text/javascript" src="/js/jQueryRotate.js"></script>
+		<script type="text/javascript" src="/js/common.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="/upload/ajaxfileupload.css">
+		<script type="text/javascript" src="/upload/ajaxfileupload.js"></script>
+		<style type="text/css">
+			a {
+				color: #444;
+				line-height: 24px;
+				text-decoration: none;
+			}
+		</style>
+	</head>
+
+	<body class="easyui-layout">
+		<div data-options="region:'north',border:false" style="height:134px">
+			<div style="height:104px;background: #fff url(/images/header/header.png) repeat-x left top;">
+				<div style="background: url(/images/header/header_h1.jpg) no-repeat;height:104px;width:100%">
+					<table class="myHeadTable" border="0" cellspacing="0" cellpadding="0">
+						<tr height="30px">
+							<td>
+								<span id="myUserInfo" class="myUserInfo">岳阳市消防支队 亿邦！ 欢迎您 |</span>
+								<span class="myUserInfo">
+						<a href="javascript:updatePassOfLayout()" title="修改密码">修改密码</a> |
+						<a href="/authentication/logout" title="退出" onclick="return deleteCookie('userName')">退出</a>
+					</span>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<div class="easyui-panel" style="border:0px;padding-left:180px;background: #A6C7ED url(/images/header/nav_welcome.gif) no-repeat">
+				<a id="_index" href="javascript:void(0)" onclick="toIndex()" class="easyui-linkbutton" data-options="plain:true" style="height:28px;width:80px">主页</a>
+				<a id="_task" href="javascript:void(0)" class="easyui-menubutton" data-options="plain:true,menu:'#mm1'" style="height:28px;width:80px;">消防救援</a>
+				<a id="_GPS" href="javascript:void(0)" class="easyui-menubutton" data-options="menu:'#mm2'" style="height:28px;width:80px;">消防战评</a>
+				<a id="_Poi" href="javascript:void(0)" class="easyui-menubutton" data-options="menu:'#mm3'" style="height:28px;width:80px;">基础数据</a>
+				<a id="_system" href="javascript:void(0)" class="easyui-menubutton" data-options="menu:'#mm4'" style="height:28px;width:80px;">系统管理</a>
+			</div>
+			<div id="mm1" style="width:150px;display:none" class="myMenuCss">
+				<div onclick="toFireEvent()">灾情信息录入</div>
+				<div onclick="toZaiQing()">灾情信息</div>
+				<div onclick="toTaskGps()">消防实时地图</div>
+				<div onclick="toDeployImage()">消防部署图</div>
+				<div onclick="toRealTimeVideo()">消防实时视频</div>
+				<div onclick="toVod()">视频点播</div>
+				<div onclick="toVideoMultiplay()">多路视频直播</div>
+				<div onclick="toWebApp()">移动APP</div>
+			</div>
+			<div id="mm2" style="width:150px;display:none" class="myMenuCss">
+				<div onclick="toXfResource()">战评资料</div>
+				<div onclick="toHistoryGps()">历史轨迹回放</div>
+			</div>
+			<div id="mm3" style="width:150px;display:none" class="myMenuCss">
+				<div onclick="toKeyUnit()">消防重点单位管理</div>
+				<div onclick="toHydrant()">消防水源管理</div>
+			</div>
+			<div id="mm4" style="width:150px;display:none" class="myMenuCss">
+				<div onclick="toUser()">用户管理</div>
+				<div onclick="toRolepermissions()">角色与权限管理</div>
+				<div onclick="toResource()">系统功能管理</div>
+				<div onclick="toOrganization()">组织管理</div>
+				<div onclick="toXfCode()">系统配置管理</div>
+				<div onclick="toContent()">内容发布管理</div>
+				<div onclick="toCronTask()">后台任务管理</div>
+				<div onclick="toLogs()">日志管理</div>
+			</div>
+		</div>
+
+		<div data-options="region:'south',border:true" style="height:25px;background:#fff;padding-top:4px">
+			当前位置:<font color="red"><%- title %></font>&nbsp;&nbsp;&nbsp;&nbsp; 登陆用户:
+			<font id="myuserNameShow" color="red">亿邦</font>&nbsp;&nbsp;&nbsp;&nbsp; 时间:
+			<font color="red" id="myNowTimeShow">0000-00-00 00:00:00</font>
+			<span style="float:right;">湖南亿邦通信有限公司@2014</span>
+		</div>
+
+		<div id="updateUserPassOfLayout" style="display:none">
+			<table border="0" width="280px" class="row">
+				<tr height="35">
+					<td align="right">用户:</td>
+					<td>
+						<input id="userNameUpdatePassL" class="textbox" style="height:28px;width:200px" disabled="true">
+					</td>
+				</tr>
+				<tr height="35">
+					<td align="right">旧密码:</td>
+					<td>
+						<input type="password" id="oldPassUpdatePassL" class="textbox" style="height:28px;width:200px">
+					</td>
+				</tr>
+				<tr height="35">
+					<td align="right">新密码:</td>
+					<td>
+						<input type="password" id="passUpdatePassL" class="textbox" style="height:28px;width:200px">
+					</td>
+				</tr>
+				<tr height="35">
+					<td align="right">确认密码:</td>
+					<td>
+						<input type="password" id="passAgainUpdatePassL" class="textbox" style="height:28px;width:200px">
+					</td>
+				</tr>
+				<tr height="45">
+					<td colspan="4" align="center">
+						<a href="javascript" onclick="return submitUpdatePassL()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">&nbsp;保 存&nbsp;</a> &nbsp;&nbsp;&nbsp;
+						<a href="javascript" onclick="closeDialog()" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">&nbsp;取 消&nbsp;</a>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<div style="display:none" id="deployImgShowDiv">
+			<img style="width:600px;height:600px;" src="" id="deployImgShowImg">
+			<a href="javascript" onclick="imgToLeft()" class="easyui-linkbutton" style="margin:6 auto;" data-options="iconCls:'icon-left'"></a>
+			<a href="javascript" onclick="imgToRight()" class="easyui-linkbutton" style="margin:6 auto;" data-options="iconCls:'icon-right'"></a>
+			<a href="javascript:void(0)" id="showMoreA" onclick="toDeployImage()" class="easyui-linkbutton" data-options="plain:true">查看更多>></a>
+			<a href="javascript" onclick="Dialog.close()" class="easyui-linkbutton" style="text-align:right;" data-options="iconCls:'icon-cancel'">关闭</a>
+		</div>
+
+		<script>
+			var index = $("#_index");
+			var task = $("#_task");
+			var gps = $("#_GPS");
+			var annotation = $("_Poi");
+			var arrange = $("_deployImage");
+			var video = $("#_video");
+			var system = $("#_system");
+			$('#<%=menu%>').menubutton({
+				plain: 'false'
+			});
+			console.log(document.cookie);
+			var userInfoSpan = $("#myUserInfo");
+			var userName = getCookie("DisplayName");
+			var organizationName = getCookie("organizationName");
+			if ($("#myUserInfo").length > 0) {
+				$("#myUserInfo").empty();
+				$("#myuserNameShow").empty();
+				$("#myuserNameShow").append(userName);
+				setInterval(function() {
+					var day = new Date();
+					var dayStr = day.Format("yyyy-MM-dd HH:mm:ss");
+					$("#myNowTimeShow").html(dayStr);
+				}, 1000);
+				$("#myUserInfo").append("" + organizationName + " " + userName + "！ 欢迎您 |");
+			}
+		</script>
+
+		<%- body %>
+	</body>
+
+</html>

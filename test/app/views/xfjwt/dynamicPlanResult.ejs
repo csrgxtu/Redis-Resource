@@ -1,0 +1,238 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ubuntu</title>
+    
+        
+    <!-- Bootstrap core CSS -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+
+    <link rel="stylesheet" href="/bootstrap/css/pure-min.css">
+    <style>
+      .Result-Box {
+        margin-left: 9%;
+        /*margin-left: 50px;*/
+        margin-top: 10px;
+        width: 51.8%;
+      }
+      
+      .Ul-List {
+        list-style-type: none;
+        margin-top: 10px;
+        margin-left: -40px;
+      }
+      
+      .Pagination {
+        margin-top: 50px;
+        margin-left: 2%;
+      }
+      
+      .Result-Item {
+        list-style-type: none;
+        margin-top: 10px;
+        /*margin-left: -40px;*/
+        margin-left: -6%;
+        /*margin-right: 20px;*/
+      }
+      
+      .Result-Item-Title {
+        font-size: 19px;
+        font-style: bold;
+        max-width: 580px;
+        min-width: 420px;
+        max-height: 23px;
+        overflow: hidden;
+      }
+
+      .Result-Item-Short-Link {
+        font-size: 15px;
+        /*color: green;*/
+        color: #006621;
+        margin-bottom: 5px;
+      }
+
+      .Result-Item-Scholar-Author {
+        font-size: 13px;
+        color: #006621;
+        margin-bottom: 0px;
+      }
+
+      .Result-Item-Scholar-Cite {
+        font-size: 13px;
+        color: #006621;
+        margin-bottom: 5px;
+      }
+
+      .Result-Item-Abstract {
+        /*color: #606060;*/
+        color: #444;
+        max-width: 580px;
+        min-width: 420px;
+        max-height: 59px;
+        overflow: hidden;
+      }
+
+      .Result-Item-Stats {
+        /*margin-left: 9.1%;*/
+        width: 51.8%;
+        color: #606060;
+        font-size: 13px;
+      }
+
+      a {
+        outline: 0;
+        text-decoration: none;
+        /*color: blue;*/
+        color: #1a0dab;
+        cursor: pointer;
+      }
+      
+      a:hover {
+        text-decoration: none;
+      }
+      
+      a:visited {
+        /*color: #800080;*/
+        color: #61C;
+      }
+      
+      a:active {
+        color: red;
+      }
+    </style>
+  </head>
+
+  <body>
+<!-- search box -->
+    <div style="margin-top: 35px;">
+      <a href="/DynamicPlan/index"><img src="/bootstrap/image/logo11w.png" width="108" height="38" style="margin-left: 10px; margin-right: 8px; margin-top: 3px; float: left;"></a>
+      <form class="pure-form" style="margin-left: 9%;" action="/DynamicPlan/search" method="GET">
+        <fieldset>
+            <input class="pure-input-1-2" type="text" name="id" autofocus>
+            <button type="submit" class="pure-button pure-button-primary">Search</button>
+        </fieldset>
+      </form>
+    </div>
+
+    <!--<hr style="height: 0.5px; min-width:480px;">-->
+    <hr style="margin-bottom: 3px; height: 0.5px;"/>
+    <!-- result stats -->
+    <%=data%>
+    <!-- result box -->
+    <div class="Result-Box">
+      
+        <span class="Result-Item-Stats">About  122000000  results</span>
+      
+      <ul class="Ul-List">
+        <li>
+          <div>
+            
+              <ul class="Result-Item">
+                <li class="Result-Item-Title"><a href="/url?q=http://www.ubuntu.com/&amp;sa=U&amp;ei=ZAq5VN6nB-OxsAS7uILQCw&amp;ved=0CBMQFjAA&amp;usg=AFQjCNHkL6B5J26isVMGZEnWCLddVVASdg" target="_blank">Ubuntu: The leading OS for PC, tablet, phone and cloud</a></li>
+                <li class="Result-Item-Short-Link">www.ubuntu.com/</li>
+                <li class="Result-Item-Abstract">Ubuntu is an open source software platform that runs everywhere from the 
+smartphone, the tablet and the PC to the server and the cloud.</li>
+              </ul>
+            
+              <ul class="Result-Item">
+                <li class="Result-Item-Title"><a href="/url?q=http://en.wikipedia.org/wiki/Ubuntu_(operating_system)&amp;sa=U&amp;ei=ZAq5VN6nB-OxsAS7uILQCw&amp;ved=0CCYQFjAH&amp;usg=AFQjCNHPm8B_zkIysWxItAVi0OqKSAfMug" target="_blank">Ubuntu (operating system) - Wikipedia, the free encyclopedia</a></li>
+                <li class="Result-Item-Short-Link">en.wikipedia.org/wiki/Ubuntu_(operating_system)</li>
+                <li class="Result-Item-Abstract">Ubuntu (originally /ʊˈbuːntʊ/ uu-BOON-tuu, according to the company website 
+/ʊˈbʊntuː/ uu-BUUN-too) is a Debian-based Linux operating system, with ...</li>
+              </ul>
+            
+              <ul class="Result-Item">
+                <li class="Result-Item-Title"><a href="/url?q=http://en.wikipedia.org/wiki/Ubuntu_(philosophy)&amp;sa=U&amp;ei=ZAq5VN6nB-OxsAS7uILQCw&amp;ved=0CCwQFjAI&amp;usg=AFQjCNHuczbu0TP2edUHOc6312Ka3zGw3w" target="_blank">Ubuntu (philosophy) - Wikipedia, the free encyclopedia</a></li>
+                <li class="Result-Item-Short-Link">en.wikipedia.org/wiki/Ubuntu_(philosophy)</li>
+                <li class="Result-Item-Abstract">Ubuntu 2] is a Nguni Bantu term roughly translating to &#34;human kindness.&#34; It is an 
+idea from the Southern African region which means literally &#34;human-ness,&#34; and ...</li>
+              </ul>
+            
+              <ul class="Result-Item">
+                <li class="Result-Item-Title"><a href="/url?q=http://en.wikipedia.org/wiki/Ubuntu&amp;sa=U&amp;ei=ZAq5VN6nB-OxsAS7uILQCw&amp;ved=0CDIQFjAJ&amp;usg=AFQjCNGB5mi8dENEVtc03GOxv8z9lBdCJg" target="_blank">Ubuntu - Wikipedia, the free encyclopedia</a></li>
+                <li class="Result-Item-Short-Link">en.wikipedia.org/wiki/Ubuntu</li>
+                <li class="Result-Item-Abstract">Ubuntu may refer to: Ubuntu (philosophy), an ethical concept of southern African 
+origin; Ubuntu Local Municipality, Northern Cape, South Africa; Ubuntu Party, ...</li>
+              </ul>
+            
+              <ul class="Result-Item">
+                <li class="Result-Item-Title"><a href="/url?q=http://distrowatch.com/ubuntu&amp;sa=U&amp;ei=ZAq5VN6nB-OxsAS7uILQCw&amp;ved=0CEEQFjAN&amp;usg=AFQjCNEzzD8oSMGwaOigJnHpnlSSghjh3Q" target="_blank">DistroWatch.com: Ubuntu</a></li>
+                <li class="Result-Item-Short-Link">distrowatch.com/ubuntu</li>
+                <li class="Result-Item-Abstract">Ubuntu is a complete desktop Linux operating system, freely available with both 
+community and professional support. The Ubuntu community is built on the ...</li>
+              </ul>
+            
+              <ul class="Result-Item">
+                <li class="Result-Item-Title"><a href="/url?q=http://ubuntuforums.org/&amp;sa=U&amp;ei=ZAq5VN6nB-OxsAS7uILQCw&amp;ved=0CEcQFjAO&amp;usg=AFQjCNFDwkziuXzblscpWRhg3vMQFKzk9w" target="_blank">Ubuntu Forums</a></li>
+                <li class="Result-Item-Short-Link">ubuntuforums.org/</li>
+                <li class="Result-Item-Abstract">Choose the most appropriate category for your questions regarding Ubuntu, 
+Kubuntu, Xubuntu, Edubuntu, Lubuntu, UbuntuGnome, Ubuntu Studio, and ...</li>
+              </ul>
+            
+
+
+            
+            
+
+            
+            <ul class="Result-Item">
+              <ul class="pagination">
+              
+                
+                  <li class="active"><a href="/search?q=ubuntu&start=0">1 <span class="sr-only">(current)</span></a></li>
+                
+              
+                
+                  <li class="disable"><a href="/search?q=ubuntu&start=10">2</a></li>
+                
+              
+                
+                  <li class="disable"><a href="/search?q=ubuntu&start=20">3</a></li>
+                
+              
+                
+                  <li class="disable"><a href="/search?q=ubuntu&start=30">4</a></li>
+                
+              
+                
+                  <li class="disable"><a href="/search?q=ubuntu&start=40">5</a></li>
+                
+              
+                
+                  <li class="disable"><a href="/search?q=ubuntu&start=50">6</a></li>
+                
+              
+                
+                  <li class="disable"><a href="/search?q=ubuntu&start=60">7</a></li>
+                
+              
+                
+                  <li class="disable"><a href="/search?q=ubuntu&start=70">8</a></li>
+                
+              
+                
+                  <li class="disable"><a href="/search?q=ubuntu&start=80">9</a></li>
+                
+              
+                
+                  <li class="disable"><a href="/search?q=ubuntu&start=90">10</a></li>
+                
+              
+              </ul>
+            </ul>
+            </div>
+          </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./static/js/jquery-1.11.1.min.js"></script>
+    <script src="./static/js/bootstrap.min.js"></script>
+  </body>
+</html>

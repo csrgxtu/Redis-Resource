@@ -1,0 +1,562 @@
+<html>
+  <head>
+    <title>
+      <% if (typeof data.T1.DXMC !== 'undefined') { %>
+        <%=data.T1.DXMC%>灭火救援预案
+      <% } else { %>
+        灭火救援预案
+      <% } %>
+    </title>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+  <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <div>
+    <div >
+      <center>
+        <% if (typeof data.T1.DXMC !== 'undefined') { %>
+          <h3><%=data.T1.DXMC%>灭火救援预案</h3>
+        <% } else {%>
+          <h3>灭火救援预案</h3>
+        <% } %>
+        <% if (typeof data.T17.TP !== 'undefined') { %>
+          <img src='/files/YAGL_YATPXX/<%=data.T17.TP%>' class='img-responsive img-rounded' width='480px' height='320px' alt='mainPic'>
+        <% } %>
+        <br/>
+      </center>
+      <table class="table table-bordered table-hover">
+        <tbody>
+        <% if (typeof data.T1 !== 'undefined') { %>
+          <tr>
+            <th scope="row">预案编号：</th>
+            <td><%=data.T1.YABH%></td>
+            <th scope="row">预案类型：</th>
+            <td><%=data.T1.YAZL%></td>
+          </tr>
+          <tr>
+            <th scope="row">预案对象名称：</th>
+            <td><%=data.T1.DXMC%></td>
+            <th scope="row">预案对象地址：</th>
+            <td><%=data.T1.DXDZ%></td>
+          </tr>
+          <tr>
+            <th scope="row">是否跨区域：</th>
+            <td><%=data.T1.SFKQY%></td>
+            <th scope="row">是否母预案：</th>
+            <td><%=data.T1.SFMYA%></td>
+          </tr>
+          <tr>
+            <th scope="row">编制单位：</th>
+            <td><%=data.T1.ZZDWID%></td>
+            <th scope="row">编制人：</th>
+            <td><%=data.T1.ZZRMC%></td>
+          </tr>
+          <tr>
+            <th scope="row">编制日期：</th>
+            <td colspan="4"><%=data.T1.ZZRQ%></td>
+          </tr>
+        <% } %>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>1. 单位概况</h3>
+    <div >
+      <h4>1.1. 单位基本情况</h4>
+      <table class="table table-bordered table-hover">
+        <tbody>
+        <% if (typeof data.T2 !== 'undefined') { %>
+          <tr>
+            <th scope="row">单位名称：</th>
+            <td><%=data.T2.DWMC%></td>
+            <th scope="row">拼音简称：</th>
+            <td colspan="4"><%=data.T2.DWPYJC%></td>
+          </tr>
+          <tr>
+            <th scope="row">单位地址：</th>
+            <td><%=data.T2.DWDZ%></td>
+            <th scope="row">单位电话：</th>
+            <td colspan="4"><%=data.T2.DWDH%></td>
+          </tr>
+          <tr>
+            <th scope="row">邮政编码：</th>
+            <td><%=data.T2.YZBM%></td>
+            <th scope="row">电子邮箱：</th>
+            <td><%=data.T2.DWDZYX%></td>
+            <th scope="row">单位等级：</th>
+            <td><%=data.T2.DWDJ%>级</td>
+          </tr>
+          <tr>
+            <th scope="row">行政区域：</th>
+            <td><%=data.T2.XZQY%></td>
+            <th scope="row">成立时间：</th>
+            <td><%=data.T2.DWCLSJ%></td>
+            <th scope="row">单位性质：</th>
+            <td><%=data.T2.DWXZ%></td>
+          </tr>
+          <tr>
+            <th scope="row">法人代表或主要负责人：</th>
+            <td><%=data.T2.FRDB%></td>
+            <th scope="row">身份证：</th>
+            <td></td>
+            <th scope="row">法人电话：</th>
+            <td><%=data.T2.FRDBDH%></td>
+          </tr>
+          <tr>
+            <th scope="row">消防安全负责人：</th>
+            <td><%=data.T2.AQZRR%></td>
+            <th scope="row">身份证：</th>
+            <td><%=data.T2.AQZRRSFZ%></td>
+            <th scope="row">电话：</th>
+            <td><%=data.T2.AQZRRDH%></td>
+          </tr>
+          <tr>
+            <th scope="row">专兼职消防管理人：</th>
+            <td><%=data.T2.ZJZXFGLR%></td>
+            <th scope="row">身份证：</th>
+            <td><%=data.T2.ZJZXFGLRSFZ%></td>
+            <th scope="row">电话：</th>
+            <td><%=data.T2.ZJZXFGLRDH%></td>
+          </tr>
+          <tr>
+            <th scope="row">单位主属性：</th>
+            <td colspan="6"><%=data.T2.DWZSX%></td>
+          </tr>
+          <tr>
+            <th scope="row">单位次属性：</th>
+            <td colspan="6"><%=data.T2.DWCSX%></td>
+          </tr>
+          <tr>
+            <th scope="row">经济所有制：</th>
+            <td><%=data.T2.JJSYZ%></td>
+            <th scope="row">消防管辖：</th>
+            <td><%=data.T2.XFGXJGID%></td>
+            <th scope="row">固定资产（万元）</th>
+            <td><%=data.T2.GDZC%></td>
+          </tr>
+          <tr>
+            <th scope="row">占地面积（㎡）：</th>
+            <td><%=data.T2.ZDMJ%></td>
+            <th scope="row">建筑面积（㎡）：</th>
+            <td><%=data.T2.JZMJ%></td>
+            <th scope="row">建筑数量</th>
+            <td><%=data.T2.JZSL%></td>
+          </tr>
+          <tr>
+            <th scope="row">职工人数（人）:</th>
+            <td><%=data.T2.ZGRS%></td>
+            <th scope="row">自动消防设施情况：</th>
+            <td><%=data.T2.ZDXFSS%></td>
+            <th scope="row">地理坐标X：</th>
+            <td><%=data.T2.GIS_X%></td>
+          </tr>
+          <tr>
+            <th scope="row">地理位置：</th>
+            <td><%=data.T2.DLWZ%></td>
+            <th scope="row">地理坐标Y：</th>
+            <td colspan="4"><%=data.T2.GIS_Y%></td>
+          </tr>
+          <tr>
+            <th scope="row">备注：</th>
+            <td colspan="6"><%=data.T2.BZ%></td>
+          </tr>
+        <% } %>
+        </tbody>
+      </table>
+    </div>
+    
+    <h3>1.2. 重点部位</h3>
+    <h4>1.2.1. 灾害部位</h4>
+    <table class="table table-bordered table-hover">
+
+    </table>
+    <h4>1.2.2. 重点部位</h4>
+    <div >
+      <table class="table table-bordered table-hover">
+        <tbody>
+        <% if (typeof data.T4 !== 'undefined') { %>
+          <tr>
+            <th scope="row">重点部位名称：</th>
+            <td><%=data.T4.ZDBWMC%></td>
+            <th scope="row">重点部位位置：</th>
+            <td><%=data.T4.ZDBWWZ%></td>
+          </tr>
+          <tr>
+            <th scope="row">所在层数：</th>
+            <td><%=data.T4.SZCS%></td>
+            <th scope="row">所在高度(m)：</th>
+            <td><%=data.T4.SZGD%></td>
+          </tr>
+          <tr>
+            <th scope="row">建筑面积(㎡)：</th>
+            <td><%=data.T4.JZMJ%></td>
+            <th scope="row">消防电梯数：</th>
+            <td><%=data.T4.XFDTS%></td>
+          </tr>
+          <tr>
+            <th scope="row">疏散出口数：</th>
+            <td><%=data.T4.SSCKS%></td>
+            <th scope="row">安全出口数：</th>
+            <td><%=data.T4.AQCKS%></td>
+          </tr>
+          <tr>
+            <th scope="row">建筑结构：</th>
+            <td><%=data.T4.JZJGDM%></td>
+            <th scope="row">使用性质：</th>
+            <td><%=data.T4.SYXZDM%></td>
+          </tr>
+          <tr>
+            <th scope="row">防火标识设立情况：</th>
+            <td><%=data.T4.FHBZSLQKDM%></td>
+            <th scope="row">危险源情况：</th>
+            <td><%=data.T4.WXYQKDM%></td>
+          </tr>
+          <tr>
+            <th scope="row">火种情况：</th>
+            <td><%=data.T4.HZQKDM%></td>
+            <th scope="row">耐火等级：</th>
+            <td><%=data.T4.NHDJDM%></td>
+          </tr>
+          <tr>
+            <th scope="row">灭火设施：</th>
+            <td colspan="4"><%=data.T4.MHSS%></td>
+          </tr>
+          <tr class="warning">
+            <th scope="row">危险性：</th>
+            <td colspan="4"><%=data.T4.WXX%></td>
+          </tr>
+          <tr>
+            <th scope="row">处置措施：</th>
+            <td colspan="4"><%=data.T4.CZCS%></td>
+          </tr>
+          <tr class="danger">
+            <th scope="row">注意事项：</th>
+            <td colspan="4"><%=data.T4.ZYSX%></td>
+          </tr>
+          <tr class="success">
+            <th scope="row">责任人：</th>
+            <td><%=data.T4.ZRR%></td>
+            <th scope="row">责任人联系电话：</th>
+            <td><%=data.T4.LXDH%></td>
+          </tr>
+        <% } %>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>1.3. 单位扩展信息</h3>
+    <div >
+      <table class="table table-bordered table-hover">
+        <tbody>
+          <% if (typeof data.T5 !== 'undefined') { %>
+          <tr>
+            <th scope="row">单位基本情况描述：</th>
+            <td><%=data.T5.DWJBQKMS%></td>
+          </tr>
+          <tr>
+            <th scope="row">周边毗邻情况：</th>
+            <td><%=data.T5.ZBPLQK%></td>
+          </tr>
+          <tr>
+            <th scope="row">消防通道或疏散通道：</th>
+            <td><%=data.T5.XFTDHSLTD%></td>
+          </tr>
+          <tr>
+            <th scope="row">内部消防设施：</th>
+            <td><%=data.T5.NBXFSS%></td>
+          </tr>
+          <tr>
+            <th scope="row">防火设施：</th>
+            <td><%=data.T5.FHSS%></td>
+          </tr>
+          <tr>
+            <th scope="row">消防控制室信息：</th>
+            <td><%=data.T5.XFKZSXX%></td>
+          </tr>
+          <tr>
+            <th scope="row">其他：</th>
+            <td><%=data.T5.QT%></td>
+          </tr>
+        <% } %>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>2. 灾情设定</h3>
+    <div >
+      <h4>2.1. 工业装置火灾灾情设定</h4>
+      <table class="table table-bordered table-hover">
+        <tbody>
+          <% if (typeof data.T6 !== 'undefined') { %>
+          <tr>
+            <th scope="row">起火原因：</th>
+            <td></td>
+            <th scope="row">发生地点：</th>
+            <td><%=data.T6.FSDD%></td>
+          </tr>
+          <tr>
+            <th scope="row">灾情规模：</th>
+            <td><%=data.T6.ZQGM%></td>
+            <th scope="row">装置分类：</th>
+            <td></td>
+          </tr>
+          <tr>
+            <th scope="row">燃烧物质：</th>
+            <td></td>
+            <th scope="row">燃烧面积（㎡）：</th>
+            <td></td>
+          </tr>
+          <tr>
+            <th scope="row">起火高度（㎡）</th>
+            <td colspan="4"></td>
+          </tr>
+          <tr>
+            <th scope="row">所需灭火剂种类</th>
+            <td colspan="4"></td>
+          </tr>
+          <tr>
+            <th scope="row">灾情特点</th>
+            <td colspan="4"><%=data.T6.ZQTD%></td>
+          </tr>
+          <tr>
+            <th scope="row">备注：</th>
+            <td colspan="4"><%=data.T6.BZ%></td>
+          </tr>
+        <% } %>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>3. 力量调集</h3>
+    <div >
+      <h4>3.1. 车辆调集信息</h4>
+      <table class="table table-bordered table-hover">
+        <tbody>
+          <tr>
+            <th scope="col">单位</th>
+            <th scope="col">车辆类型</th>
+            <th scope="col">车辆等级</th>
+            <th scope="col">作战功能</th>
+            <th scope="col">车牌号码</th>
+            <th scope="col">关键参数</th>
+          </tr>
+            <% if (typeof data.T7 !== 'undefined') { %> 
+            <% for (var i = 0; i < data.T7.length; i++) {%>
+            <tr>
+              <td><%=data.T7[i].SSDWID%></td>
+              <td><%=data.T7[i].CLLXDM%></td>
+              <td><%=data.T7[i].CLDJDM%></td>
+              <td><%=data.T7[i].ZZGNDM%></td>
+              <td><%=data.T7[i].CPHM%></td>
+              <td><%=data.T7[i].GJCS%></td>
+            </tr>
+            <% }%>
+            <% }%>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>3.2. 装备调集信息</h3>
+    <div >
+      <h4>3.2.1. 辖区装备调集</h4>
+      <table class="table table-bordered table-hover">
+        <tbody>
+          <tr>
+            <th scope="col">装备名称</th>
+            <th scope="col">单位</th>
+            <th scope="col">调集数量</th>
+          </tr>
+          <% if (typeof data.T8 !== 'undefined') { %>
+          <% for (var i = 0; i < data.T8.length; i++) {%>
+            <tr>
+              <td><%=data.T8[i].ZBMC%></td>
+              <td><%=data.T8[i].SSDWID%></td>
+              <td><%=data.T8[i].ZBSL%></td>
+            </tr>
+          <% } %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+
+    <h4>3.2.2. 增援装备调集</h4>
+    <div >
+      <h3>3.3. 专家调集信息</h3>
+      <table class="table table-bordered table-hover">
+        <tbody>
+          <tr>
+            <th scope="col">专家名称</th>
+            <th scope="col">专家所属</th>
+            <th scope="col">联系电话</th>
+            <th scope="col">专家领域</th>
+          </tr>
+          <% if (typeof data.T10 !== 'undefined') { %>
+          <% for (var i = 0; i < data.T10.length; i++) { %>
+            <tr>
+              <td><%=data.T10[i].ZJID%></td>
+              <td><%=data.T10[i].ZJSS%></td>
+              <td><%=data.T10[i].LXDH%></td>
+              <td><%=data.T10[i].ZJLY%></td>
+            </tr>
+          <% } %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+    <h3>4. 力量部署</h3>
+    <div >
+      <h4>4.1. 力量部署说明</h4>
+      <table class="table table-bordered table-hover">
+        <tbody>
+          <tr>
+            <th scope="col">单位</th>
+            <th scope="col">车辆类型</th>
+            <th scope="col">车牌号码</th>
+            <th scope="col">部署位置</th>
+            <th scope="col">部署任务</th>
+            <th scope="col">责任人</th>
+            <th scope="col">备注</th>
+          </tr>
+          <% if (typeof data.t11 !== 'undefined') { %>
+          <% for (var i = 0; i < data.T11.length; i++) { %>
+            <tr>
+              <td><%=data.T11[i].SSDWID%></td>
+              <td><%=data.T11[i].CLLXDM%></td>
+              <td><%=data.T11[i].CPHM%></td>
+              <td><%=data.T11[i].BSWZ%></td>
+              <td><%=data.T11[i].BSRW%></td>
+              <td><%=data.T11[i].ZRR%></td>
+              <td><%=data.T11[i].BZ%></td>
+            </tr>
+          <% } %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>5. 作战行动</h3>
+    <table class="table table-bordered table-hover">
+      <tbody>
+        <tr>
+          <th scope="col">作战分区</th>
+          <th scope="col">力量单元</th>
+          <th scope="col">力量编成</th>
+          <th scope="col">作战行动</th>
+          <th scope="col">备注</th>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>6. 指挥体系</h3>
+      <center>
+        <% if (typeof data.T17.ZH !== 'undefined') { %>
+          <img src='/files/syncYAZHTX/<%=data.T17.ZH%>' class='img-responsive img-rounded' width='480px' height='320px' alt='ZHTX'>
+        <% } %>
+      </center>
+    <h4>6.1. 组织机构</h4>
+    <div >
+      <h4>6.2. 指挥体系</h4>
+      <table class="table table-bordered table-hover">
+        <tbody>
+          <tr>
+            <th scope="col">岗位名称</th>
+            <th scope="col">岗位职责</th>
+            <th scope="col">岗位说明</th>
+          </tr>
+          <% if (typeof data.T14 !== 'undefined') { %>
+          <% for (var i = 0; i < data.T14.length; i++) { %>
+            <tr>
+              <td><%=data.T14[i].GWMC%></td>
+              <td><%=data.T14[i].ZZ%></td>
+              <td><%=data.T14[i].SM%></td>
+            </tr>
+          <% } %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+
+    <div >
+      <h4>6.3. 通信呼号</h4>
+      <table class="table table-bordered table-hover">
+        <tbody>
+          <tr>
+            <th scope="col">单位名称</th>
+            <th scope="col">通信呼号</th>
+          </tr>
+          <% if (typeof data.T15 !== 'undefined') { %>
+          <% for (var i = 0; i < data.T15.length; i++) { %>
+            <tr>
+              <td><%=data.T15[i].DJJGID%></td>
+              <td><%=data.T15[i].TXDH%></td>
+            </tr>
+          <% } %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+
+    <div >
+      <h4>7. 战勤保障</h4>
+      <table class="table table-bordered table-hover">
+        <tbody>
+          <tr>
+            <th scope="col">单位名称</th>
+            <th scope="col">值班电话</th>
+            <th scope="col">任务与要求</th>
+            <th scope="col">资源类型</th>
+            <th scope="col">资源名称</th>
+            <th scope="col">资源数量</th>
+            <th scope="col">计量单位</th>
+          </tr>
+          <% if (typeof data.T16 !== 'undefined') { %>
+          <% for (var i = 0; i < data.T16.length; i++) { %>
+            <tr>
+              <td><%=data.T16[i].DWMC%></td>
+              <td><%=data.T16[i].LXDH%></td>
+              <td><%=data.T16[i].RWYFF%></td>
+              <td><%=data.T16[i].ZYLX%></td>
+              <td><%=data.T16[i].ZYMC%></td>
+              <td><%=data.T16[i].ZYSL%></td>
+              <td><%=data.T16[i].JLDW%></td>
+            </tr>
+          <% } %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+
+    <!--<h4>8. 联动单位</h4>
+    <table class="table table-bordered table-hover">
+      <tbody>
+        <tr>
+          <th scope="col">单位名称</th>
+          <th scope="col">单位地址</th>
+          <th scope="col">应急服务内容</th>
+          <th scope="col">联系人</th>
+          <th scope="col">联系电话</th>
+        </tr>
+      </tbody>
+    </table>-->
+
+    <h3>9. 特别警示</h3>
+    （1）设置观察哨，监视险情，一旦出现危险，及时组织人员撤退；（2）作战人员、车辆、器材必须采取防爆措施，消防车不能停放在下水井（沟）、电缆井（沟）、覆工板上面和管线下面，也不要在此处设置水枪阵地；（3）在灭火进攻时，宜选择上风、侧风方向；（4）不能有效控制泄漏的情况下，不准灭火。
+
+    <br />
+    <table class="table">
+      <tbody>
+        <% for (var i = 0; i < data.T17.FJ.length; i++) { %>
+          <tr>
+            <td><img src='/files/YAGL_MHDW_FJXX/<%=data.T17.FJ[i].FJ%>' class='img-responsive img-rounded' alt='FJXXPic'><%=data.T17.FJ[i].FJMC%></td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="/bootstrap/js/jquery-1.11.1.min.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="/bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>

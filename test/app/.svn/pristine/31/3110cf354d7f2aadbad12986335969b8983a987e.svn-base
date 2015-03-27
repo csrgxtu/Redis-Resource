@@ -1,0 +1,327 @@
+var map= new BMap.Map("mapGps");   //创建地图实例
+map.centerAndZoom("岳阳", 14);
+
+map.addControl(new BMap.NavigationControl());
+map.addControl(new BMap.OverviewMapControl());
+
+map.enableScrollWheelZoom();//启动鼠标滚轮缩放地图
+map.enableKeyboard();//启动键盘操作地图
+ // 启用地图惯性拖拽
+map.enableInertialDragging();
+
+  // 展示普通街道、卫星和路网的混合视图
+map.addControl(new BMap.MapTypeControl({mapTypes: [BMAP_NORMAL_MAP, BMAP_HYBRID_MAP]}));
+
+var markersFire  = [];
+//创建数组，保存从服务器获取的半小时内的gps数据
+var GpsInfoAll =new Array();
+
+//对每个用户配置的图画信息,保存其gps数据
+var gpsUsers= new Array(
+	{color:"#FF8080",imie:"",gps:new Array()},
+	{color:"#80FF80",imie:"",gps:new Array()},
+    {color:"#0080FF",imie:"",gps:new Array()},
+	{color:"#FF80FF",imie:"",gps:new Array()},
+    {color:"#800000",imie:"",gps:new Array()},
+	{color:"#408080",imie:"",gps:new Array()},
+    {color:"#800040",imie:"",gps:new Array()},
+	{color:"#99668B",imie:"",gps:new Array()},
+    {color:"#2FD08F",imie:"",gps:new Array()},
+	{color:"#15720E",imie:"",gps:new Array()},
+    {color:"#512c35",imie:"",gps:new Array()},
+	{color:"#57057A",imie:"",gps:new Array()}
+);
+
+/**
+ *  显示历史轨迹,数据只有该串号的所有数据
+ *	gpsUser
+ */ 
+function  showGpsByimie(gpsUser){
+	var gps=gpsUser.gps;
+	 //给第一点设置位起点
+	var start=new BMap.Point(gps[0].lon,gps[0].lat);
+	var labelStr = new BMap.Label("起",{offset:new BMap.Size(0,0),position:start});
+    map.addOverlay(labelStr);
+
+    for(var i=0;i<gps.length-1;i++){		
+		if(gps[i].markid == gps[i+1].markid){
+			var polyline = new BMap.Polyline([
+				new BMap.Point(gps[i].lon,gps[i].lat),
+				new BMap.Point(gps[i+1].lon,gps[i+1].lat)
+				],
+				{strokeColor:gpsUser.color, strokeWeight:4, strokeOpacity:1}
+			);
+			map.addOverlay(polyline);
+		}
+	}
+}
+
+
+/**
+ *
+ *   通过获取的实时数据，显示实施轨迹  
+ *   把新获得的数据添加到 gpsUsers 集合中
+ */
+function showGpsNowByimie(gps){
+	
+	var temp=true;
+	for(var i=0;i<gpsUsers.length;i++){
+		if(gpsUsers[i].imie == gps.imie){
+			temp =false;
+			drawLineById(i,gps.lon,gps.lat);
+			gpsUsers[i].gps.push(gps);
+			break;
+		}		
+	}
+	
+	if(temp){
+		//这是第一个点
+		//找到第一个空的gpsUser 数据
+		var numberTemp = 0;
+		for(var j=0;j<gpsUsers.length;j++){
+			if(gpsUsers[j].imei == ""){
+				numberTemp = j;
+				break;
+			}
+		}
+		
+		gpsUsers[numberTemp].imie= gps.imie;
+		var start=new BMap.Point(gps.lon,gps.lat);
+		var labelStr = new BMap.Label("起",{offset:new BMap.Size(0,0),position:start});
+		map.addOverlay(labelStr);
+		gpsUsers[numberTemp].gps.push(gps);
+		
+		numberTemp++;
+	}	
+}
+
+/**
+ *   画出 折线 。。轨迹
+ */
+function drawLineById(index,lon,lat){
+	
+	var len=gpsUsers[index].gps.length-1;
+		
+	var polyline = new BMap.Polyline([
+		new BMap.Point(gpsUsers[index].gps[len].lon,gpsUsers[index].gps[len].lat),
+		new BMap.Point(lon,lat)
+		],
+		{strokeColor:gpsUsers[index].color, strokeWeight:5, strokeOpacity:1}
+	);
+	if(gpsUsers[index].hidden == "0"){	
+		map.addOverlay(polyline);
+	}
+}
+
+
+
+/**
+ *  处理所有数据，并把数据给每个imie赋值
+ */
+function  dealGpsWithImie(){
+	var  n=0;          //记录当前第几个用户
+	var  imieTemp="";    //临时变量，记录imie
+	for(var i=0;i<GpsInfoAll.length;i++){
+		if(GpsInfoAll[i].imie == imieTemp  &&  imieTemp !=""){
+			gpsUsers[n].gps.push(GpsInfoAll[i]);
+		}else{
+			if(n>=12){
+				break;
+			}else{
+				gpsUsers[n].imie=GpsInfoAll[i].imie;
+				gpsUsers[n].gps.push(GpsInfoAll[i]);
+				imieTemp=GpsInfoAll[i].imie;
+			}	
+			n++;
+		}
+	}
+	for(var j=0;j<gpsUsers.length;j++){		
+		if(gpsUsers[j].imie != ""  &&  gpsUsers[j].imie != null){
+			console.log(gpsUsers[j]); 
+			showGpsByimie(gpsUsers[j]);
+		}
+		
+	}
+}
+
+
+/**
+ *  标记着火点
+ */
+function markFirePosition(fireEvent){
+		
+	var pt = new BMap.Point(fireEvent.lon,fireEvent.lat);
+	var myIcon = new BMap.Icon("/images/fireup.gif", new BMap.Size(100,100));
+	var marker2 = new BMap.Marker(pt,{icon:myIcon});
+	markersFire.push(marker2);
+	map.addOverlay(marker2);
+	
+	//创建点击事件
+    (function(){
+        var infoWindow = new BMap.InfoWindow(showFireInfoWindow(fireEvent).join("")); // 创建信息窗口对象
+			marker2.addEventListener('click', function(){
+			this.openInfoWindow(infoWindow);
+		});
+    })();	
+}
+
+$("#jieJingListTable").datagrid({
+	onSelect:function(rowIndex,row){			
+		for(var i=0;i<markersFire.length;i++){			
+			if(row.lat == markersFire[i].getPosition().lat  && row.lon == markersFire[i].getPosition().lng){				 
+				var infoWindow = new BMap.InfoWindow(showFireInfoWindow(row).join("")); // 创建信息窗口对象
+				markersFire[i].openInfoWindow(infoWindow);
+				break;
+			}
+		}			
+	}	
+});
+
+
+/**
+ * 在服务器上获取半小时内的所有该任务gps数据
+    starttime=2014-05-13%2002:35:34
+ */
+function getGpsInfoInServer(){
+	var now = new Date().getTime()-30*60000;
+	var halfHour =new Date(now);
+	var starttime =halfHour.Format("yyyy-MM-dd HH:mm:ss"); 	
+	$.ajax({
+		type:"post",
+		url:"/Gps/read",
+	//	data:"startTime=2014-08-07 12:00:00",
+		data:"startTime="+starttime+"",
+		success:function(msg){
+			if(msg.code == 200){
+				var data=msg.data;			
+				for(var i=0;i<data.length;i++){
+					var gps=new gpsInfo(data[i]);
+					GpsInfoAll.push(gps);
+				}
+			
+				dealGpsWithImie();
+			}else{
+				console.log(msg);
+				openAlert("初始化数据失败",300,100);
+			}
+			
+		}
+	});
+}
+
+/**
+ *   获取当前任务的着火点，
+ *   返回lat，lon，等相关信息 
+ */
+function getFirePositionByTask(){
+	$.ajax({
+		type:"post",
+		url:"/ZaiQing/getUnfinishzaiqing",
+		success:function(msg){				
+			if(msg.code == 200){
+				var fires = [];
+				for(var i=0; i< msg.data.length; i++){
+					var position  =new firePosition(msg.data[i]);
+					fires.push(position);
+				}	
+				$("#jieJingListTable").datagrid("loadData",fires);		
+				for(var i=0;i<fires.length;i++){
+					markFirePosition(fires[i]);
+				}		
+				$("#jieJingListTable").datagrid("selectRow",0);		
+			}else{
+				console.log(msg);
+				openAlert("初始化数据失败",300,100);
+			}
+		}
+	});
+}
+
+/**
+ *   着火点位置详细信息展示
+ * 
+ */
+function showFireInfoWindow(fire){
+    var html = [];
+    html.push('<strong>灾情信息:</strong>');
+	html.push('<table border="0" style="width:280px;">');
+	html.push('<tr height="32px"><td width="75px">灾情名:</td>');
+	html.push('		<td><input class="textbox" style="width:200px;height:28px;" readonly="readonly" value="'+fire.ZaiQingName+'"></td></tr>');
+	html.push('<tr height="32px"><td>灾情地址:</td>');
+	html.push('		<td><input class="textbox" style="width:200px;height:28px;" readonly="readonly" value="'+fire.Address+'"></td></tr>')
+	html.push('</table>');    
+    return html;
+}
+
+
+	/**
+	 *  gpsInfo信息实体
+	 *  markid  标志
+	 *	username  用户名
+	 *	imie   串号
+	 *	lat   纬度
+	 *	lon   经度
+	 *	speed  速度
+	 */
+function gpsInfo(data){
+	this.markid=data.BatchId;
+	this.username=data.UserName;
+	this.imie=data.DeviceNumber;
+	this.lat=data.BaiduLat;
+	this.lon=data.BaiduLon;
+	this.speed=data.Speed;
+}
+
+
+/**
+ *  着火点位置
+ *  eventtime  接警时间
+ *	bjr   接警人
+ *	phone   电话
+ *	address   火点地址
+ *	lat      维度
+ *	lon     经度
+ */
+function firePosition(data){
+	this.ZaiQingId=data.ZaiQingId;
+	this.ZaiQingName=data.ZaiQingName;
+	this.lon=data.Lon;
+	this.lat=data.Lat;
+	this.Address=data.Address;
+}
+
+$(function(){
+	getGpsInfoInServer();
+	getFirePositionByTask();
+	
+});
+/**
+ *  通过socket.io获取实时数据，并显示。。
+ *	message.taskid;
+ *	message.userid;
+ *	message.username;
+ *	message.imie;
+ *	message.lat;
+ *	message.lon;
+ *	message.speed;
+ */
+ 
+socket.on('realTimeGpsData',function(message){
+  var gps=new gpsInfo(message);
+	showGpsNowByimie(gps);
+});
+/**
+ *  通过socket.io获取接警信息，并显示
+ *  eventtime  接警时间
+ *	bjr   接警人
+ *	phone   电话
+ *	address   火点地址
+ *	lat      维度
+ *	lon     经度
+ *
+ */
+socket.on('newFireEvent',function(message){
+	var firePo = new firePosition(message);
+	$("#jieJingListTable").datagrid("appendRow",firePo);
+	markFirePosition(firePo);
+});

@@ -1,0 +1,182 @@
+﻿<div id="searchPage">
+	<form class="ui-filterable">
+		<input id="autocomplete-input" id="autocompleteInput" placeholder="组织机构" data-type="search">
+	</form>
+	<ul id="autocomplete" data-role="listview" data-input="#autocomplete-input" data-filter="true" data-inset="true"></ul>
+	<script>
+		document.getElementById('searchPage').parentElement.parentElement.style.paddingTop=0;
+		document.getElementById('searchPage').parentElement.style.marginTop=0;
+		
+		var ul;
+		var input;
+		$("#autocomplete").on("filterablebeforefilter", function(e, data) {
+			ul = $(this);
+			input = $(data.input);
+			var $ul = $(this),
+				$input = $(data.input),
+				value = $input.val();
+			if (value != "") {
+				list = new Array();
+				repeatOrgs(datas, value);
+				$ul.html(toList(list));
+				$ul.listview("refresh");
+				$ul.trigger("updatelayout");
+			} else {
+				$ul.html("");
+				$ul.listview("refresh");
+				$ul.trigger("updatelayout");
+			}
+		});
+		var list = new Array();
+
+		function repeatOrgs(dat, value) {
+			if (list.length >= 10) {
+				return;
+			}
+			for (var i = 0; i < dat.length; i++) {
+				if (list.length >= 10) {
+					return;
+				}
+				if (dat[i].text.indexOf(value) != -1) {
+					list.push(dat[i]);
+				}
+				if (dat[i].children) {
+					repeatOrgs(dat[i].children, value);
+				}
+			}
+		}
+
+		function toList(lists) {
+			var html = "";
+			for (var i = 0; i < lists.length; i++) {
+				html += "<li><a style=\"font-weight: normal;padding-left: 40px;\"  class=\"ui-btn\" onclick=\"toRightChange('" + lists[i].jgtree + "','" + lists[i].id + "','" + lists[i].text + "')\">" + lists[i].text + "</a></li>";
+			}
+			return html;
+		}
+	</script>
+	<label for="search-1">组织机构：</label>
+	<a id="organizationPageText" href="#organizationPage" onclick="showOrganPage()" data-rel="popup" data-theme="a" data-position-to="window" data-role="button" class="ui-btn ui-icon-carat-d ui-btn-icon-right ui-corner-all ui-shadow">全部</a>
+	<input type="hidden" id="organizationPageID" />
+	<input type="hidden" id="organizationPageJGTree" />
+	<div data-role="popup" id="organizationPage" data-theme="a">
+		<a href="#" id="organTreesBack" onclick="toBackList()" data-role="button" data-theme="a" data-icon="back" data-iconpos="notext" class="ui-btn-left"> Back</a>
+		<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right"> Close</a>
+		<div data-role="header">
+			<h1>组织机构</h1>
+		</div>
+		<div data-role="content">
+			<ul data-role="listview" id="organTrees" data-inset="true">
+			</ul>
+		</div>
+	</div>
+
+	<script type="application/javascript">
+		function getlocalStorage(name) {
+			return localStorage[name];
+		}
+		var pess=getlocalStorage("RoleList");
+		if(pess==""||pess==null||pess.toLowerCase().indexOf("/organization/readOrgTree".toLowerCase())==-1){
+			$('#searchPage').css('display','none');
+		}
+		var datas = eval(getlocalStorage("OrganListBySearchPage"));
+		$(function() {
+			$('#organizationPageJGTree').val(getlocalStorage("JGTREE"));
+			$('#organizationPageText').html(getlocalStorage("organizationName"));
+			$('#organizationPageID').val(getlocalStorage("OrganizationId"));
+		});
+		var btnDis = false;
+
+		function displayBackBtn() {
+			if (!btnDis) {
+				$('#organTreesBack').css('display', 'none');
+			} else {
+				$('#organTreesBack').css('display', 'block');
+			}
+		}
+
+		function showOrganPage() {
+			var organList = '';
+			for (var i = 0; i < datas.length; i++) {
+				organList += '<li class="ui-first-child ui-last-child" style="width:300px">';
+				if (datas[i].children) {
+					organList += "<a style=\"font-weight: normal;padding-left: 40px;\"  class=\"ui-btn ui-btn-icon-right ui-icon-carat-r\" onclick='getDetailsTree(\"" + datas[i].jgtree + "\",\"" + datas[i].id + "\",\"" + datas[i].text + "\")'>" + datas[i].text + "</a>";
+				} else {
+					organList += "<a style=\"font-weight: normal;padding-left: 40px;\"  class=\"ui-btn\" onclick=\"toRightChange('" + datas[i].jgtree + "','" + datas[i].id + "','" + datas[i].text + "')\">" + datas[i].text + "</a>";
+				}
+				organList += '</li> ';
+			}
+			btnDis = false;
+			displayBackBtn();
+			$('#organTrees').html(organList);
+		}
+
+		function getDetailsTree(jgtree, id, text) {
+			btnDis = true;
+			listSize++;
+			var organList = '';
+			organList += '<li class="ui-first-child ui-last-child" style="width:300px">';
+			organList += "<a class=\"ui-btn\" onclick=\"toRightChange('" + jgtree + "','" + id + "','" + text + "')\">" + text + "</a>";
+			cld = null;
+			getChildrens(datas, id);
+			for (var i = 0; i < cld.length; i++) {
+				if (cld[i].children) {
+					organList += "<a style=\"font-weight: normal;padding-left: 40px;\"  class=\"ui-btn ui-btn-icon-right ui-icon-carat-r\" onclick='getDetailsTree(\"" + cld[i].jgtree + "\",\"" + cld[i].id + "\",\"" + cld[i].text + "\")'>" + cld[i].text + "</a>";
+				} else {
+					organList += "<a style=\"font-weight: normal;padding-left: 40px;\"  class=\"ui-btn\" onclick=\"toRightChange('" + cld[i].jgtree + "','" + cld[i].id + "','" + cld[i].text + "')\">" + cld[i].text + "</a>";
+				}
+			}
+			organList += '</li> ';
+			$('#organTrees').html(organList);
+			displayBackBtn();
+		}
+		var cld;
+		var old;
+		var backData;
+		var listSize = 0;
+
+		function toBackList() {
+			for (var i = 0; i < datas.length; i++) {
+				getParents(datas[i], old.id);
+			}
+			getDetailsTree(backData.jgtree, backData.id, backData.text);
+		}
+
+		function getParents(dat, id) {
+			var das = dat.children;
+			for (var i = 0; i < das.length; i++) {
+				if (das[i].id == id) {
+					backData = dat;
+				}
+				if (das[i].children) {
+					getParents(das[i], id);
+				}
+			}
+		}
+
+		function getChildrens(clds, id) {
+			for (var i = 0; i < clds.length; i++) {
+				if (clds[i].id == id) {
+					old = clds[i];
+					cld = clds[i].children;
+				}
+				if (clds[i].children) {
+					getChildrens(clds[i].children, id);
+				}
+			}
+		}
+
+		function toRightChange(jgtree, id, text) {
+			if (ul) {
+				input.val(text);
+				ul.html("");
+				ul.listview("refresh");
+				ul.trigger("updatelayout");
+			}
+			$('#organizationPageID').val(id);
+			$('#organizationPageText').html(text);
+			$('#organizationPageJGTree').val(jgtree);
+			$("#organizationPage").popup("close");
+			toLoadData();
+		}
+	</script>
+</div>

@@ -1,0 +1,63 @@
+{
+  "name": "hashtable",
+  "version": "0.5.3",
+  "description": "Native HashTable and ES6 compatible Map for Node.js",
+  "main": "./index.js",
+  "keywords": [
+    "es6-map",
+    "es6",
+    "hash",
+    "map",
+    "hashmap",
+    "hashtable",
+    "container"
+  ],
+  "maintainers": [
+    {
+      "name": "chad3814",
+      "email": "chad@chad-cat-lore-eddie.com"
+    }
+  ],
+  "author": {
+    "name": "Isaac Wagner",
+    "email": "isaacbwagner@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/chad3814/node-hashtable.git"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "test-more": "~0.1.1",
+    "runtests": "~0.1.1",
+    "async": "latest",
+    "es6-map": "latest"
+  },
+  "scripts": {
+    "install": "node-gyp configure build",
+    "test": "runtests test/hashtable.js test/keys.js"
+  },
+  "gitHead": "476687057382c2cf1e378e4d98a2a38e685748e3",
+  "bugs": {
+    "url": "https://github.com/chad3814/node-hashtable/issues"
+  },
+  "homepage": "https://github.com/chad3814/node-hashtable",
+  "_id": "hashtable@0.5.3",
+  "_shasum": "083d7e83465650480aecb01fb96fd8548dfca8ae",
+  "_from": "hashtable@",
+  "_npmVersion": "2.6.0",
+  "_nodeVersion": "0.10.36",
+  "_npmUser": {
+    "name": "chad3814",
+    "email": "chad@chad-cat-lore-eddie.com"
+  },
+  "dist": {
+    "shasum": "083d7e83465650480aecb01fb96fd8548dfca8ae",
+    "tarball": "http://registry.npmjs.org/hashtable/-/hashtable-0.5.3.tgz"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/hashtable/-/hashtable-0.5.3.tgz"
+}

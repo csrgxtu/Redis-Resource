@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>案件信息列表</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="/css/themes/default/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="/_assets/css/jqm-demos.css">
+    <script src="/js/jqmobile/jquery.min.js"></script>
+
+    <script src="/js/jqmobile/jquery.mobile-1.4.5.min.js"></script>
+
+    <link rel="stylesheet" href="/js/jqdatepicker/jquery.mobile.datepicker.css">
+    <script src="/js/jqdatepicker/jquery.ui.datepicker.js"></script>
+    <script id="mobile-datepicker" src="/js/jqdatepicker/jquery.mobile.datepicker.js"></script>
+    <script id="mobile-datepicker" src="/js/jqdatepicker/datepicker-zh-CN.js"></script>
+    <script>
+            $(document).on("pagecreate", function () {
+                $("body > [data-role='panel']").panel();
+                $("body > [data-role='panel'] [data-role='listview']").listview();
+                $(document).on("swipeleft swiperight", function (e) {
+                    if ($(".ui-page-active").jqmData("panel") !== "open") {
+                        if (e.type === "swiperight") {
+                            $("#outside").panel("open");
+                        }
+                    }
+                });
+            });
+            function showLoading() {
+                $.mobile.loadingMessageTextVisible = true;
+                $.mobile.showPageLoadingMsg("a", "加载中...");
+            }
+            function hideLoading() {
+                $.mobile.hidePageLoadingMsg();
+            }
+    </script>
+</head>
+<body>
+    <div data-role="page" class="jqm-demos" data-quicklinks="true">
+        <div data-role="header" class="jqm-header">
+            <a href="#outside" data-icon="bars" data-iconpos="notext">Menu</a>
+            <h2>案件信息列表</h2>
+
+        </div><!-- /header -->
+        <div class="ui-content jqm-content" role="main">
+            <div class="ui-field-contain">
+                <label for="search-1">辖区中队:</label>
+                <input type="text" id="sqzd"/>
+                <label for="search-1">案发时间:</label>
+                <input type="text" id="startTime" data-role="date" />
+            </div>
+            <ul data-role="listview" data-inset="true" id="lsData">
+                <li>
+                    <a href="/xfjwt/liandetail" rel="external">
+                        <p><strong>三湘南湖大市场</strong></p>
+                        <p>岳阳楼区大队</p>
+                        <p><strong>下达</strong></p>
+                        <p class="ui-li-aside">2015-01-06 08:09:07</p>
+
+                    </a>
+                </li>
+                <li>
+                    <a href="/xfjwt/liandetail" rel="external">
+                        <p><strong>中南汽车世界旁</strong></p>
+                        <p>岳阳楼区大队</p>
+                        <p><strong>下达</strong></p>
+                        <p class="ui-li-aside">2015-01-06 08:09:07</p>
+
+                    </a>
+                </li>
+                <li>
+                    <a href="/xfjwt/liandetail" rel="external">
+                        <p><strong>大围山中锻村福利化工厂</strong></p>
+                        <p>岳阳楼区大队</p>
+                        <p><strong>下达</strong></p>
+                        <p class="ui-li-aside">2015-01-06 08:09:07</p>
+
+                    </a>
+                </li>
+            </ul>
+        </div><!-- /content -->
+        <div data-role="footer" data-position="fixed" data-tap-toggle="false" class="jqm-footer">
+            <p>Copyright 2014  湖南亿邦通信有限公司</p>
+        </div><!-- /footer -->
+
+    </div><!-- /page -->
+    <div data-role="panel" id="outside" data-theme="b">
+        <ul data-role="listview">
+            <li data-icon="back"><a href="#" data-rel="close">Close</a></li>
+            <li><a href="/xfjwt/lianlist" rel="external">立案列表</a></li>
+            <li><a id="a_zbcq" href="/xfjwt/index2" rel="external">值班信息及出勤人员状况统计</a></li>
+            <li><a id="a_yjld" href="/xfjwt/yjld" rel="external">应急联动单位信息</a></li>
+            <li><a href="/xfjwt/bznl" rel="external">战勤保障单位及保障能力</a></li>
+            <li><a href="/xfjwt/nbzj" rel="external">内部专家信息</a></li>
+            <li><a href="/xfjwt/wbzj" rel="external">外部专家信息</a></li>
+            <li><a href="/xfjwt/clzb" rel="external">车辆作战功能及随车器材信息</a></li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+        var msgData;  //数据集合
+
+        function loadData() {
+            $.mobile.loading("show", {});
+            $.ajax({
+                type: "GET",
+                url: "/ZQInfo/getZQinfo?pageIndex=" + pageIndex + "&pageSize=" + pageSize + "&startTime=" + $("#startTime").val() + "&JGJC=" + txtName,
+                success: function (msg) {
+                    if (msg.total > 0) {
+                        pageTotal = msg.total;
+                        dataToTable(msg.data);
+                        $.mobile.loading("hide");
+                    }
+                    else {
+                        $('#lsData').empty();
+                        $.mobile.loading("hide");
+                    }
+                }
+            });
+
+        }
+        function dataToTable(data) {
+            if (data.length > 0) {
+                var tbody = "";
+                var dc = { JGJC: "机构简称",ZQSTATUS:"案件状态",ZQTYPE:"案件类型",ZQLEVEL:"等级",ZQADRESS:"地址" ,SENDTIME:"开始时间",OVERTIME:"结束时间"}
+                for (var i = 0; i < data.length; i++) {
+                    tbody += "<li><a rel='external' href='/xfjwt/liandetail?ZQID=" + data[i].ID + "'>";
+                    var obj = data[i];
+                    for (var dtData in dc) {
+                            if (obj[dtData] == null)
+                                obj[dtData] = "";
+                            tbody += "<strong>" + dc[dtData] + ": </strong>" + "<span>" + obj[dtData] + "</span> <br />";
+                    }
+                    tbody += "</a></li>";
+                }
+                $('#lsData').append(tbody);
+
+            }
+            $('#lsData').listview("refresh");
+        }
+        var pageIndex = 1, pageSize = 20, pageTotal = 0, txtName = "";
+
+        $(function () {
+            $('#lsData').empty();
+            pageIndex = 1
+            $.mobile.loading("show", {});
+            loadData();
+            $(window).scroll(function () {
+                if ($(document).height() > $(window).height()) {
+                    if ($(document).height() - $(document).scrollTop() - $(window).height() <= 50) {
+                        if (pageIndex <= pageTotal) {
+                            pageIndex = pageIndex + 1;
+                            loadData();
+                        }
+                    }
+                }
+            });
+            $("#sqzd").change(function () {
+                $.mobile.loading("show", {});
+                pageIndex = 1;
+                $('#lsData').empty();
+                txtName = $("#sqzd").val();
+                loadData();
+            });
+        });
+
+
+    </script>
+</body>
+</html>

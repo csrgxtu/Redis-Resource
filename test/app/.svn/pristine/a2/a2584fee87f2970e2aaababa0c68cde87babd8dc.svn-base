@@ -1,0 +1,70 @@
+{
+  "name": "wcf.js",
+  "version": "0.0.6",
+  "description": "A WCF-compatible web services client stack for node.js",
+  "engines": {
+    "node": ">=0.4.0"
+  },
+  "author": {
+    "name": "Yaron Naveh",
+    "url": "yaronn01@gmail.com, http://webservices20.blogspot.com/"
+  },
+  "dependencies": {
+    "ws.js": ">= 0.0.15",
+    "xml-crypto": ">=0.0.4"
+  },
+  "devDependencies": {
+    "nodeunit": ">=0.6.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/yaronn/wcf.js.git"
+  },
+  "main": "./index.js",
+  "directories": {
+    "lib": "./lib"
+  },
+  "keywords": [
+    "wcf",
+    "BasicHttpBinding",
+    "WSHttpBinding",
+    "CustomBinding",
+    "ws-security",
+    "mtom",
+    "ws-addressing",
+    "ws-star",
+    "ws-*",
+    "web service standards",
+    "wsdl",
+    "soap"
+  ],
+  "licenses": [
+    {
+      "type": "MIT License",
+      "url": "http://www.opensource.org/licenses/mit-license.php"
+    }
+  ],
+  "_npmUser": {
+    "name": "yaron",
+    "email": "yaronn01@gmail.com"
+  },
+  "_id": "wcf.js@0.0.6",
+  "optionalDependencies": {},
+  "_engineSupported": true,
+  "_npmVersion": "1.1.16",
+  "_nodeVersion": "v0.6.15",
+  "_defaultsLoaded": true,
+  "dist": {
+    "shasum": "08236613cf50f2867212be83af19ff0758342586",
+    "tarball": "http://registry.npmjs.org/wcf.js/-/wcf.js-0.0.6.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "yaron",
+      "email": "yaronn01@gmail.com"
+    }
+  ],
+  "_shasum": "08236613cf50f2867212be83af19ff0758342586",
+  "_from": "wcf.js@",
+  "_resolved": "https://registry.npmjs.org/wcf.js/-/wcf.js-0.0.6.tgz"
+}

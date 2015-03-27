@@ -1,0 +1,101 @@
+<div data-options="region:'center'">	
+	<table  class="easyui-datagrid"  id="dg" title="视频基本信息列表" style="width:930px;height:528px" data-options="
+				rownumbers:true, 
+				singleSelect:true,
+				autoRowHeight:false,
+				pagination:true,
+				collapsible:false,
+				toolbar:'#toolbar',
+				remoteSort:false,
+				multiSort:true,
+				loadMsg:'正在加载数据，请稍等...',
+				striped:true,
+				fit:true,
+				fitColumns:true">
+		<thead>  	
+			<tr>
+                                <th data-options="field:'JGJC',width:120,sortable:true">部门</th>
+				<th data-options="field:'ZaiQingName',width:120,sortable:true">灾情</th>
+                                <th data-options="field:'VideoType',width:120,sortable:true">视频类别</th>
+                                <th data-options="field:'VideoLength',width:120,sortable:true">视频时长</th>
+				<th data-options="field:'DisplayName',width:120,sortable:true">创建人</th>
+                               <th data-options="field:'Address',width:120,sortable:true">拍摄地址</th>
+                                 <th data-options="field:'Description',width:120,sortable:true">视频描述</th>
+				<th data-options="field:'BeginTime',width:120,sortable:true">创建时间</th>
+
+			</tr>
+		</thead>
+	</table>
+	
+	<div id="toolbar" style="padding:5px;height:auto">
+		<div style="margin-bottom:5px">
+			<a href="javascript:void(0)" id="updateVideo" class="easyui-linkbutton" iconCls="icon-edit" plain="true" title="编辑">编辑</a>
+			<a href="javascript:void(0)" id="deleteVideo" class="easyui-linkbutton" iconCls="icon-cut" plain="true" title="删除">删除</a>
+			<a href="javascript:void(0)" id="downloadVideo" class="easyui-linkbutton" iconCls="icon-save" plain="true" title="下载">下载</a>
+		</div>
+
+		<div>		
+			机构名:&nbsp;<select style="width:130px;height:28px;border:#95B8E7 1px solid" id="JGInfo">	
+			</select>
+			视频类别:&nbsp;<select style="width:130px;height:28px;border:#95B8E7 1px solid" id="videoType">	
+			</select>
+			创建人:&nbsp;<input class="textbox" style="width:130px;height:28px;" id="displayName">
+                        开始时间: &nbsp;
+                                <input class="easyui-datetimebox" data-options="formatter:myformatter" style="height:28px;width:180px;" id="startTime" />
+                        结束时间: &nbsp;
+                                <input class="easyui-datetimebox" data-options="formatter:myformatter" style="height:28px;width:180px;" id="endTime"  />
+			<a href="javascript:void(0)" id="searchVideo" class="easyui-linkbutton" iconCls="icon-search">搜 索&nbsp;&nbsp;</a>
+		</div>
+	</div>
+
+      <!-- updateVideoInfo -->
+       <div id="updateVideoTable" style="display:none">
+		<input type="hidden" id="updateVideoId"/>
+                <input type="hidden" id="taskId"/>
+        <table border="0" width=280px class="row">
+          <tr height="35px">
+            <td  width="60px" align="right">部门:</td>
+	    <td  width="160px"><input class="textbox" id="videoOrgUpdate" style="height:28px;width:200px;" disabled></td>
+	 </tr>
+         <tr>	
+	     <td align="right">灾情:</td><td>
+              <input id="taskUpdate" style="height:28px;width:200px;border:#95B8E7 1px solid" disabled/>
+            </td>            
+          </tr>
+          <tr height="35px">
+			<td  align="right">视频类别:</td>
+			<td><select id="updateVideoType"  style="height:28px;width:200px;border:#95B8E7 1px solid">
+
+                            </select></td>
+		  </tr>
+	          <tr>	
+			<td  align="right">拍摄地址:</td><td>
+                        <input class="textbox" id="videoAddress" style="height:28px;width:200px;">
+            </td>
+          </tr>
+             
+        <tr>
+                        <td  align="right">视频描述:</td><td>
+                        <input class="textbox" id="videoDescription" style="height:28px;width:200px;">
+            </td>
+          </tr>
+
+ 
+	 <tr>
+			<td  align="right">创建人:</td><td>
+                        <input class="textbox" id="createdByName" style="height:28px;width:200px;" disabled>
+            </td>
+          </tr>
+
+           <tr height="45px"><td colspan="4" align="center">
+			<a href="javascript" onclick="return submitUpdateVideo()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">&nbsp;保 存&nbsp;</a>
+			&nbsp;&nbsp;&nbsp;
+			<a href="javascript" onclick="Dialog.close()" class="easyui-linkbutton" data-options="iconCls:'icon-undo'">&nbsp;取 消&nbsp;</a>			
+          </td></tr>
+        </table>
+	</div>
+
+</div>	
+<script src='/js/videoVodList.js' charset="UTF-8"></script>
+<script>var permissionStr = "<%=data%>";</script>
+

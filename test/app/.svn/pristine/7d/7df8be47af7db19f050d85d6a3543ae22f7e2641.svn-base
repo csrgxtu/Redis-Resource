@@ -1,0 +1,123 @@
+*{
+	font-size:12px;
+}
+body {
+    /*font-family:verdana,helvetica,arial,sans-serif;*/
+	font-family: '微软雅黑','新宋体','宋体';
+    font-size:12px;
+    margin:0;
+}
+h2 {
+    font-size:18px;
+    font-weight:bold;
+    margin:0;
+    margin-bottom:15px;
+}
+.demo-info{
+	padding:0 0 12px 0;
+}
+.demo-tip{
+	display:none;
+}
+
+.easyui-panel a:hover{
+	color:red;
+}
+
+.myMenuCss{
+	TEXT-DECORATION: none;
+	color:#000;
+    font-size:16px;
+    width:150px;
+    display:none
+}
+    .myMenuCss div {
+        height:25px;
+        text-align:center;
+        margin:0 auto;
+    }
+.myMenuCss a{
+	TEXT-DECORATION: none;
+	color:#000;
+    font-size:16px;
+    width:150px;
+    display:none
+}
+
+.myImg {
+	float:left;
+}
+
+.myUserInfo{
+	font-size:15px;
+	color:#BFE1FF;
+}
+
+.myUserInfo a{
+	height:60px;
+	font-size:15px;
+	color:#BFE1FF;
+	text-decoration:none;
+	float:fight;
+}
+
+.myHeadTable{
+	background:url(/images/header/operation.png) no-repeat;
+	float:right;
+	padding-right:5px;
+}
+a {
+    text-decoration: none;
+}
+.ebmenu{
+    font-size: 14px;
+    margin: 0px;
+    padding: 10px;
+    width: 200px;
+    color: #444;
+    width:120px;
+    color:white;
+    height:20px;
+    padding-top:10px;
+}
+.ebmenu:hover {
+    font-size: 14px;
+    margin: 0px;
+    padding: 0px;
+    width: 200px;
+    color:red;
+        padding-top:10px;
+}
+.l-btn-plain:hover .ebmenu {
+     font-size: 14px;
+    margin: 0px;
+    padding: 0px;
+    width: 200px;
+    color: #444;
+    width:120px;
+}
+.m-btn-plain-active .ebmenu {
+     font-size: 14px;
+    margin: 0px;
+    padding: 0px;
+    width: 200px;
+    color: #444;
+    width:120px;
+}
+.menu-item:hover .ebmenu {
+         font-size: 14px;
+    margin: 0px;
+    padding: 0px;
+    width: 200px;
+    color: #444;
+    width:120px;
+     margin-top:10px;
+}
+.menu-item .ebmenu {
+         font-size: 14px;
+    padding: 0px;
+    width: 200px;
+    color: #444;
+    margin-top:10px;
+}
+

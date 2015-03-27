@@ -1,0 +1,330 @@
+/**
+ * Author: dishy
+ * Date: 25/May/2014
+ * File: XfImageController
+ * Des: controller that operates on XfImage model
+ *
+ * Produced By EBang.
+ */
+var fs = require('fs');
+var crypto = require('crypto');
+var path = require('path');
+var mqtt = require('mqtt');
+var uuid = require('node-uuid');
+var client = mqtt.createClient(1883, 'localhost');
+module.exports = {
+	/**
+	 * imageDeploy
+	 * show view of image deploy
+	 *
+	 * @return view
+	 */
+	deployImage: function(req, res) {
+    var userId = req.session.loginInfo.userInfo.UserId;
+    var viewUrl = 'xfjwt/showArrangePic';
+    var title = '部署图信息';
+    var menu = 'arrange';
+    ReviewService.getViewPass(res,userId,viewUrl,title,menu);
+	//	return res.view({title : 'arrange'}, 'xfjwt/showArrangePic');
+	},
+  save: function(req,res){
+    function canUse(val){
+      if(val == ''||val == null){
+        return res.send({code: 403,msg: 'Invalid Param',data: '',});
+      }
+    }
+	  function trim(str){
+    return str.replace(/(^\s*)|(\s*$)/g, "");
+    }
+    function chrn(str){
+     return str.replace(/[\r\n]/g,"");
+    }
+    var zaiQingId = req.param('zaiQingId');
+    var imageType = req.param('imageType');
+    var address = req.param('address');
+    var organizationId = req.session.loginInfo.userInfo.OrganizationId;
+    var baiduLat = req.param('baiduLat');
+    var baiduLon = req.param('baiduLon');
+    var createdBy = req.session.loginInfo.userInfo.UserName;
+    var createdTime = UtilityService.getCurrentTime();
+    var displayName = req.session.loginInfo.userInfo.DisplayName;
+    if( zaiQingId == null || zaiQingId == '' || baiduLat == null || baiduLat == ''
+     || baiduLon == null || baiduLon == '' || imageType == null || imageType == '')
+      return res.send({code: 404,msg: 'check you params',data: ''});
+    req.file('image').upload(function(err,files){
+      if(err)
+        return res.send({code: 500,msg: 'image param is null',data: ''});
+      console.log(typeof(files));
+      console.log('files = ' + JSON.stringify(files));
+      if (files.length == 0)
+        return res.send({code: 404,msg: "请选择图片",data: ''});
+      var orgFilePath_0 = files[0].fd;
+      var orgFileName_0 = files[0].filename;
+      var encodedFileName = uuid.v1();
+      var thumbnailUrl = sails.config.values.imagePath + encodedFileName + ".jpg";
+      fs.exists(orgFilePath_0,function(exist){
+        if(!exist)
+          return res.send({code: 404,msg: 'no such file',data: ''});
+        var data = fs.readFileSync(orgFilePath_0);
+        fs.writeFileSync(thumbnailUrl, data);
+        fs.unlink(orgFilePath_0, function (err) {
+          if (err) return res.send({code: 404,msg: 'no such file',data: ''});;
+          console.log('successfully deleted /tmp/hello');
+          var url = sails.config.values.imageUrlPath + encodedFileName + ".jpg";
+          var createValues = {};
+          createValues.OrganizationId = organizationId;
+          createValues.ZaiQingId = zaiQingId;
+          createValues.ImageType = imageType;
+          createValues.Category = "图片类别";
+          createValues.BaiduLat = baiduLat;
+          createValues.BaiduLon = baiduLon;
+          createValues.OriginFileName = orgFileName_0;
+          createValues.EncodedFileName = encodedFileName;
+          createValues.Url = url;
+          createValues.ThumbnailUrl = thumbnailUrl;
+          if(address != null && address != "")
+            createValues.Address = address;
+          createValues.CreatedBy = createdBy;
+          createValues.CreatedTime = createdTime;
+          XFJWT_Image.create(createValues)
+          .exec(function(err,createResult){
+            if(err)
+              return res.send({code: 500,msg: 'databases err',data: err});
+            XFJWT_ZaiQing.find({ZaiQingId: zaiQingId})
+            .exec(function(err,zaiQingResult){
+              if(err)
+                return res.send({code: 500,msg: 'databases err',data: err});
+              if(zaiQingResult.length == 0)
+                return res.send({code: 404,msg: '灾情不存在',data: ''})
+              var imageInfo = {};
+              imageInfo.zaiQingId = zaiQingId;
+              imageInfo.zaiQingName = zaiQingResult[0].ZaiQingName;
+              imageInfo.orgName = zaiQingResult[0].JGJC;
+              imageInfo.imageUrl = url;
+              imageInfo.displayName = displayName;
+              imageInfo.createdTime = createdTime;
+			  if(address != null && address != ""){
+				imageInfo.address = address;	
+			  }else{
+				imageInfo.address = "";
+			  }
+              imageInfo.imageType = imageType;
+			  imageInfo.createdBy = createdBy;
+              sails.io.sockets.emit('realTimeImageDepoly', imageInfo);
+              var sendMsgSql = "select u.UserName from xfjwt_ZaiQingDiaoPai dp inner join xfjwt_User u "
+                             + "on dp.DiaoPaiDuiXiangId = u.UserId where dp.ZaiQingId = " + zaiQingId;
+              XFJWT_ZaiQing.query(sendMsgSql,function(err,sendMsgSqlResult){
+                if(err)
+                  return res.send({code: 500,msg: 'databases err',data: err});
+                for(var i = 0;i<sendMsgSqlResult.length;i++){
+                    client.publish(sails.config.values.imageTopic+sendMsgSqlResult[i].UserName, JSON.stringify(imageInfo),{qos: 2},function(err){
+                      if(err){
+                          console.log("err="+err);
+                        }else{
+                          console.log("yes:"+i);
+                        }
+                      });
+                }
+                return res.send({code: 200,msg: 'successfully',data: ''});
+              })
+            })
+          })
+        });
+      })
+    })
+  },
+  read: function(req,res){
+        var pageIndex = req.param('pageIndex');
+		var pageSize = req.param('pageSize');
+		var imageType = req.param('imageType');
+		var zaiQingName = req.param('zaiQingName');
+		if (pageIndex == '' || pageIndex == null || pageSize == '' || pageSize == null) {
+			return res.send({
+				code: 403,
+				msg: 'Invalid Param',
+				data: ''
+			});
+		}
+		var start = (pageIndex - 1) * pageSize;
+		var countSql = "select count(*) as total from xfjwt_Image pic inner join xfjwt_ZaiQing zq on pic.ZaiQingId = zq.ZaiQingId ";
+		var readSql = "select * from xfjwt_Image pic inner join xfjwt_ZaiQing zq on pic.ZaiQingId = zq.ZaiQingId ";
+		if (zaiQingName != null && zaiQingName != '') {
+			countSql = countSql + " AND zaiQingName LIKE '%" + zaiQingName + "%'";
+			readSql = readSql + " AND zaiQingName LIKE '%" + zaiQingName + "%'";
+		}
+		if (imageType != null && imageType != '') {
+			countSql = countSql + " AND imageType = '" + imageType + "'";
+			readSql = readSql + " AND imageType = '" + imageType + "'";
+		}
+		
+		readSql = readSql + " LIMIT " + start + ", " + pageSize;
+		XFJWT_Image.query(countSql, function(err, recs) {
+			if (err) {
+				return res.send({
+					code: 500,
+					msg: 'DATABASE ERROR',
+					data: err,
+				});
+			}
+			var total = recs[0].total;
+			XFJWT_Image.query(readSql, function(err, recs) {
+				if (err) {
+					return res.send({
+						code: 500,
+						msg: 'DATABASE ERROR',
+						data: err,
+					});
+				}
+
+				return res.send({
+					code: 200,
+					msg: 'SUCCESSFUL',
+					total: total,
+					data: recs,
+				});
+			});
+		});
+
+  },
+ delete: function(req, res) {
+    var xfImagesId = req.param('xfImagesId');
+    if (xfImagesId == null || xfImagesId == '') {
+      return res.send({
+        code: 403,
+        msg: 'Invalid Param',
+        description: 'Seems you ant set the parameters right',
+        data: null,
+      });
+    }
+
+    XFJWT_Image.destroy({
+      XfImagesId:xfImagesId
+    }).done(function(err,result) {
+      if (err) {
+        return res.send({
+          code: 500,
+          msg: '数据库出错',
+          description: '数据库出错',
+          data: null,
+        });
+      }
+
+      return res.send({
+        code: 200,
+        msg: '成功',
+        description: '成功',
+        data: result,
+      });
+    });
+  },
+  
+ getPublisherNames: function(req, res) {
+    var sql = "SELECT DISTINCT(CreatedBy) FROM XfImages";
+    XFJWT_User.query(sql, function(err, users) {
+      if (err) {
+				UtilityService.errorLog("XfImages:getPublisherNames " + sql);
+        return res.send({
+          code: 500,
+          msg: 'Server Internal Error',
+          description: 'Seems Server Has An Internal Error',
+          data: null,
+        });
+      }
+
+      return res.send({
+        code: 200,
+        msg: 'SUCCESSFUL',
+        description: 'Successfully Query database',
+        data: users,
+      });
+    });
+  },
+
+  getTaskNames: function(req, res) {
+    var sql = "SELECT i.TaskId, t.TaskName from XfImages i "
+            + "INNER JOIN Task t  ON i.TaskId = t.TaskId GROUP BY i.taskId";
+    XFJWT_Image.query(sql, function(err, names) {
+      if (err) {
+				UtilityService.errorLog("XfImages:getTaskNames " + sql);
+        return res.send({
+          code: 500,
+          msg: 'Server Internal Error',
+          description: 'Seems Server Has An Internal Error',
+          data: null,
+        });
+      }
+
+      return res.send({
+        code: 200,
+        msg: 'SUCCESSFUL',
+        description: 'Successfully Query database',
+        data: names,
+      });
+    });
+  },
+ getVIMessage: function(req,res){
+   var taskId = req.param('taskId');
+   var startTime = req.param('startTime');
+   var endTime = req.param('endTime');
+   var str="";
+	 if(taskId==""||taskId==null){
+			str="select 'Video' as ResourceType, v.VideoType, v.Category,concat(v.ThumbnailUrl,'/',v.EncodedFileName,'.jpg') as Thumbnail, v.CreatedTime, u.DisplayName, v.EncodedFileName as Url,o.Level3Name from XfVideoInfo v left join User u on v.CreatedBy = u.UserName left join Organization o on o.OrganizationId = u.OrganizationId where v.CreatedTime >= '"+startTime+"' and v.CreatedTime <= '"+endTime+"'  union all select 'Image' as ResourceType, i.ImageType, i.Category,'' as Thumbnail,i.CreatedTime, u.DisplayName, Url,o.Level3Name from XfImages i left join User u on i.CreatedBy = u.UserName left join Organization o on o.OrganizationId = u.OrganizationId where i.CreatedTime >= '"+startTime+"' and i.CreatedTime <= '"+endTime+"'";
+		}else{
+			str="select 'Video' as ResourceType, v.VideoType, v.Category,concat(v.ThumbnailUrl,'/',v.EncodedFileName,'.jpg') as Thumbnail, v.CreatedTime, u.DisplayName, v.EncodedFileName as Url,o.Level3Name from XfVideoInfo v left join User u on v.CreatedBy = u.UserName left join Organization o on o.OrganizationId = u.OrganizationId where v.CreatedTime >= '"+startTime+"' and v.CreatedTime <= '"+endTime+"' and v.TaskId = "+taskId+"  union all select 'Image' as ResourceType, i.ImageType, i.Category,'' as Thumbnail,i.CreatedTime, u.DisplayName, Url,o.Level3Name from XfImages i left join User u on i.CreatedBy = u.UserName left join Organization o on o.OrganizationId = u.OrganizationId where i.CreatedTime >= '"+startTime+"' and i.CreatedTime <= '"+endTime+"' and i.TaskId = "+taskId;
+		} 
+   XFJWT_Image.query(str,function(err,result){
+			if (err) {
+				UtilityService.errorLog("XfImages:getTaskNames " + sql);
+			 	return res.send({
+					code: 500,
+					msg: 'Server Internal Error',
+					data: err,
+				});	
+			}
+              return res.send({
+                    code:200,
+                    msg:'OK',
+                    data:result
+               });
+     })
+
+ },
+ 
+  /**
+  * getImageTypes
+  * get all availlable ImageTypes
+  *
+  * @return RESTful Json
+  */
+  getImageTypes: function(req, res) {
+    var sql = "SELECT CodeDisplayName from xfjwt_SysCode where CodeCategory = '图片类别'";
+    
+    XFJWT_Image.query(sql, function(err, recs) {
+      if (err) {
+        return res.send({
+          code: 500,
+          msg: 'DATABASE ERROR',
+          data: err,
+        });
+      }
+      
+      return res.send({
+        code: 200,
+        msg: 'SUCCESSFUL',
+        data: recs,
+      });
+    });
+  },
+  
+}
+
+
+
+
+
+
+
+
+
+
+

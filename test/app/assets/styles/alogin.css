@@ -1,0 +1,231 @@
+body
+{
+	background: url(/images/login/bg.gif) repeat-x;
+	background-position:0px 0px;
+	margin:0px 0px;
+}
+
+.logo
+{
+	height: 67px;
+	top:0px;
+	width:100%;
+	background-color: #ffffff;
+	background-image: url(/images/login/ebanglogo.png);
+	background-repeat: no-repeat;
+	background-position:8% 50%;	
+
+}
+
+ul
+{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.Main
+{
+	width: 940px;	
+	margin: 0 auto;
+}
+
+.top
+{
+	height: 37px;
+}
+
+.top2
+{
+	height: 94px;
+	background: url(/images/login/login_02.gif) no-repeat;
+}
+.topA
+{
+	width: 155px;
+	height: 140px;
+	float: left;
+	overflow: hidden;
+	background: url(/images/login/login_03.gif) no-repeat;
+}
+
+
+
+
+.topB
+{
+	width: 200px;
+	height: 140px;
+	float: left;
+	overflow: hidden;
+	background: url(/images/login/login_04.gif) no-repeat;
+}
+
+
+
+.topC
+{
+	width: 27px;
+	height: 140px;
+	float: left;
+	overflow: hidden;
+	background: url(/images/login/login_05.gif) no-repeat;
+}
+
+
+.topD
+{
+	width: 400px;
+	height: 140px;
+	float: left;
+	overflow: hidden;
+	background: url(/images/login/login_06.gif);
+}
+
+.topE
+{
+	width: 158px;
+	height: 140px;
+	float: left;
+	overflow: hidden;
+	background: url(/images/login/login_07.gif) no-repeat;
+}
+
+
+
+.middle_A
+{
+	width: 155px;
+	height: 94px;
+	float: left;
+	overflow: hidden;
+	background: url(/images/login/login_08.gif) no-repeat;
+}
+
+.middle_B
+{
+	width: 309px;
+	height: 94px;
+	float: left;
+	overflow: hidden;
+	background: url(/images/login/login_09.gif) no-repeat;
+
+}
+
+.middle_C
+{
+	width: 318px;
+	height: 94px;
+	float: left;
+	overflow: hidden;
+	background: url(/images/login/login_10.gif) no-repeat;
+}
+
+.middle_D
+{
+	width: 158px;
+	height: 94px;
+	float: left;
+	overflow: hidden;
+	background: url(/images/login/login_11.gif) no-repeat;
+}
+
+.bottom_A
+{
+	height: 130px;
+	clear: both;
+	overflow: hidden;
+	background: url(/images/login/login_12_1.png) no-repeat;
+}
+
+.bottom_B
+{
+	height: 70px;
+	overflow: hidden;
+	 text-align:center;
+	background: url(/images/login/login_13.gif) no-repeat;
+}
+
+.login
+{
+	
+}
+
+.login li
+{
+	line-height: 35px;
+	height:35px;
+	overflow:hidden;
+	padding:3px 0px;
+}
+
+.left
+{ line-height: 35px;
+	vertical-align: middle;
+	width: 80px;
+	height:34px;
+	text-align: right;
+	display: -moz-inline-box;
+	display: inline-block;
+	padding-bottom:3px;
+}
+
+.left_1
+{ line-height: 35px;
+    font-size: 14px;
+	vertical-align: middle;
+	width: 100px;
+	height:34px;
+	text-align: right;
+	display: -moz-inline-box;
+	display: inline-block;
+	padding-bottom:5px;
+}
+
+.txt
+{
+	width: 215px;
+	height: 30px;
+	line-height: 30px;
+	overflow: hidden;
+	border: 0px;
+	padding-left: 3px;
+	color: #999999;
+	background: url(/images/login/txt.gif) no-repeat left center;
+}
+
+.txtCode
+{
+	width: 94px;
+	height: 30px;
+	line-height: 30px;
+	overflow: hidden;
+	border: 0px;
+	padding-left: 3px;
+	color: #999999;
+	background: url(/images/login/code.gif) no-repeat left center;
+}
+
+.btn
+{
+	margin-left:60px;
+}
+
+
+.tdheadleft
+{
+	left:8px;
+}
+
+a{
+	TEXT-DECORATION:none;
+	color:blue;
+}
+
+.radioc{
+	line-height: 30px;
+	padding-left: 3px;
+	margin-left: 15px;
+	margin-right: 10px;
+
+
+}

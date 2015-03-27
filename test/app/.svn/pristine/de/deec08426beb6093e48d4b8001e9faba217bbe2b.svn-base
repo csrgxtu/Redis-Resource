@@ -1,0 +1,182 @@
+.container{
+  border:1px #d3eaef solid;
+  margin:5px;
+}
+
+/*      right       */
+
+.titlebt {
+	font-size: 12px;
+	line-height: 26px;
+	color: #353C44;
+	display: block;
+	text-indent: 5px;
+	background: url(/images/task/bg1.gif) repeat-x;
+}
+
+.userT{
+	width:100%;
+	border:1px solid #D5DAFF;
+}
+
+.userB{
+	width:100%;
+	height:308px;
+	border:1px solid #D5DAFF;
+	
+}
+
+
+.txt
+{
+	width: 150px;
+	height: 25px;
+	line-height: 25px;
+	padding-left: 4px;
+
+}
+
+.sel
+{
+        width: 157px;
+        height: 30px;
+        line-height: 30px;
+        overflow: hidden;
+        padding-left: 3px;
+}
+
+#adduser{
+	font-size:14px;
+}
+
+#adduser tr{
+	height:35px;
+}
+
+#adduser table{
+	margin-top:12px;
+	margin-left:30px;
+	margin-bottom:7px;
+}
+
+.dr{
+	text-align:right;
+	width:100px;
+}
+.dr2{
+	width:160px;
+	padding-left:10px;
+}
+
+.usersub{
+	width:120px;
+	height:32px;
+	font-size:16px;
+
+}
+
+
+
+/*  ±í¸ñ   */
+
+.STYLE1 {
+	color: #000000;
+	font-size: 13px;
+}
+
+.STYLE6 {
+	color: #000000; 
+	font-size: 13px; 
+}
+
+.STYLE10 {
+	color: #000000;
+	font-size: 13px;
+}
+
+.STYLE19 {
+	color: #344b50;
+	font-size: 13px;
+}
+
+.STYLE21 {
+	font-size: 13px;
+	color: #3b6375;
+}
+.STYLE22 {
+	font-size: 13px;
+	color: #295568;
+}
+
+.txt1
+{
+        width: 215px;
+        height: 30px;
+        line-height: 30px;
+        overflow: hidden;
+        border: 0px;
+        padding-left: 3px;
+        margin-left:5px;        
+        background: url(/images/task/txt.gif) no-repeat left center;
+}
+.txt2
+{
+        width: 216px;
+        height: 30px;
+        line-height: 30px;
+        overflow: hidden;
+        border: 0px;
+        padding-left: 3px;
+        margin-left:5px;
+        background: url(/images/task/txt.gif) no-repeat left center;
+}
+.row {
+  font: normal 13px auto "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  color: black;
+}
+.row td{
+  padding:10px 1px;
+}
+.btn {
+  display: inline-block;
+  *display: inline;
+  padding: 4px 12px;
+  margin-bottom: 0;
+  *margin-left: .3em;
+  font-size: 14px;
+  line-height: 20px;
+  color: #333333;
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  vertical-align: middle;
+  cursor: pointer;
+  background-color: #f5f5f5;
+  *background-color: #e6e6e6;
+  background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+  background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
+  background-repeat: repeat-x;
+  border: 1px solid #cccccc;
+  *border: 0;
+  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-bottom-color: #b3b3b3;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+  *zoom: 1;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+     -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+
+
+
+
+
+

@@ -1,0 +1,424 @@
+<style>
+	input{
+		padding-left:4px;
+	}
+</style>
+<script>
+	var permissionStr = "<%=data%>";
+</script>
+
+<div data-options="region:'center'">	
+	<table id="jieJingAndTaskTable">
+	</table>
+	
+	<div id="toolbar" style="padding:5px;height:auto">
+		<div style="margin-bottom:5px">
+			<a href="javascript:void(0)" id="createZaiQing" class="easyui-linkbutton" iconCls="icon-edit" plain="true" title="调派信息录入">调派信息录入</a>
+			<a href="javascript:void(0)" id="endZaiQing" class="easyui-linkbutton" iconCls="icon-remove" plain="true" title="结案">任务结案</a>
+			<a href="javascript:void(0)" id="readZaiQing" class="easyui-linkbutton" iconCls="icon-tip" plain="true" title="灾情详情">灾情详情</a>
+            <a href="javascript:void(0)" id="sendZaiQingMsg" class="easyui-linkbutton" iconcls="icon-msg" plain="true" title="推送指令">推送指令</a>
+		</div>
+		<div style="height:33px;">
+			开始时间: &nbsp;
+				<input class="easyui-datetimebox" data-options="formatter:myformatter" style="height:28px;width:180px;" id="starDateInput" />		
+			结束时间: &nbsp;
+				<input class="easyui-datetimebox" data-options="formatter:myformatter" style="height:28px;width:180px;" id="endDateInput"  />
+			筛选：
+				<select id="cornFrom" onchange="getZaiQingInfo(pageNumber, pageSize);" style="height:28px;width:180px;border:#95B8E7 1px solid">
+					<option value="">全部</option>
+					<option value="xfjygl">消防救援管理系统</option>
+					<option value="xfjwt">消防警务通</option>
+				</select>
+			<a href="javascript:void(0)" id="searchZaiQin" class="easyui-linkbutton" onclick="getZaiQingInfo(pageNumber, pageSize);" iconCls="icon-search">搜 索&nbsp;&nbsp;</a>	
+		</div>
+	</div>
+</div>
+
+<!--  弹出层   新增层-->
+<div id="diaopaiCreate" style="display:none"> 
+<input type="hidden" id="creatKeyUnitName"/>
+<input type="hidden" id="creatzaiQingIdc"/>
+	<table>
+		<tr>
+			<td>
+				<div id="taskBasicPanel" title="灾情基本信息" class="easyui-panel" style="width:285px;height:535px;padding:3px;">
+					<table border="0">
+						<tr height="33px">
+							<td width="60px" align="right">灾情名称:</td>
+							<td><input id="creatzaiQingNamec" class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>							
+						</tr>
+						<tr height="33px">
+							<td align="right">灾情状态:</td>
+							<td><select id="creattaskStatusInput" style="width:160px;height:28px;border:1px solid #95B8E7">
+									<option value="接警">接警</option>
+									<option value="出警">出警</option>
+									<option value="灭火">灭火</option>
+									<option value="救援">救援</option>
+									<option value="完成">完成</option>	
+								</select><span style="padding-left:3px;color:red;font-weight:bold;">*</span>
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">报警人:</td>
+							<td>
+								<input id="creatBJRc" disabled type="text" class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+								
+								</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">联系电话:</td>
+							<td>
+								<input id="creatphoneNumberc" type="text" class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+								
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">纬度:</td>
+							<td>
+								<input id="creatlatc" type="text" disabled class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">经度:</td>
+							<td>
+								<input id="creatlonc" type="text" disabled class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">类型:</td>
+							<td>
+								<input id="creattypec" type="text" disabled class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">所属机构:</td>
+							<td>
+								<input id="creatJGJCc" type="text" disabled class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">地址:</td>
+							<td>
+								<input id="creataddressc" type="text" class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">推送时间:</td>
+							<td><input id="creatcreatedTimec" class="textbox" style="width:160px;height:28px;" disabled><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+						</tr>
+						<tr height="33px">
+							<td align="right">结束时间:</td>
+							<td><input id="creattaskEndTimeInput" class="easyui-datetimebox" data-options="formatter:myformatter" style="height:28px;width:160px;" /></td>	
+						</tr>
+						<tr height="33px">
+							<td width="60px" align="right">灾情描述:</td>
+							<td><textarea id="creatdescriptionc" class="textbox" style="height:50px;width:160px;"></textarea><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>							
+						</tr>		
+						<tr height="33px">
+							<td width="60px" align="right">灾情来源:</td>
+							<td><input id="creatlaiyuan" type="text" disabled class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>							
+						</tr>
+						<tr>
+							<td colspan="2"><div id='flaglaiyuan' style="color: red;"></div></td>
+						</tr>
+					</table>		
+				</div>
+			</td>
+			<td>				
+				<table class="easyui-datagrid" id ="creatuserTable" title="灾情成员" style="width:210px;height:535px" data-options="
+					rownumbers:true,
+					singleSelect:true,
+					idField:'UserId',
+					striped:true,
+					fitColumns:true">
+					<thead>
+						<tr>
+							<th data-options="field:'DisplayName',width:50">姓名</th>						
+							<th data-options="field:'JGJC',width:130">组织</th>
+						</tr>
+					</thead>
+				</table>
+			</td>
+			<td id="organizationTd">
+				<div id="taskOrganization" title="组织" class="easyui-panel" style="width:182px;">
+					<div style="border-bottom:1px solid #95B8E7;width:178px;height:250px;overflow:auto;">						 
+						<ul id ="organizationTree"></ul>	
+					</div>
+					<div style="height: 270px;">
+						<input type="hidden" id="zuzhiuserorganizationId"/>
+						<div style="padding-top:6px;width:178px;height:262px;overflow:auto">
+							<table id="ManDiv" width="100%" height="100%"></table>
+						</div>
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" height="40" align="center">
+				<a href="javascript" id="createOrUpdateBtn" onclick="saveZaiQing()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">&nbsp;保 存&nbsp;</a>
+				&nbsp;&nbsp;&nbsp;
+				<a href="javascript" onclick="Dialog.close()" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">&nbsp;取 消&nbsp;</a>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<!--  弹出层   编辑层-->
+<div id="diaopaiUpdate" style="display:none"> 
+<input type="hidden" id="updatezaiQingIdc"/>
+<input type="hidden" id="updateKeyUnitName"/>
+	<table>
+		<tr>
+			<td>
+				<div id="taskBasicPanel" title="灾情基本信息" class="easyui-panel" style="width:285px;height:520px;padding:3px;">
+					<table border="0">
+						<tr height="33px">
+							<td width="60px" align="right">灾情名称:</td>
+							<td><input id="updatezaiQingNamec" class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>							
+						</tr>
+						<tr height="33px">
+							<td align="right">灾情状态:</td>
+							<td><select id="updatetaskStatusInput" style="width:160px;height:28px;border:1px solid #95B8E7">
+									<option value="接警">接警</option>
+									<option value="出警">出警</option>
+									<option value="灭火">灭火</option>
+									<option value="救援">救援</option>
+									<option value="完成">完成</option>	
+								</select><span style="padding-left:3px;color:red;font-weight:bold;">*</span>
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">报警人:</td>
+							<td>
+								<input id="updateBJRc" disabled type="text" class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+								
+								</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">联系电话:</td>
+							<td>
+								<input id="updatephoneNumberc" type="text" class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+								
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">纬度:</td>
+							<td>
+								<input id="updatelatc" type="text" disabled class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">经度:</td>
+							<td>
+								<input id="updatelonc" type="text" disabled class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">类型:</td>
+							<td>
+								<input id="updatetypec" type="text" disabled class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">所属机构:</td>
+							<td>
+								<input id="updateJGJCc" type="text" disabled class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">地址:</td>
+							<td>
+								<input id="updateaddressc" type="text" class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">推送时间:</td>
+							<td><input id="updatecreatedTimec" class="textbox" style="width:160px;height:28px;" disabled><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+						</tr>
+						<tr height="33px">
+							<td align="right">结束时间:</td>
+							<td><input id="updatetaskEndTimeInput" class="easyui-datetimebox" data-options="formatter:myformatter" style="height:28px;width:160px;" /></td>	
+						</tr>
+						<tr height="33px">
+							<td width="60px" align="right">灾情描述:</td>
+							<td><textarea id="updatedescriptionc" class="textbox" style="height:50px;width:160px;"></textarea><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>							
+						</tr>	
+						<tr height="33px">
+							<td width="60px" align="right">灾情来源:</td>
+							<td><input id="updatelaiyuan" type="text" disabled class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>							
+						</tr>	
+					</table>			
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" height="40" align="center">
+				<a href="javascript" onclick="updateZaiQing()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">&nbsp;保 存&nbsp;</a>
+				&nbsp;&nbsp;&nbsp;
+				<a href="javascript" onclick="Dialog.close()" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">&nbsp;取 消&nbsp;</a>
+			</td>
+		</tr>
+	</table>
+</div>
+
+
+<!--  弹出层   任务详细信息层-->
+<div id="taskShowDiv" style="display:none"> 
+	<table>
+		<tr>
+			<td>
+				<div title="任务基本信息" class="easyui-panel" style="width:285px;height:520;padding:3px;">
+					<table border="0">
+						<tr height="33px">
+							<td width="60px" align="right">灾情名称:</td>
+							<td><input id="showzaiQingNamec" disabled class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>							
+						</tr>
+						<tr height="33px">
+							<td align="right">灾情状态:</td>
+							<td><select id="showtaskStatusInput" disabled style="width:160px;height:28px;border:1px solid #95B8E7">
+									<option value="接警">接警</option>
+									<option value="出警">出警</option>
+									<option value="灭火">灭火</option>
+									<option value="救援">救援</option>
+									<option value="完成">完成</option>	
+								</select><span style="padding-left:3px;color:red;font-weight:bold;">*</span>
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">报警人:</td>
+							<td>
+								<input id="showBJRc" disabled type="text" class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+								
+								</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">联系电话:</td>
+							<td>
+								<input id="showphoneNumberc" type="text" class="textbox" disabled 
+								style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+								
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">纬度:</td>
+							<td>
+								<input id="showlatc" type="text" disabled class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">经度:</td>
+							<td>
+								<input id="showlonc" type="text" disabled class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">类型:</td>
+							<td>
+								<input id="showtypec" type="text" disabled class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">所属机构:</td>
+							<td>
+								<input id="showJGJCc" type="text" disabled class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">地址:</td>
+							<td>
+								<input id="showaddressc" type="text" disabled class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+							</td>
+						</tr>
+						<tr height="33px">
+							<td align="right">推送时间:</td>
+							<td><input id="showcreatedTimec" class="textbox" style="width:160px;height:28px;" disabled><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>
+						</tr>
+						<tr height="33px">
+							<td align="right">结束时间:</td>
+							<td><input id="showtaskEndTimeInput" disabled class="easyui-datetimebox" data-options="formatter:myformatter" style="height:28px;width:160px;" /></td>	
+						</tr>
+						<tr height="33px">
+							<td width="60px" align="right">灾情描述:</td>
+							<td><textarea id="showdescriptionc" disabled class="textbox" style="height:50px;width:160px;"></textarea><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>							
+						</tr>	
+						<tr height="33px">
+							<td width="60px" align="right">灾情来源:</td>
+							<td><input id="showlaiyuan" type="text" disabled class="textbox" style="width:160px;height:28px;"><span style="padding-left:3px;color:red;font-weight:bold;">*</span></td>							
+						</tr>	
+					</table>		
+				</div>
+			</td>
+			<td>				
+				<table class="easyui-datagrid" id ="showuserTable" title="灾情成员" style="width:210px;height:520px" data-options="
+					rownumbers:true,
+					singleSelect:true,
+					striped:true,
+					idField:'UserId',
+					fitColumns:true">
+					<thead>
+						<tr>
+							<th data-options="field:'DisplayName',width:50">姓名</th>						
+							<th data-options="field:'JGJC',width:130">组织</th>
+						</tr>
+					</thead>
+				</table>
+			</td>			
+		</tr>
+		<tr>
+			<td colspan="2" height="40" align="center">				
+				<a href="javascript" onclick="Dialog.close()" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">&nbsp;取 消&nbsp;</a>
+			</td>
+		</tr>
+	</table>
+</div>
+
+
+<!--  弹出层   发布指令-->
+<div id="userInfoDiv" style="display:none">
+    <input type="hidden" id="zhilingzaiQingIdc"/>
+    <table>
+        <tr>
+            <td id="organizationTd">
+                <div id="taskOrganizationUser" title="组织" class="easyui-panel" style="width:182px;height:430px;">
+                    <div style="border-bottom:1px solid #95B8E7;width:180px;height:200px;overflow:auto;">
+                        <ul id="organizationTreeUser" class="easyui-tree" data-options="lines:true,checkbox:false,animate:true"></ul>
+                    </div>
+                    <div>
+                        <div style="padding-top:6px;width:178px;height:210px;overflow:auto">
+                            <table id="ManDivUser" width="98%" height></table>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <table class="easyui-datagrid" id="userTableUser" title="已选成员" style="width:210px;height:430px" data-options="
+					rownumbers:true,
+					singleSelect:true,
+					striped:true,
+					idField:'UserId',
+					fitColumns:true">
+                    <thead>
+                        <tr>
+                            <th data-options="field:'DisplayName',width:50">姓名</th>
+                            <th data-options="field:'JGJC',width:130">组织</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div class="panel-header" style="width: 198px; margin-top:5px;display:none">
+                    <div class="panel-title">文字内容</div><div class="panel-tool"></div>
+                    <textarea id="txtMsg" style="width:198px;height:45px"></textarea>
+                </div>
+                
+            </td>
+      
+        </tr>
+        <tr>
+            <td colspan="3" height="40" align="center">
+                <a href="javascript:void(0)" id="btnSendMsg" onclick="return sendMsg()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">&nbsp;推送信息&nbsp;</a>
+                &nbsp;&nbsp;&nbsp;
+                <a href="javascript:void(0)" onclick="Dialog.close()" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">&nbsp;取 消&nbsp;</a>
+            </td>
+        </tr>
+    </table>
+</div>
+<script  type="text/javascript" src="/js/zaiqing.js"></script>

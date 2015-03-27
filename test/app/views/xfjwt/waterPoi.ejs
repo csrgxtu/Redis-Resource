@@ -1,0 +1,82 @@
+<script>
+	var permissionStr = "<%=data%>";
+</script>
+
+<style>
+	.showImg{
+		width:94px;
+		padding:3px;
+		border:1px red dashed;
+	}
+
+	.btnName {
+		position: absolute;
+		width: 100%;
+		left: 0;
+		line-height: 20px;
+	}
+	.fileBorder {
+		margin-top:5px;
+		position: relative;
+		height: 20px;
+		border-radius: 9999999999px;
+		color: #d7d7d7;
+		border: solid 1px #333;
+		background: #333;
+		background: -webkit-gradient(linear, left top, left bottom, from(#666), to(#000));
+		background: -moz-linear-gradient(top, #666, #000);
+		filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#666666', endColorstr='#000000');
+	}
+	.fileBorder:hover {
+		background: #000;
+		background: -webkit-gradient(linear, left top, left bottom, from(#444), to(#000));
+		background: -moz-linear-gradient(top, #444, #000);
+		filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#444444', endColorstr='#000000');
+	}
+	.fileBorder:active {
+		color: #666;
+		background: -webkit-gradient(linear, left top, left bottom, from(#000), to(#444));
+		background: -moz-linear-gradient(top, #000, #444);
+		filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#000000', endColorstr='#666666');
+	}
+	input[type=file] {
+		position: absolute;
+		width: 100%;
+		left: 0;
+		filter: alpha(opacity: 0);
+		opacity: 0
+	}
+	input {
+		padding-left: 4px;
+	}
+</style>
+<div id="win">
+	<img id="showImgInDagrid" style="width: 100%;"/>
+</div>  
+
+<div data-options="region:'center'">
+	<div id="mapBox" style="width:100%;height:100%;"></div>
+</div>
+
+<div data-options="region:'west',split:true,border:true,title:'水源数据'" style="width:350px;">
+	<table id="waterTable">
+	</table>
+</div>
+
+<div id="toolbar" style="padding:5px;height:auto">
+	<div style="margin-bottom:5px">
+		<a href="javascript:void(0)" id="createWater" class="easyui-linkbutton" iconCls="icon-add" plain="true" title="添加">添加</a>
+		<a href="javascript:void(0)" id="deleteWater" class="easyui-linkbutton" iconCls="icon-cut" plain="true" title="删除">删除</a>
+	</div>
+	<div>
+		<div style="height:35px;">
+			<input class="textbox" id="waterAddress" placeholder="输入标注地址…" onkeydown="poiBtn()" style="height:30px;width:200px;">
+			<a href="javascript:void(0)" id="searchPoiByAddress" class="easyui-linkbutton" iconCls="icon-search">关键字搜索</a>
+		</div>
+	</div>
+</div>
+
+<script src="http://api.map.baidu.com/getscript?v=2.0&ak=gpLv0NLU88Ujhig1wySTVV0l&services=&t=20131205043325"></script>
+<script type="text/javascript" src="/js/MarkerTool_min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>

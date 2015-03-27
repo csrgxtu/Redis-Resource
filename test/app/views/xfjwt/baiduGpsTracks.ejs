@@ -1,0 +1,50 @@
+<script  src="http://api.map.baidu.com/getscript?v=2.0&ak=gpLv0NLU88Ujhig1wySTVV0l&services=&t=20131205043325"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/library/LuShu/1.2/src/LuShu_min.js"></script>
+<div data-options="region:'center'">
+	<div id="mapGps" style="width:100%;height:100%;"></div>
+</div>
+
+<div data-options="region:'west',split:true,border:true,title:'历史轨迹基本信息'" style="width:350px;">
+	<table  class="easyui-datagrid"  id="gpsList" data-options="
+				rownumbers:true, 
+				singleSelect:true,
+				autoRowHeight:false,				
+				collapsible:false,
+				toolbar:'#toolbar',
+				singleSelect:false,
+				remoteSort:false,
+				multiSort:true,
+				loadMsg:'正在加载数据，请稍等...',
+				striped:true,
+				fit:true,
+				fitColumns:true">
+		<thead>  	
+			<tr>
+				<th data-options="checkbox:true"></th>
+				<th data-options="field:'username',width:70,sortable:true">姓名</th>
+				<th data-options="field:'start',width:150,sortable:true">轨迹开始时间</th>				
+				<th data-options="field:'end',width:150,sortable:true">轨迹结束时间</th>
+				<th data-options="field:'colo',width:50,sortable:true,styler: function (value, row, index) {
+					return 'background-color:'+row.color+';';
+				}">颜色</th>
+			</tr>
+		</thead>  
+	</table>
+</div>
+
+<div id="toolbar">
+	<table>
+		<tr>
+			<td>
+				<div style="height:33px;">开始时间: &nbsp;<input class="easyui-datetimebox" data-options="formatter:myformatter" style="height:28px;width:180px;" id="sdate" /> </div>		
+				<div style="height:33px;">结束时间: &nbsp;<input class="easyui-datetimebox" data-options="formatter:myformatter" style="height:28px;width:180px;" id="edate"  /></div>
+			</td>
+			<td style="padding-left:10px;">	
+				<a href="javascript:void(0)" id="select" style="height:30px;" class="easyui-linkbutton" iconCls="icon-search">搜 索&nbsp;&nbsp;</a>
+			</td>
+		</tr>
+	</table>	
+		
+</div>
+
+<script type="text/javascript" src="/js/baiduGpsHis.js"></script>

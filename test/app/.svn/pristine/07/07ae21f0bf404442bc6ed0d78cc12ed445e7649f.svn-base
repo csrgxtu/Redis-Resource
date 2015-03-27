@@ -1,0 +1,51 @@
+<script src="/jwplayer_report/jwplayer.js"></script>
+<script type="text/javascript" src="/jwplayer_report/jwplayer.html5.js"></script>
+<script>
+
+  $(document).ready(function(){
+ var url = location.search;
+  var urlName = url.split("&");
+  var filename = decodeURI(urlName[0].slice(1));
+  var zaiQingName = decodeURI(urlName[1]);
+  var orgName = decodeURI(urlName[2]);
+  var displayName = decodeURI(urlName[3]);
+  var createdTime = decodeURI(urlName[4]);
+  var videoname = document.getElementById('videoname');
+     videoname.innerHTML ='灾情:'+zaiQingName+'&nbsp&nbsp创建人:'+orgName+'-'+displayName+'&nbsp&nbsp时间:'+createdTime+'';
+   jwplayer('container').setup({
+          flashplayer:"/jwplayer_report/jwplayer.flash.swf",
+          file:'rtmp://124.232.154.82:1935/appname/'+filename,
+          width: '1100',
+          height: '480',
+         autostart:true,
+  });
+ }) 
+
+  
+ 
+
+</script>
+<div data-options="region:'center'">
+<div>您现在观看的直播名为：<span id='videoname'></div>
+<hr/>
+<table cellpadding="10"  height="500">
+
+<tr>
+<td width="100" valign="top">
+
+</td>
+<td><div id="container">Loading the player ...</div></td>
+</tr>
+</table>
+<div id="container"></div>
+</div>
+
+
+
+
+
+
+
+
+
+ 

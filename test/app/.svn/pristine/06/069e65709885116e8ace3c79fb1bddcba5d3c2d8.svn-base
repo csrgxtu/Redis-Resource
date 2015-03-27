@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>移动指挥菜单首页</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="/css/themes/default/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="/_assets/css/jqm-demos.css">
+    <script src="/js/jqmobile/jquery.min.js"></script>
+
+    <script src="/js/jqmobile/jquery.mobile-1.4.5.min.js"></script>
+    <script src="/js/common.js"></script>
+	<script>
+		$(function(){
+			getOrganListBySearchPage();
+		});
+	</script>
+</head>
+<body>
+    <form>
+    	<input type="button" value="立案列表" onclick="toLianlist()">
+        <input type="button" value="值班信息及出勤人员状况统计" onclick="toIndex2()">
+        <input type="button" value="应急联动单位信息" onclick="toYjld()">
+        <input type="button" value="战勤保障单位及保障能力" onclick="toBznl()">
+        <input type="button" value="内部专家信息" onclick="toNbzj()">
+        <input type="button" value="外部专家信息" onclick="toWbzj()">
+        <input type="button" value="车辆作战功能及随车器材信息" onclick="toClzb()">
+        <input type="button" value="灭火药剂" onclick="tomhyj()">
+    </form>
+</body>
+</html>

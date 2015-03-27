@@ -1,0 +1,61 @@
+1 消防人员信息
+
+2 应急联动信息
+  url: /XFJGRetr/getYYLDDWInfo
+  param:
+  	   DWMC     单位名称
+  	   YJFWNR		应急服务内容
+  	   DWDZ			单位地址
+  	   DWLX		单位类型
+  	   JGJC			机构简称（消防辖区）
+  	   pageIndex  not null   start with 1
+  	   pageSize  not null
+ example: 
+ 	localhost:1337/XFJGRetr/getYYLDDWInfo?pageIndex=1&pageSize=1&JGJC=汨罗
+ 	response:
+ 		{
+		    "code": 200,
+		    "msg": "success",
+		    "total": 7,
+		    "data": [
+		        {
+		            "ID": "02896e70e5c443c8b50f542d5bae3699",
+		            "DWMC": "汨罗市公安局",
+		            "LXR": "局长",
+		            "LXDH": "110",
+		            "YJFWNR": "\u0000",
+		            "DWDZ": "湖南省岳阳市汨罗市",
+		            "DWLX": "反恐",
+		            "JGJC": "汨罗中队"
+		        }
+		    ]
+		}
+3 战勤保障单位及保障能力
+  url: /XFJGRetr/BZDWInfo
+  param: 
+      BZDW    保障单位
+      BZLB	  保障类别
+      WHJG	  维护机构
+  example: 
+  		localhost:1337/XFJGRetr/BZDWInfo?pageIndex=1&pageSize=1&WHJG=一中
+  	  response:
+  	  	{
+		    "code": 200,
+		    "msg": "success",
+		    "total": 11,
+		    "data": [
+		        {
+		            "ID": "402886f538e7436f01391fbd2b712958",
+		            "BZDW": "市水务局",
+		            "ZYMC": null,
+		            "BZLB": "装备器材供应",
+		            "BZNL": "水利工程",
+		            "LXDH": "8092285",
+		            "WHJG": "一中队"
+		        }
+		    ]
+		}
+4 车辆装备信息
+  url: localhost:1337/XFJGRetr/getCLZBInfo
+  param: 目前没传参数
+  

@@ -1,0 +1,242 @@
+<script>
+	var permissionStr="<%=data%>";
+</script>
+
+<style>
+	input {
+		padding-left:4px;
+	}
+</style>
+<div data-options="region:'center'">
+	<table class="easyui-datagrid" id="dg" title="用户基本信息列表" style="width:930px;height:528px" data-options="
+				rownumbers:true, 
+				singleSelect:true,
+				autoRowHeight:false,
+				pagination:true,
+				collapsible:false,
+				toolbar:'#toolbar',
+				remoteSort:false,
+				multiSort:true,
+				loadMsg:'正在加载数据，请稍等...',
+				striped:true,
+				fit:true,
+				fitColumns:true">
+		<thead>
+			<tr>
+				<th data-options="field:'loginName',width:60,sortable:true">账号</th>
+				<th data-options="field:'userName',width:60,sortable:true">姓名</th>
+				<th data-options="field:'title',width:100,sortable:true">职位</th>
+				<th data-options="field:'phoneNumber',width:100,sortable:true">联系电话</th>
+				<th data-options="field:'roleName',width:120,sortable:true">权限</th>
+				<th data-options="field:'organization',width:120,sortable:true">部门</th>
+				<th data-options="field:'status',width:120,sortable:true">登陆状态</th>
+				<th data-options="field:'imei',width:100,sortable:true">设备串号</th>
+				<th data-options="field:'shortNumber',width:60,sortable:true">短号</th>
+				<th data-options="field:'NoSequence',width:60,sortable:true">序号</th>
+			</tr>
+		</thead>
+	</table>
+
+	<div id="toolbar" style="padding:5px;height:auto">
+		<div style="margin-bottom:5px">
+			<a href="javascript:void(0)" id="createUser" class="easyui-linkbutton" iconCls="icon-add" plain="true" title="添加">添加</a>
+			<a href="javascript:void(0)" id="updateUser" class="easyui-linkbutton" iconCls="icon-edit" plain="true" title="编辑">编辑</a>
+			<a href="javascript:void(0)" id="updatePass" class="easyui-linkbutton" iconCls="icon-edit" plain="true" title="修改密码">修改密码</a>
+			<a href="javascript:void(0)" id="deleteUser" class="easyui-linkbutton" iconCls="icon-cut" plain="true" title="删除">删除</a>
+			<a href="javascirpt:void(0)" id="lockUser" class="easyui-linkbutton" iconCls="icon-tip" plain="true" title="加锁">加锁</a>
+			<a href="javascirpt:void(0)" id="unlockUser" class="easyui-linkbutton" iconCls="icon-remove" plain="true" title="解锁">解锁</a>
+		</div>
+
+		<div>
+			姓名:
+			<input class="textbox" placeholder="输入用户姓名" style="width:130px;height:28px;" id="userNameSea"> 职位:
+			<select style="width:130px;height:28px;border:#95B8E7 1px solid" id="titleSea">
+			</select>
+			权限:
+			<select style="width:130px;height:28px;border:#95B8E7 1px solid" id="permissionSea">
+			</select>
+			部门:
+			<select style="width:130px;height:28px;border:#95B8E7 1px solid" id="organizationSea">
+			</select>
+			<a href="javascript:void(0)" id="searchUser" class="easyui-linkbutton" iconCls="icon-search">搜 索&nbsp;&nbsp;</a>
+		</div>
+	</div>
+
+</div>
+
+<div id="addUser" style="display:none">
+	<table border="0" width=470px class="row">
+		<tr height="35px">
+			<td width="60px" align="right">用户账号:</td>
+			<td width="160px">
+				<input class="textbox" maxLength="10" id="userNameCreate" style="height:28px;width:150px;">
+			</td>
+			<td width="60px" align="right">姓 名:</td>
+			<td>
+				<input class="textbox" maxLength="8" id="userDisplayNameCreate" style="height:28px;width:150px;">
+			</td>
+		</tr>
+		<tr height="35px">
+			<td align="right">确认密码:</td>
+			<td>
+				<input type="password" class="textbox" id="userPassCreate" style="height:28px;width:150px;">
+			</td>
+			<td align="right">登陆密码:</td>
+			<td width="160px">
+				<input class="textbox" type="password" id="userPassAgainCreate" style="height:28px;width:150px;">
+			</td>
+		</tr>
+		<tr height="35px">
+			<td align="right">所属部门:</td>
+			<td>
+				<select id="organizationCreate" style="height:28px;width:150px;border:#95B8E7 1px solid"></select>
+			</td>
+			<td align="right">用户职位:</td>
+			<td>
+				<select id="titleCreate" style="height:28px;width:150px;border:#95B8E7 1px solid">
+				</select>
+			</td>
+		</tr>
+		<tr height="35px">
+			<td align="right">权 限:</td>
+			<td>
+				<select id="permissionCreate" style="height:28px;width:150px;border:#95B8E7 1px solid"></select>
+			</td>
+			<td align="right">手机串号:</td>
+			<td>
+				<input type="text" maxLength="20" id="imeiCreate" class="textbox" style="height:28px;width:150px;">
+			</td>
+		</tr>
+		<tr height="35px">
+			<td align="right">联系电话:</td>
+			<td>
+				<input maxLength="11" class="textbox" style="height:28px;width:150px;" id="phoneCreate">
+			</td>
+			<td align="right">短号:</td>
+			<td>
+				<input maxlength="16" class="textbox" style="height:28px;width:150px;" id="shortNumberCreate">
+			</td>
+		</tr>
+		<tr height="35px">
+			<td align="right">序号:</td>
+			<td colspan="3">
+				<input class="textbox" style="height:28px;width:383px;" id="NoSequenceCreate">
+			</td>
+		</tr>
+		<tr height="45px">
+			<td colspan="4" align="center">
+				<a href="javascript" id="saveUserBtn" onclick="return submitAddUser()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">&nbsp;保 存&nbsp;</a> &nbsp;&nbsp;&nbsp;
+				<a href="javascript" onclick="Dialog.close()" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">&nbsp;取 消&nbsp;</a>
+			</td>
+		</tr>
+	</table>
+
+</div>
+
+
+<div id="updateUserTable" style="display:none">
+	<input type="hidden" id="userIdUpdate">
+	<table border="0" width=280px class="row">
+		<tr height="35px">
+			<td width="60px" align="right">用户账号:</td>
+			<td width="160px">
+				<input maxLength="10" class="textbox" id="userNameUpdate" style="height:28px;width:200px;">
+			</td>
+		</tr>
+		<tr>
+			<td align="right">所属部门:</td>
+			<td>
+				<select id="organizationUpdate" style="height:28px;width:200px;border:#95B8E7 1px solid"></select>
+			</td>
+		</tr>
+		<tr height="35px">
+			<td align="right">姓名:</td>
+			<td>
+				<input class="textbox" maxLength="8" id="userDisplayNameUpdate" style="height:28px;width:200px;">
+			</td>
+		</tr>
+		<tr height="35px">
+			<td align="right">联系电话:</td>
+			<td>
+				<input class="textbox" maxLength="11" id="phoneUpdate" style="height:28px;width:200px;">
+			</td>
+		</tr>
+		<tr>
+			<td align="right">用户职位:</td>
+			<td>
+				<select id="titleUpdate" style="height:28px;width:200px;border:#95B8E7 1px solid">
+				</select>
+			</td>
+		</tr>
+		<tr height="35px">
+			<td align="right">权限:</td>
+			<td>
+				<select id="permissionUpdate" style="height:28px;width:200px;border:#95B8E7 1px solid"></select>
+			</td>
+		</tr>
+		<tr>
+			<td align="right">手机串号:</td>
+			<td>
+				<input type="text" maxLength="20" id="imeiUpdate" class="textbox" style="height:28px;width:200px;">
+			</td>
+		</tr>
+		<tr>
+			<td align="right">短号:</td>
+			<td>
+				<input type="text" maxlength="20" id="shortNumberUpdate" class="textbox" style="height:28px;width:200px;">
+			</td>
+		</tr>
+		<tr>
+			<td align="right">序号:</td>
+			<td>
+				<input type="text" maxlength="20" id="NoSequenceUpdate" class="textbox" style="height:28px;width:200px;">
+			</td>
+		</tr>
+		<tr height="45px">
+			<td colspan="4" align="center">
+				<a href="javascript" id="updateUserBtn" onclick="return submitUpdateUser()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">&nbsp;保 存&nbsp;</a> &nbsp;&nbsp;&nbsp;
+				<a href="javascript" onclick="Dialog.close()" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">&nbsp;取 消&nbsp;</a>
+			</td>
+		</tr>
+	</table>
+</div>
+
+
+<div id="updateUserPass" style="display:none">
+	<input type="hidden" id="userIdUpdatePass">
+	<input type="hidden" id="userLoginNameUpdatePass">
+	<table border="0" width="280px" class="row">
+		<tr height="35">
+			<td align="right">用户:</td>
+			<td>
+				<input id="userNameUpdatePass" class="textbox" style="height:28px;width:200px;" disabled="true">
+			</td>
+		</tr>
+		<tr height="35">
+			<td align="right">新密码:</td>
+			<td>
+				<input type="password" id="passUpdatePass" class="textbox" style="height:28px;width:200px;">
+			</td>
+		</tr>
+		<tr height="35">
+			<td align="right">确认密码:</td>
+			<td>
+				<input type="password" id="passAgainUpdatePass" class="textbox" style="height:28px;width:200px;">
+			</td>
+		</tr>
+		<tr height="35">
+			<td align="right"></td>
+			<td>
+				<input type="checkbox" style="height:16px;width:16px;" id="checkboxPass">初始化密码</td>
+		</tr>
+		<tr height="45">
+			<td colspan="4" align="center">
+				<a href="javascript" onclick="return submitUpdatePass()" class="easyui-linkbutton" data-options="iconCls:'icon-save'">&nbsp;保 存&nbsp;</a> &nbsp;&nbsp;&nbsp;
+				<a href="javascript" onclick="Dialog.close()" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">&nbsp;取 消&nbsp;</a>
+			</td>
+		</tr>
+	</table>
+</div>
+
+
+<script src="/js/user.js" type="text/javascript"></script>

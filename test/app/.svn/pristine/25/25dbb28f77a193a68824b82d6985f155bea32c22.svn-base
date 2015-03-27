@@ -1,0 +1,455 @@
+/**
+* Author: Archer Reilly
+* File: RoleController.js
+* Date: 25/May/2014
+* Des: controller for Role model
+*
+* Produced By EBang.
+*/
+var uuid = require('node-uuid');
+var async = require('async');
+var fs = require('fs');
+var exec = require('child_process').exec, child;
+module.exports = {
+
+
+  index: function(req,res){
+ /*   var userId = req.session.loginInfo.userInfo.userid;
+	var clientCode = req.session.loginInfo.userInfo.ClientCode;*/
+    var userId = req.session.loginInfo.userInfo.UserId;
+    var viewUrl = 'xfjwt/waterPoi';
+    var title = '重点水源';
+    var menu = '重点水源';
+    ReviewService.getViewPass(res,userId,viewUrl,title,menu);
+	/*LogService.saveb(req,clientCode,userId,"重点标注主页","重点标注主页","重点标注主页");
+    ReviewService.getViewPass(res,userId,viewUrl,title,menu);*/
+  //return res.view('keypoint.ejs');
+  },
+  
+  /**
+   * save
+   * create or update according to shuiYuanId
+   *
+   * @param shuiYuanId int (optional)
+   * @param refId int
+   * @param number string
+   * @param name string
+   * @param city string
+   * @param district string
+   * @param road string
+   * @param address string
+   * @param type string
+   * @param statusCode int
+   * @param gisLon float
+   * @param gisLat float
+   * @param baiduLon float
+   * @param baiduLat float
+   * @param zpurl string
+   * @param fwtd string
+   * @param fwtx string
+   * @param fwtn string
+   * @param fwtb string
+   * @return RESTful Json
+   */
+  save: function(req, res,next) {
+    var shuiYuanId = req.param('shuiYuanId');//
+    var name = req.param('name');//
+    var road = req.param('road');
+    var address = req.param('address');
+    var type = req.param('type');
+    var statusCode = req.param('statusCode');
+    var baiduLon = req.param('baiduLon');
+    var baiduLat = req.param('baiduLat');
+    var fwtd = req.param('fwtd');
+    var fwtn = req.param('fwtn');
+    var fwtx= req.param('fwtx');
+    var fwtb = req.param('fwtb');
+    var zpwj = req.param('zpwj');
+    var createdBy = req.session.loginInfo.userInfo.UserName;
+    var updatedBy = createdBy;
+    var createdTime = UtilityService.getCurrentTime();
+    var updatedTime = createdTime;
+    var organizationId = req.session.loginInfo.userInfo.OrganizationId;
+    var userId = req.session.loginInfo.userInfo.userid;
+    
+    if (shuiYuanId == null || shuiYuanId == '') {
+      if (name == null || name == '' || address == null || address == ''
+        || type == null || type == '' || statusCode == null
+        || statusCode == ''  || baiduLon == null
+        || baiduLon == '' || baiduLat == null || baiduLat == ''
+        ) {
+        return res.send(sails.config.returnCode.INVALID_PARAM);
+      }
+      var createdValues = {};
+      createdValues.Name = name;
+      if(road != null && road != '')
+        createdValues.Road = road;
+      createdValues.Address = address;
+      createdValues.Type = type;
+      createdValues.StatusCode = statusCode;
+      createdValues.CreatedTime = createdTime;
+      createdValues.CreatedBy = createdBy;
+      createdValues.OrganizationId = organizationId;
+      createdValues.BaiduLon = baiduLon;
+      createdValues.BaiduLat = baiduLat;
+      if(fwtd != null && fwtd != '')
+        createdValues.FWTD = fwtd;
+      if(fwtn != null && fwtn != '')
+        createdValues.FWTN = fwtn;
+      if(fwtx != null && fwtx != '')
+        createdValues.FWTX = fwtx;
+      if(fwtb != null && fwtb != '')
+        createdValues.FWTB = fwtb;
+      if(zpwj != null && zpwj != '')
+        createdValues.ZPURL = zpwj;                                      
+      XFJWT_ShuiYuan.create(createdValues).exec(function(err, recs) {
+        if (err) {
+          sails.config.returnCode.DB_ERROR.data = err;
+          return res.send(sails.config.returnCode.DB_ERROR);
+        }
+        console.log(recs);
+        sails.config.returnCode.QUERY_OK.data = recs;
+        return res.send(sails.config.returnCode.QUERY_OK);
+      });
+    } else {
+      var updatedValues = {};
+      updatedValues.UpdatedTime = updatedTime;
+      updatedValues.UpdatedBy = updatedBy;
+      if(name != null && name != '')
+        updatedValues.Name = name;
+      if(road != null && road != '')
+        updatedValues.Road = road;
+      if(address != null && address != '')
+        updatedValues.Address = address;
+      if(type != null && type != '')
+        updatedValues.Type = type;
+      if(statusCode != null && statusCode != '')
+        updatedValues.StatusCode = statusCode;
+      if(baiduLat != null && baiduLat != '')
+        updatedValues.BaiduLat = baiduLat;
+      if(baiduLon != null && baiduLon != '')
+        updatedValues.BaiduLon = baiduLon;
+      if(fwtd != null && fwtd != '')
+        updatedValues.FWTD = fwtd;
+      if(fwtn != null && fwtn != '')
+        updatedValues.FWTN = fwtn;
+      if(fwtx != null && fwtx != '')
+        updatedValues.FWTX = fwtx;
+      if(fwtb != null && fwtb != '')
+        updatedValues.FWTB = fwtb;
+      if(zpwj != null && zpwj != '')
+        updatedValues.ZPURL = zpwj;                         
+      XFJWT_ShuiYuan.update({
+        ShuiYuanId: shuiYuanId,
+      }, updatedValues).exec(function(err, recs) {
+        if (err) {
+          sails.config.returnCode.DB_ERROR.data = err;
+          return res.send(sails.config.returnCode.DB_ERROR);
+        }
+        sails.config.returnCode.QUERY_OK.data = recs;
+        return res.send(sails.config.returnCode.QUERY_OK);
+      });
+    }
+
+  },
+
+  /**
+    upload pic
+    pic tag {
+      FWTD
+      FWTN
+      FWTX
+      FWTB
+      ZPWJ
+    }
+  */
+  uploadShuiYuanPic: function(req,res){
+    var picTag = req.param('picTag');
+    var tpUrl;
+    var tpPath;
+    var encodeFileName;
+    var arr = ['FWTD','FWTN','FWTX','FWTB','ZPURL'];
+    if(picTag == '' || picTag == null)
+      return res.send({code: 404,msg: 'picTag param is null',data: ''});
+    var picTagUpCase = picTag.toUpperCase();
+    if(arr.indexOf(picTagUpCase) == -1)
+      return res.send({code: 404,msg: "you should set pictag in enum['FWTD','FWTN','FWTX','FWTB','ZPURL']"});
+    req.file('image').upload(function(err,files){
+      console.log(files);
+      if(err)
+        return res.send({code: 500,msg: 'upload file fails ',data: ''});
+      if(files.length == 0)
+        return res.send({code: 404,msg: 'please select picture',data: ''});
+      var orgFilePath = files[0].fd;
+      var orgFileName = files[0].filename;
+      var orgFileExtension = orgFileName.split('.');
+      var orgFileExtD = orgFileExtension[1];
+      encodeFileName = uuid.v1();
+      console.log(files);
+      if(picTagUpCase == 'FWTD'){
+        tpUrl = sails.config.values.AP1FileUrl.SY_FWTDURL + encodeFileName + "." + orgFileExtD;
+        tpPath = sails.config.values.AP1FilePath.SY_UPLOADFWTD + encodeFileName + "." + orgFileExtD;
+      }else if(picTagUpCase == 'FWTN'){
+        tpUrl = sails.config.values.AP1FileUrl.SY_FWTNURL + encodeFileName + "." + orgFileExtD;
+        tpPath = sails.config.values.AP1FilePath.SY_UPLOADFWTN + encodeFileName + "." + orgFileExtD;
+      }else if(picTagUpCase == 'FWTX'){
+        tpUrl = sails.config.values.AP1FileUrl.SY_FWTXURL + encodeFileName + "." + orgFileExtD;
+        tpPath = sails.config.values.AP1FilePath.SY_UPLOADFWTX + encodeFileName + "." + orgFileExtD;
+      }else if(picTagUpCase == 'FWTB'){
+        tpUrl = sails.config.values.AP1FileUrl.SY_FWTBURL + encodeFileName + "." + orgFileExtD;
+        tpPath = sails.config.values.AP1FilePath.SY_UPLOADFWTB + encodeFileName + "." + orgFileExtD;
+      }else {
+        tpUrl = sails.config.values.AP1FileUrl.SY_ZPWJURL + encodeFileName + "." + orgFileExtD;
+        tpPath = sails.config.values.AP1FilePath.SY_UPLOADZPWJ + encodeFileName + "." + orgFileExtD;
+      }
+      if(fs.existsSync(orgFilePath)){
+          child = exec("mv " + orgFilePath + " " + tpPath,
+          function (error, stdout, stderr) {
+            if (error) {
+              return res.send({code: 500,msg: "server err"});
+            }
+            return res.send({code: 200,msg: 'upload success',tpUrl: tpUrl});
+          }); 
+      }else{
+        return res.send({code: 403,msg: 'upload file missing',data: ''});  
+      }
+    })
+  },
+  /**
+   * read
+   * read records
+   *
+   * @param pageIndex int
+   * @param pageSize int
+   * @param name string (optional)
+   * @param city string (optional)
+   * @param address string (optional)
+   * @return RESTful Json
+   */
+  read: function(req, res) {
+    var pageIndex = req.param('pageIndex');
+    var pageSize = req.param('pageSize');
+    var name = req.param('name');
+    var city = req.param('city');
+    var address = req.param('address');
+    var organizationId = req.session.loginInfo.userInfo.OrganizationId;
+    if (pageIndex == null || pageIndex == '' || pageSize == null
+      || pageSize == '' || organizationId == null
+      || organizationId == '') {
+      return res.send(sails.config.returnCode.INVALID_PARAM);
+    }
+    
+    var start = (pageIndex - 1) * pageSize;
+    var sql = "SELECT * FROM xfjwt_ShuiYuan WHERE IsActive = 1";
+    var sqlTotal = "select count(*) as total from xfjwt_ShuiYuan where IsActive = 1 ";
+    if (name != null && name != '') {
+      sql = sql + " AND Name LIKE '%" + name + "%'";
+      sqlTotal = sqlTotal + " AND Name LIKE '%" + name + "%'";
+    }
+    if (city != null && city != '') {
+      sql = sql + " AND City LIKE '%" + city + "%'";
+      sqlTotal = sqlTotal + " AND City LIKE '%" + city + "%'";
+    }
+    if (address != null && address != '') {
+      sql = sql + " AND Address LIKE '%" + address + "%'";
+      sqlTotal = sqlTotal + " AND Address LIKE '%" + address + "%'";
+    }
+    sql = sql + " LIMIT " + start + ", " + pageSize;
+    
+    XFJWT_ShuiYuan.query(sqlTotal, function(err, sqlTotalResult) {
+      if (err) {
+        sails.config.returnCode.DB_ERROR.data = err;
+        return res.send(sails.config.returnCode.DB_ERROR);
+      }
+      if(sqlTotalResult.length == 0)
+        return res.send({code: 404,msg: 'no data',data: ''});
+      var total = sqlTotalResult[0].total;
+      
+      XFJWT_ShuiYuan.query(sql, function(err, recs) {
+        if (err) {
+          sails.config.returnCode.DB_ERROR.data = err;
+          return res.send(sails.config.returnCode.DB_ERROR);
+        }
+        
+        sails.config.returnCode.QUERY_OK.data = {
+          'total': total,
+          'recs': recs,
+        };
+        return res.send(sails.config.returnCode.QUERY_OK);
+      });
+    });
+  },
+  shuiYuanDataSync: function(req,res){
+    var dataSyncSql = "replace into xfjwt_ShuiYuan(OrganizationId,RefId,Number,Name,District,Road,Address,Type,StatusCode,GisLon,GisLat,IsActive,CreatedBy,CreatedTime) "
+                    + "select sy.JGID,sy.ID,sy.SYBH as Number, sy.SYMC as Name,xzcode.DMMC as District,"
+                    + "ld.LDMC as Road, sy.SYDZ as Address, code.DMMC as `Type`,"
+                    + "sy.KYZT as `StatusCode`, sy.GIS_X as GisLon, sy.GIS_Y as GisLat,"
+                    + "sy.JLZT,'SYSTEM','2014-10-01 00:00:00' "
+                    + "from SY_SYJBXX sy "
+                    + "left join DM_SJZD code on sy.SYLX=code.DMZ "
+                    + "inner join DM_SJZDZB zb on zb.ID=code.DM_SJZD_ID and zb.ZDDM='SYLX' "
+                    + "left join JGXX_XFJG jg on sy.JGID=jg.ID "
+                    + "left join SY_LDXX ld on sy.SSLD=ld.ID "
+                    + "left join DM_SJZD xzcode on ld.SSXZQ=xzcode.DMZ  "
+                    + "left join DM_SJZDZB xzzb on xzzb.ID=xzcode.DM_SJZD_ID and xzzb.ZDDM='XZQH' "
+                    + "where sy.JLZT = 1";
+                   
+    XFJWT_CronTask.find({TaskName: 'shuiYuanDataSync'})
+    .exec(function(err,taskNameResult){
+      if(err)
+        return res.send({code: 500,msg: 'database err',data: err});
+      if (taskNameResult.length == 0) 
+        return res.send({code: 404,msg: 'please input task first',data: ''});
+      XFJWT_CronTaskHistory.find({CronTaskId: taskNameResult[0].CronTaskId})
+      .sort('DataEndTime DESC')
+      .limit(1)
+      .exec(function(err,crontaskIdResult){
+        if(err)
+          return res.send({code: 500,msg: 'crontaskIdResult err',data: err});
+        if(crontaskIdResult.length == 0){
+          dataSyncSql += " and sy.SJC > '2015-01-20 00:00:00'";
+          var createValues = {};
+          createValues.CronTaskId = taskNameResult[0].CronTaskId;
+          createValues.DataEndTime = '2015-01-20 00:00:00';
+          createValues.CreatedTime = UtilityService.getCurrentTime();
+          createValues.Message = "水源更新";
+          XFJWT_CronTaskHistory.create(createValues)
+          .exec(function(err,createValuesResult){
+            if(err)
+              return res.send({code: 500,msg: 'crontaskIdResult err',data: err});
+            XFJWT_CronTask.query(dataSyncSql,function(err,dataSyncSqlResult){
+              if(err)
+                return res.send({code: 500,msg: 'dataSyncSqlResult err',data: err});
+              return res.send({code: 200,msg: 'successfully',data: ''});
+            })
+          })
+        }else{
+          var curentTime = UtilityService.getCurrentTime();
+          dataSyncSql += " and sy.SJC > '"+crontaskIdResult[0].DataEndTime+"'";
+          var createValues = {};
+          createValues.CronTaskId = taskNameResult[0].CronTaskId;
+          createValues.DataEndTime = curentTime;
+          createValues.CreatedTime = UtilityService.getCurrentTime();
+          createValues.Message = "水源更新";
+          XFJWT_CronTaskHistory.create(createValues)
+          .exec(function(err,createValuesResult){
+            if(err)
+              return res.send({code: 500,msg: 'crontaskIdResult err',data: err});
+            XFJWT_CronTask.query(dataSyncSql,function(err,dataSyncSqlResult){
+              if(err)
+                return res.send({code: 500,msg: 'dataSyncSqlResult err',data: err});
+              return res.send({code: 200,msg: 'successfully',data: ''});
+            })
+          })
+        }
+      })
+      
+    })
+  },
+  /**
+   * delete
+   * delete an record
+   * 
+   * @param shuiYuanId int
+   * @return RESTful Json
+   */
+  delete: function(req, res) {
+    var shuiYuanId = req.param('shuiYuanId');
+    if (shuiYuanId == null || shuiYuanId == '') {
+      return res.send(sails.config.returnCode.INVALID_PARAM);
+    }
+    
+    XFJWT_ShuiYuan.update({
+      ShuiYuanId: shuiYuanId,
+    }, {
+      IsActive: false,
+    }).exec(function(err, recs) {
+      if (err) {
+        sails.config.returnCode.DB_ERROR.data = err;
+        return res.send(sails.config.returnCode.DB_ERROR);
+      }
+      
+      sails.config.returnCode.QUERY_OK.data = recs;
+      return res.send(sails.config.returnCode.QUERY_OK);
+    });
+  },
+
+  /**
+   * ShuiYuanTP
+   * fill up the empty columns in the xfjwt_ShuiYuan, i.e
+   * ZPURL, FWTD, FWTX, FWTN, TWTB
+   *
+   * @param void
+   * @param return RESTful Json
+   */
+  ShuiYuanTP: function(req, res) {
+    var sql = 'SELECT RefId FROM xfjwt_ShuiYuan';
+    XFJWT_ShuiYuan.query(sql, function(err, recs) {
+      if (err) {
+        sails.config.returnCode.DB_ERROR.data = err;
+        return res.send(sails.config.returnCode.DB_ERROR);
+      }
+      
+      for (var i = 0; i < recs.length; i++) {
+        var sqla = "SELECT ID, FWTD, FWTX, FWTN, FWTB, ZPWJURL FROM"
+          + " SY_SYJBXX WHERE ID = '" + recs[i].RefId + "'";
+        XFJWT_ShuiYuan.query(sqla, function(err, recs) {
+          if (err) {
+            sails.config.returnCode.DB_ERROR.data = err;
+            return res.send(sails.config.returnCode.DB_ERROR);
+          }
+
+          if (recs.length == 0) {
+            return res.send(sails.config.returnCode.QUERY_OK);
+          }
+
+          /*var sqlb = "UPDATE xfjwt_ShuiYuan set FWTD = '"
+            + recs[0].FWTD + ".jpg', FWTX = '" + recs[0].FWTX
+            + ".jpg', FWTN = '" + recs[0].FWTN + ".jpg', FWTB = '"
+            + recs[0].FWTB + ".jpg', ZPURL = '" + recs[0].ZPWJURL
+            + ".jpg' WHERE RefId = '" + recs[0].ID + "'";*/
+          var sqlb = "UPDATE xfjwt_ShuiYuan set";
+          if (recs[0].FWTD != null && recs[0].FWTD != '') {
+            sqlb = sqlb + " FWTD = '/files/syncSYJBXXFWTD/" + recs[0].FWTD + ".jpg',";
+          } else {
+            sqlb = sqlb + " FWTD = NULL,";
+          }
+          if (recs[0].FWTN != null && recs[0].FWTN != '') {
+            sqlb = sqlb + " FWTN = '/files/syncSYJBXXFWTN/" + recs[0].FWTN + ".jpg',";
+          } else {
+            sqlb = sqlb + " FWTN = NULL,";
+          }
+          if (recs[0].FWTB != null && recs[0].FWTB != '') {
+            sqlb = sqlb + " FWTB = '/files/syncSYJBXXFWTB/" + recs[0].FWTB + ".jpg',";
+          } else {
+            sqlb = sqlb + " FWTB = NULL,";
+          }
+          if (recs[0].FWTX != null && recs[0].FWTX != '') {
+            sqlb = sqlb + " FWTX = '/files/syncSYJBXXFWTX/" + recs[0].FWTX + ".jpg',";
+          } else {
+            sqlb = sqlb + " FWTX = NULL,";
+          }
+          if (recs[0].ZPWJURL != null && recs[0].ZPWJURL != '') {
+            sqlb = sqlb + " ZPURL = '/files/syncSYJBXXZPWJ/" + recs[0].ZPWJURL + ".jpg'";
+          } else {
+            sqlb = sqlb + " ZPURL = NULL";
+          }
+          sqlb = sqlb + " WHERE RefId = '" + recs[0].ID + "'";
+          XFJWT_ShuiYuan.query(sqlb, function(err, recs) {
+            if (err) {
+              sails.config.returnCode.DB_ERROR.data = err;
+              console.log('DEBUG: ');
+              console.log(err);
+              return res.send(sails.config.returnCode.DB_ERROR);
+            }
+           
+            //sails.config.returnCode.QUERY_OK.data = recs;
+            //return res.send(sails.config.returnCode.QUERY_OK);
+          });
+        });
+      }
+
+      return res.send(sails.config.returnCode.QEUERY_OK);
+    });
+  },
+}

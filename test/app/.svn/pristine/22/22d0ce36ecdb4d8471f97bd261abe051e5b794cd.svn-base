@@ -1,0 +1,148 @@
+﻿<html>
+<head>
+    <title>视频直播中心</title>
+    <link rel="stylesheet" type="text/css" href="/jqueryeasyui/css/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/jqueryeasyui/css/icon.css">
+    <link rel="stylesheet" type="text/css" href="/jqueryeasyui/css/demo.css">
+    <link rel="stylesheet" type="text/css" href="/styles/videoVod.css" />
+    <script type="text/javascript" src="/jqueryeasyui/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/jqueryeasyui/js/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/jqueryeasyui/js/juqeryeasyui-my.js"></script>
+    <script type="text/javascript" src="/dialog/zDialog.js"></script>
+    <script type="text/javascript" src="/dialog/zDrag.js"></script>
+    <script type="text/javascript" src="/js/MD5.js"></script>
+    <script type="text/javascript" src="/js/socket.io.js"></script>
+    <script type="text/javascript" src="/js/sails.io.js"></script>
+    <script type="text/javascript" src="/js/app.js"></script>
+    <script type="text/javascript" src="/js/jQueryRotate.js"></script>
+    <script type="text/javascript" src="/js/common.js"></script>
+    <script type="text/javascript" src='/js/socket.io.js'></script>
+    <script src="/jwplayer_report/jwplayer.js"></script>
+    <script type="text/javascript" src="/jwplayer_report/jwplayer.html5.js"></script>
+    <script type="text/javascript" src="/js/videoVod.js"></script>
+</head>
+<body class="easyui-layout">
+    <div id='liveDiv' style=" width:250px;" data-options="region:'west',split:true,border:true,title:'视频直播中心'">
+        <p class="player_title">
+            当前共有 <b style="color:red" id="liveCount">0</b> 路直播
+        </p>
+        <div style="height:500px;overflow-y:auto;overflow-x:hidden;" id="dvLiveVideo">
+            <ul id='liveUl'></ul>
+        </div>
+        <div style=" height:50px;position:relative;width:100%;float:left;" id="dvRight">
+            <p class="player_title">播放模式：</p>
+            <input type="radio" value="mode" onclick="setMode(1)" name="mode" id="mode1" checked /> 单路直播<br />
+            <input type="radio" value="mode" onclick="setMode(4)" name="mode" id="mode2" /> 2 X 2 路直播<br />
+            <input type="radio" value="mode" onclick="setMode(9)" name="mode" id="mode2" /> 3 X 3 路直播
+        </div>
+    </div>
+    <div id="dvContext" data-options="region:'center',split:true,border:true,title:'视频直播控制台',tools:'#tlReturn'" style="text-align:center; margin:0 auto">
+        <div style="margin:0px auto; clear:both;background-color:#000;" id="dvContainer">
+            <div style="margin:0px auto; clear:both;background-color:#000;" id="dvContainerVideo">
+
+            </div>
+        </div>
+
+        <table style="width:100%;height:100%;display:none;" id="tbFourVideo">
+            <tr>
+                <td style="background-color:#000;width:50%;">
+                    <div id="p41" style="margin:0 auto;">
+
+                    </div>
+                </td>
+                <td style="background-color:#000;width:50%;">
+                    <div id="p42">
+
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color:#000;width:50%;">
+                    <div id="p43">
+
+                    </div>
+                </td>
+                <td style="background-color:#000;width:50%;">
+                    <div id="p44">
+
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <table style="width:100%;height:100%;display:none;" id="tbNineVideo">
+            <tr>
+                <td style="background-color:#000;width:33%;">
+                    <div id="p91">
+
+                    </div>
+                </td>
+                <td style="background-color:#000;width:33%;">
+                    <div id="p92">
+
+                    </div>
+                </td>
+                <td style="background-color:#000;width:33%;">
+                    <div id="p93">
+
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color:#000;width:33%;">
+                    <div id="p94">
+
+                    </div>
+                </td>
+                <td style="background-color:#000;width:33%;">
+                    <div id="p95">
+
+                    </div>
+                </td>
+                <td style="background-color:#000;width:33%;">
+                    <div id="p96">
+
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="background-color:#000;width:33%;">
+                    <div id="p97">
+
+                    </div>
+                </td>
+                <td style="background-color:#000;width:33%;">
+                    <div id="p98">
+
+                    </div>
+                </td>
+                <td style="background-color:#000;width:33%;">
+                    <div id="p99">
+
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="tt1">
+        <a href="#" style="width:30px" onclick="javascript:removeVideo(0)" title="关闭视频">x</a>
+    </div>
+    <div id="tt2">
+        <a href="#" style="width:30px" onclick="javascript:moveVideo(1)" title="切换到大屏">切换</a>
+        <a href="#" style="width:30px" onclick="javascript:removeVideo(1)" title="关闭视频">x</a>
+    </div>
+    <div id="tt3">
+        <a href="#" style="width:30px" onclick="javascript:moveVideo(2)" title="切换到大屏">切换</a>
+        <a href="#" style="width:30px" onclick="javascript:removeVideo(2)" title="关闭视频">x</a>
+    </div>
+    <div id="tt4">
+        <a href="#" style="width:30px" onclick="javascript:moveVideo(3)" title="切换到大屏">切换</a>
+        <a href="#" style="width:30px" onclick="javascript:removeVideo(3)" title="关闭视频">x</a>
+    </div>
+    <div id="tlReturn">
+        <a href="/xfjwt/index" style="width:60px" onclick="javascript:void(0)" title="返回消防通首页">返回首页</a>
+    </div>
+    <audio id="chatAudio"><source src="/musics/notify.mp3"></audio>
+    <audio id="chatAudio2"><source src="/musics/videoli.mp3"></audio>
+</body>
+</html>

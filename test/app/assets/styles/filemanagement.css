@@ -1,0 +1,68 @@
+
+/*  ±í¸ñ   */
+
+.STYLE1 {
+	color: #000;
+	font-size: 13px;
+}
+
+.STYLE6 {
+	color: #000000; 
+	font-size: 13px; 
+}
+
+.STYLE10 {
+	color: #000000;
+	font-size: 13px;
+}
+
+.STYLE19 {
+	color: #344b50;
+	font-size: 13px;
+}
+
+.STYLE21 {
+	font-size: 13px;
+	color: #3b6375;
+}
+.STYLE22 {
+	font-size: 13px;
+	color: #295568;
+}
+
+
+.container{
+	
+	border:1px #d3eaef solid;
+	margin:5px;
+}
+
+.titlebt {
+  font-size: 12px;
+  line-height: 26px;
+  color: #353C44;
+  display: block;
+  text-indent: 5px;
+  background: url(/images/task/bg1.gif) repeat-x;
+}
+
+.selinput{
+	margin:10px;
+}
+
+.row {
+  font: normal 13px auto "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  color: black;
+}
+.row td{
+  padding:10px 1px;
+}
+
+.btn{
+	width:80px;
+	height:25px;
+}
+
+a{
+	color: blue;
+}

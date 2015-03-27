@@ -1,0 +1,149 @@
+主要内容：
+  1、指定主页面
+     url: /Content/index
+  2、上传内容文件,修改文件信息
+     url: /Content/save
+  3、查询功能
+     url: /Content/read
+  4、删除content数据记录
+      url:/Content/delete
+  5、App自动更新
+      url:/Content/apkUpdate
+  6, 安卓通过FTP上传视频
+      url:/Content/VOD
+
+1、指定主页面
+     url: /Content/main
+2、上传内容文件
+     上传内容文件
+     url: /Content/save
+     客户段文件上传代码:<input type="file" name="file" multiple="multiple">
+     parameters:
+	     * @param contentId int (optional)
+	     * @param actionType string
+	     * @param contentType string
+	     * @param description string
+	     * @param version string
+	     * @param fileName string
+     response:
+          success:
+             上传成功
+             {
+                  "code": 200,
+                  "msg": "Successful",
+                  "description": ""
+              }
+           paramsErr：
+              参数错误
+              {
+                  "code": 403,
+                  "msg": "Invalid Param",
+                  "description": "参数错误",
+                  "data": null
+              }
+           contentTypeErr:
+               contentType错误
+               {
+                  "code": 403,
+                  "msg": "contentType must be 'App' or 'LiveApp'",
+                  "data": ""
+               }
+           uploadErr:
+                没有选择文件上传
+                {
+                    "code": 404,
+                    "msg": "Not found",
+          "description": "Target do not exist or you have not do something important",
+
+                    "data": null
+                }
+           uploadFileMissing:
+                文件上传失败（文件不存在）
+                {
+                    "code": 404,
+                    "msg": "Not found",
+          "description": "Target do not exist or you have not do something important",
+
+                    "data": null
+                }
+           dbErr:
+                 数据库错误
+                 {
+                    "code": 500,
+                    "msg": "DATABASE ERROR",
+                    "description": "数据库异常，请重试"
+                 }
+
+3、查询功能
+     url: /Content/read
+     parameters:
+	     * @param pageIndex int
+	     * @param pageSize int
+	     * @param contentType string (optional)
+	     * @param fileName string (optional)
+     response:
+        sucess:
+            {
+					    code: 200,
+					    msg: 'SUCCESSFUL',
+					    desc: 'Successfully read record',
+					    total: total,
+					    data: result
+				    }
+			  paramsErr：
+              参数错误
+              {
+                  "code": 403,
+                  "msg": "Invalid Param",
+                  "description": "参数错误",
+                  "data": null
+              }
+        dbErr:
+               数据库错误
+               {
+                  "code": 500,
+                  "msg": "DATABASE ERROR",
+                  "description": "数据库异常，请重试"
+               }
+
+       参考列子：
+        http://localhost:1337/Content/read?pageIndex=1&pageSize=10
+4、删除content数据记录
+      url:/Content/delete
+      paramters:
+    	 * @param contentId int
+      response:
+         success:
+           {
+              "code": 200,
+              "msg": "Successful",
+              "description": ""
+            }
+         dbErr:
+           数据库错误
+           {
+              "code": 500,
+              "msg": "DATABASE ERROR",
+              "description": "数据库异常，请重试"
+           }
+        Example:
+          http://localhost:1337/Content/delete?contentId=1
+
+5、下载Content
+      url:/Content/downloadContent
+      paramters:
+	      * @param contentId int
+	    Example:
+	      http://localhost:1337/Content/downloadContent?contentId=1
+
+6, 安卓通过FTP上传视频
+  url: /Content/VOD
+  params:
+    * @param zaiQingId string
+    * @param videoType string
+    * @param category string
+    * @param fileName string
+  return:
+    参数错误，数据库错误，操作成功
+  example:
+    http://localhost:1337/Content/VOD?zaiQingId=25&videoType=阵地部署&category=视频类别&fileName=whtt.flv

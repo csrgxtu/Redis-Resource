@@ -1,0 +1,212 @@
+
+    .clear {
+        clear: both;
+    }
+
+    .item {
+        width: 240px;
+        float: left;
+        display: inline;
+        margin: 5px 0;
+        position: relative;
+        border-bottom: 1px solid #e7eff7;
+    }
+    .item:hover{
+        border: 1px solid #ff8800;
+    }
+        .item img {
+            float: left;
+            display: inline;
+            margin: 0px;
+            margin-right:5px;
+            padding:0px;
+            width: 80px;
+            height: 60px;
+        }
+
+    a {
+        text-decoration: none;
+    }
+
+    .item h5 {
+      margin:5px 0px;
+    }
+    .item h5 a {
+        font: 300 14px/14px "microsoft yahei";
+        width: 100px;
+        color: #333;
+        margin:0px 0px;
+                  background: url(/images/liveuser.png) 0 0px no-repeat;
+                      height: 24px;
+                         padding-left: 24px;
+                                  vertical-align: middle;
+                                   display: table-cell;
+
+    }
+
+        .item h5 a.select {
+            color: #ff6000;
+            font: 300 14px/14px "microsoft yahei";
+            margin-bottom: 5px;
+            width: 100px;
+        }
+    .item h6 {
+               margin:0px auto;
+         padding:0px;
+         align-items:center;
+    }
+        .item h6 p {
+            font: 500 9px/14px "microsoft yahei";
+            text-overflow: ellipsis;
+            margin: 0px auto;
+            background: url(/images/livetime.png) 0 0px no-repeat;
+            background-repeat: no-repeat;
+            margin-left: 80px;
+            padding-left: 24px;
+            height: 24px;
+            text-align: left;
+            display: table-cell;
+            vertical-align: middle;
+            text-align: left;
+            align-items: center;
+        }
+    .player_title {
+        height: 18px;
+        line-height: 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin: 0px 0px;
+        padding: 5px 12px 5px;
+        font-size: 12px;
+        font-weight: 500;
+        color: #fff;
+       /* background: #E0ECFF;*/
+       background:#428bca;
+    }
+    .ico-addvideos {
+        background-repeat: no-repeat;
+        display: block;
+        font-size: 0;
+        line-height: 0;
+        overflow: hidden;
+        color: transparent !important;
+        width: 14px;
+        height: 14px;
+        position: absolute;
+        right: 160px;
+        top: 30px;
+        cursor: pointer;
+        background-position: -20px -36px;
+        background-image: url(/images/ico_sya.png);
+        vertical-align: central;
+    }
+     .vtitle {
+        overflow: hidden;
+        clear: both;
+        display: block;
+        line-height: 24px;
+        font-weight: normal;
+        font-family: hiragino sans gb,microsoft yahei;
+        font-size: 13px;
+        color: #2A2A2A;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        padding: 0px 0px;
+    }
+        .vtitle p {
+            float: left;
+            display: block;
+            height: 24px;
+            line-height: 24px;
+            font-weight: normal;
+            font-size: 12px;
+            color: #2A2A2A;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            margin: 0px 0px;
+            padding: 0px 0px;
+        }
+
+        .vtitle span {
+            display: block;
+            height: 24px;
+            line-height: 24px;
+            font-weight: normal;
+            font-size: 12px;
+            color: #2A2A2A;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            float: left;
+        }
+
+    .mod_listTitle {
+        font: 18px/30px "Î¢ÈíÑÅºÚ";
+        color: #e5e5e5;
+        padding: 0px 0px;
+        border-bottom: 1px solid #b5b5b5;
+        margin: 0px 0px;
+        overflow: hidden;
+        _height: 1%;
+    }
+
+        .mod_listTitle .pall {
+            display: inline;
+            float: left;
+            color: #626262;
+            padding: 0px 0px;
+            margin: 0px 0px;
+            text-decoration: none;
+            font-size: 14px;
+            color: #333;
+        }
+
+    .pall a {
+        display: inline;
+        float: left;
+        color: #626262;
+        padding: 0px 0px;
+        margin: 0px 0px;
+        text-decoration: none;
+        font-size: 14px;
+        color: #333;
+        height: 29px;
+        line-height: 29px;
+        font-weight: bold;
+        outline: none;
+        cursor: default;
+    }
+
+
+    .mod_listTitle .pmore {
+        position: relative;
+        display: inline;
+        float: right;
+        width: 70px;
+        text-align: right;
+        font-size: 12px;
+        bottom: -3px;
+        padding: 0px 0px;
+        margin: 0px 0px;
+    }
+
+    p.pmore {
+        position: relative;
+        float: right;
+        width: 70px;
+        text-align: right;
+        font-size: 12px;
+        bottom: -3px;
+        right: 0px;
+        padding: 0px 0px;
+        margin: 0px 0px;
+    }
+
+    .pmore a {
+        color: #333;
+    }
+
+        .pmore a:hover {
+            color: #ff8800;
+        }

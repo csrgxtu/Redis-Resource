@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--<title>Google Search</title>-->
+
+    
+    <title>Google Search</title>
+    
+        
+    <!-- Bootstrap core CSS -->
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+      .Result-Box {
+        margin-left: 9%;
+        /*margin-left: 50px;*/
+        margin-top: 10px;
+        width: 51.8%;
+      }
+      
+      .Ul-List {
+        list-style-type: none;
+        margin-top: 10px;
+        margin-left: -40px;
+      }
+      
+      .Pagination {
+        margin-top: 50px;
+        margin-left: 2%;
+      }
+      
+      .Result-Item {
+        list-style-type: none;
+        margin-top: 10px;
+        /*margin-left: -40px;*/
+        margin-left: -6%;
+        /*margin-right: 20px;*/
+      }
+      
+      .Result-Item-Title {
+        font-size: 19px;
+        font-style: bold;
+        max-width: 580px;
+        min-width: 420px;
+        max-height: 23px;
+        overflow: hidden;
+      }
+
+      .Result-Item-Short-Link {
+        font-size: 15px;
+        /*color: green;*/
+        color: #006621;
+        margin-bottom: 5px;
+      }
+
+      .Result-Item-Scholar-Author {
+        font-size: 13px;
+        color: #006621;
+        margin-bottom: 0px;
+      }
+
+      .Result-Item-Scholar-Cite {
+        font-size: 13px;
+        color: #006621;
+        margin-bottom: 5px;
+      }
+
+      .Result-Item-Abstract {
+        /*color: #606060;*/
+        color: #444;
+        max-width: 580px;
+        min-width: 420px;
+        max-height: 59px;
+        overflow: hidden;
+      }
+
+      .Result-Item-Stats {
+        /*margin-left: 9.1%;*/
+        width: 51.8%;
+        color: #606060;
+        font-size: 13px;
+      }
+
+      a {
+        outline: 0;
+        text-decoration: none;
+        /*color: blue;*/
+        color: #1a0dab;
+        cursor: pointer;
+      }
+      
+      a:hover {
+        text-decoration: none;
+      }
+      
+      a:visited {
+        /*color: #800080;*/
+        color: #61C;
+      }
+      
+      a:active {
+        color: red;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Begin page content -->
+    <div class="container" style="margin-top: 15%;">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <center>
+            <img src="/bootstrap/image/logo11w.png" class="img-responsive" alt="Responsive image" style="no-repeat;background-size:269px 95px;height:95px;width:269px">
+          </center>
+          <br/>
+          <form role="form" method="GET" action="/DynamicPlan/search?pageIndex=1&pageSize=10">
+            <!--<fieldset>-->
+              <div class="form-group">
+                <input type="text" id="focusedInput" class="form-control" name="id" autofocus>
+              </div>
+              <center>
+              <button type="submit" class="btn btn-success">Google Search</button>
+              <button class="btn btn-success
+              &nbsp&nbsp
+              <button type="button" class="btn btn-primary">I'm Feeling Lucky</button>
+              </center>
+            <!--</fieldset>-->
+          </form>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/bootstrap/js/jquery-1.11.1.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>

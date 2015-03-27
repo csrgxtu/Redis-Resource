@@ -1,0 +1,110 @@
+<style>
+	input{
+		padding-left:4px;
+	}
+</style>
+
+
+<div data-options="region:'center',iconCls:'icon-ok'">
+	<div class="easyui-layout" data-options="fit:true">
+		<div data-options="region:'north',split:true,border:false" style="height:85px">
+			<table  class="easyui-datagrid" title="任务详情"  id="taskTable" data-options="				
+					singleSelect:true,
+					autoRowHeight:false,				
+					collapsible:false,				
+					remoteSort:false,
+					multiSort:true,					
+					loadMsg:'正在加载数据，请稍等...',
+					striped:true,
+					fit:true,
+					fitColumns:true">
+				<thead>  	
+					<tr>
+						<th data-options="field:'name',width:160,sortable:true">任务名称</th>
+						<th data-options="field:'taskComAdviser',width:60,sortable:true">指挥员</th>
+						<th data-options="field:'taskCommander',width:60,sortable:true">通信参谋</th>
+						<th data-options="field:'taskOptAdviser',width:60,sortable:true">战训参谋</th>
+						<th data-options="field:'status',width:60,sortable:true">任务状态</th>
+						<th data-options="field:'description',width:150,sortable:true">说明</th>
+						<th data-options="field:'startTime',width:100,sortable:true">开始时间</th>
+						<th data-options="field:'endTime',width:100,sortable:true">结束时间</th>
+						<th data-options="field:'createdBy',width:60,sortable:true">创建人</th>				
+					</tr>
+				</thead>  
+			</table>		
+		</div>		
+		<div data-options="region:'center',border:false">
+			<table  class="easyui-datagrid" title="战评资料"  id="videoPicTable" data-options="
+					rownumbers:true, 
+					singleSelect:true,
+					autoRowHeight:false,
+					pagination:true,
+					collapsible:false,
+					toolbar:'#toolbar',
+					remoteSort:false,
+					multiSort:true,
+					loadMsg:'正在加载数据，请稍等...',
+					striped:true,	
+					fit:true,
+					fitColumns:true">
+				<thead>  	
+					<tr>
+						<th data-options="field:'category',width:90,sortable:true">资料类别</th>
+						<th data-options="field:'type',width:90,sortable:true">视频/图片类别</th>
+						<th data-options="field:'address',width:170,sortable:true">地址</th>
+						<th data-options="field:'size',width:70,sortable:true">时长</th>
+						<th data-options="field:'description',width:170,sortable:true">说明</th>
+						<th data-options="field:'createdBy',width:90,sortable:true">创建人</th>
+						<th data-options="field:'createdTime',width:120,sortable:true">创建时间</th>										
+					</tr>
+				</thead>  
+			</table>		
+		</div>
+	</div>	
+</div>
+
+<div id="toolbar" style="padding:5px;height:auto">
+	<div style="height:33px;">
+		资料类别: &nbsp;
+			<select style="width:130px;height:28px;border:#95B8E7 1px solid" id="categoryInput">
+				<option value="">--请选择--<option>
+			</select>&nbsp;&nbsp;
+		图片/视频类别: &nbsp;
+			<select style="width:130px;height:28px;border:#95B8E7 1px solid" id="typeInput">
+				<option value="">--请选择--</option>
+			</select>
+		<a href="javascript:void(0)" id="searchTask" class="easyui-linkbutton" iconCls="icon-search">搜 索&nbsp;&nbsp;</a>	
+	</div>
+</div>
+
+<div  id="soso" style="height:35px;padding-top:5px;">
+	任务名称:<input class="textbox" id="taskSea" style="height:28px;width:190px;">
+	<a href="javascript:void(0)" id="searchTaskList" class="easyui-linkbutton" iconCls="icon-search">搜 索&nbsp;&nbsp;</a>
+
+</div>
+
+
+<div data-options="region:'west',split:true,border:true,title:'任务信息列表'" style="width:350px;">
+	<table  class="easyui-datagrid"  id="taskInfoTable" data-options="
+				rownumbers:true, 
+				singleSelect:true,
+				pagination:true,
+				autoRowHeight:false,				
+				collapsible:false,				
+				remoteSort:false,
+				multiSort:true,
+				toolbar:'#soso',
+				loadMsg:'正在加载数据，请稍等...',
+				striped:true,
+				fit:true,
+				fitColumns:true">
+		<thead>  	
+			<tr>
+				<th data-options="field:'name',width:220,sortable:true">任务名称</th>
+				<th data-options="field:'startTime',width:130,sortable:true">发生时间</th>				
+			</tr>
+		</thead>  
+	</table>
+</div>
+
+  <script type="text/javascript" src="/js/videoPicShow.js"></script>

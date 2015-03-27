@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>视频直播</title>
+    <script src="/jwplayer_report/jwplayer.js"></script>
+    <!--[if gt IE 9]> <script src="/jwplayer_report/jwplayer.html5.js" type="text/javascript"></script> <![endif]-->
+   <script type="text/javascript">
+
+       //获取URL参数
+       function getQueryString(name) {
+           var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+           var r = window.location.search.substr(1).match(reg);
+           if (r != null) return unescape(r[2]); return null;
+       }
+   </script>
+</head>
+<body style="background-color:black">
+    <div id="video" >
+    </div>
+    <script type="text/javascript">
+        var videoMain, path, width, height,mute;
+        window.onload = function () {
+
+            path = getQueryString('path');
+            if (path == null) {
+                alert('直播流不能为空');
+                return;
+            }
+            width = getQueryString('width');
+            if (path == null) {
+                width = 840;
+            }
+            height = getQueryString('height');
+            if (path == null) {
+                height = 460;
+            }
+            mute = getQueryString('mute');
+            if (path == null) {
+                mute = false;
+            }
+            videoMain = jwplayer('video').setup({
+                flashplayer:'/jwplayer_report/jwplayer.flash.swf',
+                file: path,
+                width: width,
+                height: height,
+                mute: mute,
+                autostart: true,
+                dock:false
+            });
+        };
+
+    </script>
+
+</body>
+</html>

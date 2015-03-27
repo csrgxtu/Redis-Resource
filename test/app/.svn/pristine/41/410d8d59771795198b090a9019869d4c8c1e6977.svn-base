@@ -1,0 +1,179 @@
+<link type="text/css" rel="stylesheet" href="/styles/index.css" />
+<style>
+	a{
+		text-decoration:none;
+	}
+</style>
+
+<div data-options="region:'center'" style="min-width:550px;margin:0px auto;padding:0px;">
+    <div style="margin:0px auto;padding:0px;width:950px;">
+        <div style="width:600px;height:600px;padding:10px;position:relative;float:left;margin-left:0px;">
+            <div id="p" class="easyui-panel" title="系统公告"
+                 style="width:600px;height:200px;padding:10px;"
+                 data-options="collapsible:true">
+                <div class="news">
+                    <p class="p1">湖南消防部队地震救援实战演习使用岳阳消防警务通</p>
+                    <p class="p2">[10-31] </p>
+                </div>
+                <div class="news" onclick="toYYXFvideo()">
+                    <p class="p1">湖南省岳阳支队消防警务通汇报片</p>
+                    <p class="p2">[10-23] </p>
+                </div>
+                <div class="news">
+                    <p class="p1">欢迎使用岳阳消防灭火救援辅助管理系统</p>
+                    <p class="p2">[9-20] </p>
+                </div>
+            </div>
+            <div id="tt" class="easyui-tabs" style="width:600px;height:370px;margin-top:20px;">
+                <div title="常用快捷方式" style="padding:20px;margin:0px auto;">
+                    <div class="shortcut_item" onclick="toRealTimeVideo()">
+                        <img src="/images/video.png" />
+                        <h2>实时视频</h2>
+                        <p>实时视频监控、多路视频监控</p>
+                    </div>
+                    <div class="shortcut_item" onclick="toVod()">
+                        <img src="/images/videolist.png" />
+                        <h2>视频点播</h2>
+                        <p>历史视频查询、回看</p>
+                    </div>
+                    <div class="shortcut_item" onclick="toTaskGps()">
+                        <img src="/images/map.png" />
+                        <h2>实时轨迹</h2>
+                        <p>历史轨迹查询、回访</p>
+                    </div>
+                    <div class="shortcut_item" onclick="toZhanping()">
+                        <img src="/images/dianping.png" />
+                        <h2>消防战评</h2>
+                        <p>消防任务战评、总结</p>
+                    </div>
+                    <div class="shortcut_item" onclick="toUser()">
+                        <img src="/images/user.png" />
+                        <h2>用户管理</h2>
+                        <p>用户添加、修改</p>
+                    </div>
+                    <div class="shortcut_item" onclick="toRolepermissions()">
+                        <img src="/images/role.png" />
+                        <h2>角色管理</h2>
+                        <p>角色添加、修改、权限配置</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="width:300px;height:150px;padding:10px;position:relative;float:right;">
+            <div id="p" class="easyui-panel" title="实时动态"
+                 style="width:300px;height:100px;padding:10px;"
+                 data-options="
+                collapsible:true">
+                <div style="width:100%;text-align:center;font-size:18px;margin:0px 0px;padding:0px 0px;">
+                    <p style="font-size:12px;padding-bottom:10px;">
+                        当前有<a href="/xfVideoInfo/videoMultiplay" target="_blank" id="avideocount" ><b>【0】</b></a>路直播视频
+                    </p>
+                </div>
+            </div>
+            <div style="width:300px;height:250px;padding:0px;background:#fafafa;margin-top:20px;">
+                <div id="p" class="easyui-panel" title="最新视频"
+                     style="width:300px;height:250px;padding:0px;background:#fafafa;border:0px;"
+                     data-options="collapsible:true">
+                    <table class="easyui-datagrid" id="dg" style="width:300px;height:150px;padding:0px 0px;margin:0px 0px;" data-options="
+				        loadMsg:'正在加载数据，请稍等...',
+				        fit:true,
+                        fitColumns:true,singleSelect:true,autoRowHeight:false,striped:true
+                           ">
+                        <thead>
+                            <tr>
+                                <th data-options="field:'encodedFileName',width:120">视频名</th>
+                                <th data-options="field:'videoLength',width:80">视频时长</th>
+                                <th data-options="field:'displayName',width:60">创建人</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div id="aa" class="easyui-accordion" style="width:300px;height:200px;margin-top:20px;">
+                <div title="文件下载" data-options="selected:true" style="overflow:auto;padding:10px;">
+                    <!-- <h3 style="color:#0099FF;">文件列表</h3>-->
+                    <ul class="softList">
+                        <li>
+                            <div class="grid info">
+                                <p> <a href="/xfjwt/downloadXFT" target="_blank">通用平台android客户端软件-EBANG</a></p>
+                                <span></span>
+                            </div>
+                            <div class="down">
+                                <a title="下载" href="/xfjwt/downloadXFT" target="_blank"></a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="grid info">
+                                <p> <a href="/xfjwt/downloadRP" target=" _blank">视讯直播android客户端软件-VideoLive</a></p>
+                                <span></span>
+                            </div>
+                            <div class="down">
+                                <a title="下载" href="/xfjwt/downloadRP" target="_blank"></a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="grid info">
+                                <p> <a href="/xfjwt/downloadVLC">实时直播软件下载</a></p>
+                                <span></span>
+                            </div>
+                            <div class="down">
+                                <a title="下载" href="/xfjwt/downloadVLC"></a>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="grid info">
+                                <p> <a href="/xfjwt/downloadCZ">车载视频软件下载</a></p>
+                                <span></span>
+                            </div>
+                            <div class="down">
+                                <a title="下载" href="/xfjwt/downloadCZ"></a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!--<div title="技术支持" data-options="" style="overflow:auto;padding:10px;">
+                    <div style="width:100%;" class="contact">
+                        <p> 地址 : 湖南省长沙市雨花区上海城1栋1101室</p>
+                        <p> 联系电话 : 0731-85130211</p>
+                    </div>
+                </div>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dvVideo" style="display:none;margin:0px; padding:0px;background-color:#000">
+    <video src="/video-js/yyzjp.mp4" controls="controls"  style="width:800px;height:450px;margin:0px; padding:0px;">
+        your browser does not support the video tag
+    </video>
+</div>
+<script type="text/javascript" src="/js/indexPage.js"></script>
+<script>
+
+
+var userNamec = "<%=data.userInfo.UserName%>";
+var userId="<%=data.userInfo.UserId%>";
+var displayName="<%=data.userInfo.DisplayName%>";
+var title="<%=data.userInfo.Title%>";
+var organizationId="<%=data.userInfo.OrganizationId%>";
+var imei="<%=data.userInfo.Imei%>";
+var sessionId="<%=data.userInfo.SessionId%>";
+var organizationName = "<%=data.userInfo.OrgName%>";
+var data1 = "<%=data.userInfo%>"
+console.log(data1);
+setCookie('userName',userNamec,1);
+setCookie('userid',userId,1);
+setCookie('DisplayName',displayName,1);
+setCookie('Title',title,1);
+setCookie('OrganizationId',organizationId,1);
+setCookie('Imei',imei,1);
+setCookie('SessionId', sessionId, 1);
+setCookie('organizationName',organizationName,1);
+
+ var userInfoSpan = $("#myUserInfo");
+ var userName = getCookie("DisplayName");
+ if($("#myUserInfo").length >0){
+ 		$("#myUserInfo").empty();
+ 		$("#myUserInfo").append(""+organizationName+" "+userName+"！ 欢迎您 |");
+ }
+</script>

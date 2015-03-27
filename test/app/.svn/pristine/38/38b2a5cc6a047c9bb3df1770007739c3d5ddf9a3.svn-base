@@ -1,0 +1,215 @@
+/**
+ * Author: Archer Reilly
+ * Date: 25/May/2014
+ * File: UtilityServvice.js
+ * Des: lib functions
+ *
+ * Produced By EBang.
+ */
+
+var fs = require('fs')
+
+module.exports = {
+  /**
+   * geCurrentTimeStamp
+   * get the seconds since 1971
+   *
+   * @return string
+   */
+  getCurrentTimeStamp: function() {
+    var d = new Date();
+    return d.getTime();
+  },
+  
+  /**
+   * getCurrentTime
+   * get the time of current
+   *
+   * @return String
+   */
+  getCurrentTime: function() {
+    var d = new Date();
+    var month = d.getMonth() + 1;
+    if (month < 10) {
+      month = "0" + month;
+    }
+    var day = d.getDate();
+    if (day < 10) {
+      day = "0" + day;
+    }
+    var hour = d.getHours();
+    if (hour < 10) {
+      hour = "0" + hour;
+    }
+    var minutes = d.getMinutes();
+    if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+    var seconds = d.getSeconds();
+    if (seconds < 10) {
+      seconds = "0" + seconds;
+    }
+    var currentTime = d.getFullYear() + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
+    return currentTime;
+  },
+  getSampleCurrentTime: function() {
+    var d = new Date();
+    var month = d.getMonth() + 1;
+    if (month < 10) {
+      month = "0" + month;
+    }
+    var day = d.getDate();
+    if (day < 10) {
+      day = "0" + day;
+    }
+    var hour = d.getHours();
+    if (hour < 10) {
+      hour = "0" + hour;
+    }
+    var minutes = d.getMinutes();
+    if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+    var seconds = d.getSeconds();
+    if (seconds < 10) {
+      seconds = "0" + seconds;
+    }
+    var currentTime = hour + ":" + minutes + ":" + seconds;
+    return currentTime;
+  },
+  /**
+  * get session expiredTime
+  *
+ **/
+  getExpiredTime: function(){
+     var d = new Date() ;
+     var t = d.getTime();
+         t+=3600000;
+         d = new Date(t);
+     var month = d.getMonth() + 1;
+     if (month < 10) {
+      month = "0" + month;
+     }
+     var day = d.getDate();
+     if (day < 10) {
+      day = "0" + day;
+     }
+     var hour = d.getHours();
+     if (hour < 10) {
+      hour = "0" + hour;
+     }
+     var minutes = d.getMinutes();
+     if (minutes < 10) {
+      minutes = "0" + minutes;
+     }
+     var seconds = d.getSeconds();
+     if (seconds < 10) {
+      seconds = "0" + seconds;
+     }
+     var expiredTime = d.getFullYear() + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
+     return expiredTime;
+  },
+
+  formatTime: function(time){
+   var Time = time.replace("T"," ");
+    var Time = time.replace("\.000Z","");
+   return Time;
+  },
+	/**
+   * isJEmpty
+	 * used to check if a json object is empty or not
+	 *
+	 * @param json object
+	 * @return RESTful Json
+	 */
+	isJEmpty: function(obj) {
+		for (var key in obj) {
+			if (Object.prototype.hasOwnProperty.call(obj, key)) {
+				return false;
+			}
+		}
+
+		return true;
+	},
+
+	/**
+	 * fileExist
+	 * check if the post file exist
+	 *
+	 * @param req.files.file object
+	 * @return true or false
+	 */
+	fileExist: function(obj) {
+		if (obj.originalFilename == '' || obj.originalFilename == null) {
+			return false;
+		} else {
+			return true;
+		}
+	},
+
+	/**
+   * errorLog
+   * log error message
+	 *
+   * @param err String
+   */
+  errorLog: function(err) {
+		sails.log.error(err);
+	},
+
+	/**
+	 * getVideoDuration
+	 * get the video duration from the file genearted by ffmpeg.
+	 *
+	 * @parameter abs path to the file in txt format
+	 * @return string or false
+	 */
+	getVideoDuration: function(absPath) {
+	  if (absPath == '' || absPath == null) {
+	    return false;
+	  }
+	  // even though the client side code will provide the absPath,
+	  // still need to check out the existence of the generated file
+
+	  var data = fs.readFileSync(absPath, 'utf8');
+
+	  var res = data.match(/Duration: (\d+:\d+:\d+.\d+),/);
+	  if (res == null) {
+	    return false;
+	  } else {
+	    return res[1];
+	  }
+	},
+
+	/**
+	 * getCreatedBy
+	 * get createdBy from cookie  seted in client
+	 *
+	 * @return createdBy(string) or false
+	 */
+	getCreatedBy: function(req) {
+	  var cookies = req.cookies;
+
+	  if (cookies.userName == null || cookies.userName == '') {
+	    return false;
+	  } else {
+	    return cookies.userName;
+	  }
+	},
+
+	/**
+	 * getUpdatedBy
+	 * get updatedBy from cookie
+	 *
+	 * @return updatedBy(string) or false
+	 */
+	getUpdatedBy: function(req) {
+	  var cookies = req.cookies;
+
+	  if (cookies.userName == null || cookies.userName == '') {
+	    return false;
+	  } else {
+	    return cookies.userName;
+	  }
+	},
+};

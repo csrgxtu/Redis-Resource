@@ -1,0 +1,119 @@
+﻿<div class="ui-field-contain">
+	<label for="search-1">组织机构：</label>
+	<a id="organizationPageText" href="#organizationPage" onclick="showOrganPage()" data-rel="popup" data-theme="a" data-position-to="window" data-role="button" class="ui-btn ui-icon-carat-d ui-btn-icon-right ui-corner-all ui-shadow">全部</a>
+	<input type="hidden" id="organizationPageID" />
+	<input type="hidden" id="organizationPageJGTree" />
+</div>
+<div data-role="popup" id="organizationPage" data-theme="a">
+	<a href="#" id="organTreesBack" onclick="toBackList()" data-role="button" data-theme="a" data-icon="back" data-iconpos="notext" class="ui-btn-left"> Back</a>
+	<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right"> Close</a>
+	<div data-role="header">
+		<h1>组织机构</h1>
+	</div>
+	<div data-role="content">
+		<ul data-role="listview" id="organTrees" data-inset="true">
+		</ul>
+	</div>
+</div>
+
+<script type="application/javascript">
+	function getlocalStorage(name){
+		return localStorage[name];
+	}
+	var datas = eval(getlocalStorage("OrganListBySearchPage"));
+	$(function() {
+		$('#organizationPageJGTree').val(getlocalStorage("JGTREE"));
+		$('#organizationPageText').html(getlocalStorage("organizationName"));
+		$('#organizationPageID').val(getlocalStorage("OrganizationId"));		
+	});
+	var btnDis = false;
+
+	function displayBackBtn() {
+		if (!btnDis) {
+			$('#organTreesBack').css('display', 'none');
+		} else {
+			$('#organTreesBack').css('display', 'block');
+		}
+	}
+
+	function showOrganPage() {
+		var organList = '';
+		for (var i = 0; i < datas.length; i++) {
+			organList += '<li class="ui-first-child ui-last-child" style="width:300px">';
+			if (datas[i].children) {
+				organList += "<a style=\"font-weight: normal;padding-left: 40px;\"  class=\"ui-btn ui-btn-icon-right ui-icon-carat-r\" onclick='getDetailsTree(\"" + datas[i].jgtree + "\",\"" + datas[i].id + "\",\"" + datas[i].text + "\")'>" + datas[i].text + "</a>";
+			} else {
+				organList += "<a style=\"font-weight: normal;padding-left: 40px;\"  class=\"ui-btn\" onclick=\"toRightChange('" + datas[i].jgtree + "','" + datas[i].id + "','" + datas[i].text + "')\">" + datas[i].text + "</a>";
+			}
+			organList += '</li> ';
+		}
+		btnDis = false;
+		displayBackBtn();
+		$('#organTrees').html(organList);
+	}
+
+	function getDetailsTree(jgtree, id, text) {
+		btnDis = true;
+		listSize++;
+		var organList = '';
+		organList += '<li class="ui-first-child ui-last-child" style="width:300px">';
+		organList += "<a class=\"ui-btn\" onclick=\"toRightChange('" + jgtree + "','" + id + "','" + text + "')\">" + text + "</a>";
+		cld = null;
+		getChildrens(datas, id);
+		for (var i = 0; i < cld.length; i++) {
+			if (cld[i].children) {
+				organList += "<a style=\"font-weight: normal;padding-left: 40px;\"  class=\"ui-btn ui-btn-icon-right ui-icon-carat-r\" onclick='getDetailsTree(\"" + cld[i].jgtree + "\",\"" + cld[i].id + "\",\"" + cld[i].text + "\")'>" + cld[i].text + "</a>";
+			} else {
+				organList += "<a style=\"font-weight: normal;padding-left: 40px;\"  class=\"ui-btn\" onclick=\"toRightChange('" + cld[i].jgtree + "','" + cld[i].id + "','" + cld[i].text + "')\">" + cld[i].text + "</a>";
+			}
+		}
+		organList += '</li> ';
+		$('#organTrees').html(organList);
+		displayBackBtn();
+	}
+	var cld;
+	var old;
+	var backData;
+	var listSize = 0;
+
+	function toBackList() {
+		for (var i = 0; i < datas.length; i++) {
+			getParents(datas[i], old.id);
+		}
+		getDetailsTree(backData.jgtree, backData.id, backData.text);
+	}
+
+	function getParents(dat, id) {
+		var das = dat.children;
+		for (var i = 0; i < das.length; i++) {
+			if (das[i].id == id) {
+				backData = dat;
+			} else {
+				if (das[i].children) {
+					getParents(das[i], id);
+				}
+			}
+		}
+	}
+
+	function getChildrens(clds, id) {
+		for (var i = 0; i < clds.length; i++) {
+			if (clds[i].id == id) {
+				old = clds[i];
+				cld = clds[i].children;
+			} else {
+				if (clds[i].children) {
+					getChildrens(clds[i].children, id);
+				}
+			}
+		}
+	}
+
+	function toRightChange(jgtree, id, text) {
+		$('#organizationPageID').val(id);
+		$('#organizationPageText').html(text);
+		$('#organizationPageJGTree').val(jgtree);
+		$("#organizationPage").popup("close");
+		toLoadData();
+	}
+</script>

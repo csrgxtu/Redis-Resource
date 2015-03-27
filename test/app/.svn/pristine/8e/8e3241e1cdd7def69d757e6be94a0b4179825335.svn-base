@@ -1,0 +1,36 @@
+<html>
+<head>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+	
+	<link rel="stylesheet" type="text/css" href="/jqueryeasyui/css/easyui.css">
+	<link rel="stylesheet" type="text/css" href="/jqueryeasyui/css/icon.css">
+	<link rel="stylesheet" type="text/css" href="/jqueryeasyui/css/demo.css">
+	<script type="text/javascript" src="/jqueryeasyui/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/jqueryeasyui/js/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="/jqueryeasyui/js/juqeryeasyui-my.js"></script>	
+	<script type="text/javascript" src="/dialog/zDialog.js"></script>
+	<script type="text/javascript" src="/dialog/zDrag.js"></script>	
+	
+	<script type="text/javascript" src="/js/socket.io.js"></script>  
+    <script type="text/javascript" src="/js/sails.io.js"></script> 
+    <script type="text/javascript" src="/js/app.js"></script>
+	
+	<script type="text/javascript" src="/js/jQueryRotate.js"></script>
+	
+	<script type="text/javascript" src="/js/common.js"></script>
+	
+</head>
+
+<body class="easyui-layout">
+	
+	<%- body %>
+	
+	<div style="display:none" id="deployImgShowDiv">
+		<img style="width:600px;height:600px;" src="" id="deployImgShowImg">
+		<a href="javascript" onclick="imgToLeft()"  class="easyui-linkbutton" style="margin:6 auto;" data-options="iconCls:'icon-left'"></a>
+		<a href="javascript" onclick="imgToRight()" class="easyui-linkbutton" style="margin:6 auto;" data-options="iconCls:'icon-right'"></a>		
+		<a href="javascript:void(0)" id="showMoreA" onclick="toDeployImage()" class="easyui-linkbutton" data-options="plain:true">查看更多>></a>
+	</div>
+	
+</body>

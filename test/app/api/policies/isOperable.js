@@ -1,0 +1,106 @@
+/**
+ * Author: Dishy
+ * Modified By: Archer Reilly
+ * Date: 25/Sep/2014
+ * File: isOperable.js
+ * Desc: implemente session and Rule permission constrol based
+ * authentication.
+ *
+ * Produced By Ebang.
+ */
+var url = require('url');
+
+/**
+ * first, session validation
+ * second, Role permission validation
+ */
+module.exports = function isOperable(req, res, next) {
+  if (!req.session.hasOwnProperty("loginInfo")) {
+    return res.redirect('/');
+  }
+
+  // some useful vars
+  var organizationId = req.session.loginInfo.userInfo.OrganizationId;
+  var sessionId = req.session.loginInfo.userInfo.SessionId;
+  var resourceUrl = req._parsedUrl.pathname.toUpperCase();
+  var userId = req.session.loginInfo.userInfo.UserId;
+  var sql = "SELECT * FROM xfjwt_Session s WHERE s.ExpiredTime > '"
+  + UtilityService.getCurrentTime() + "' AND s.SessionId = '"
+  + sessionId + "'";
+
+  // session query
+  XFJWT_Session.query(sql, function(err, recs) {
+    if (err) {
+      sails.config.returnCode.DB_ERROR.data = err;
+	    return res.send(sails.config.returnCode.DB_ERROR);
+    }
+
+    if (recs.length == 0) {
+      return res.redirect('/');
+    }
+
+    var expiredTime = UtilityService.getExpiredTime();
+    // session update, add 1 more hour
+	/*
+    XFJWT_Session.update({
+      SessionId: sessionId
+    }, {
+      ExpiredTime: expiredTime 
+    }).exec(function afterwards(err, recs) {
+      if (err) {
+        sails.config.returnCode.DB_ERROR.data = err;
+	      return res.send(sails.config.returnCode.DB_ERROR);
+      }*/
+
+      // get role id
+      XFJWT_User.find({UserId: userId})
+      .exec(function afterwards(err, recs) {
+        if (err) {
+          sails.config.returnCode.DB_ERROR.data = err;
+	        return res.send(sails.config.returnCode.DB_ERROR);
+        }
+
+        if (recs.length == 0) {
+          return res.send(sails.config.returnCode.NOT_AUTHORIZED);
+        }
+
+        var roleId = recs[0].RoleId;
+
+        // get resource id
+		    var sql = "select * from xfjwt_Resource where Upper(ResourceUrl) = '" + resourceUrl + "'";
+        XFJWT_Resource.query(sql, function afterwards(err, recs) {
+          if (err) {
+            sails.config.returnCode.DB_ERROR.data = err;
+	          return res.send(sails.config.returnCode.DB_ERROR);
+          }
+
+          if (recs.length == 0) {
+            return res.send(sails.config.returnCode.NOT_AUTHORIZED);
+          }
+
+          var resourceId = recs[0].ResourceId;
+
+          // query resource role
+          var sql = "SELECT * FROM xfjwt_resource_roles__role_resources "
+            + "WHERE resource_Roles = " + resourceId + " AND "
+            + "role_Resources = " + roleId;
+          XFJWT_Resource.query(sql, function(err, recs) {
+            if (err) {
+              sails.config.returnCode.DB_ERROR.data = err;
+	            return res.send(sails.config.returnCode.DB_ERROR);
+            }
+
+            if (recs.length == 0) {
+              return res.send(sails.config.returnCode.NOT_AUTHORIZED);
+            }
+
+            // before next, log this action
+            SystemLogService.create(req);
+            next();
+          });
+        //});
+      });
+    });
+  });
+
+}

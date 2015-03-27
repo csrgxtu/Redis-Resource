@@ -1,0 +1,35 @@
+{
+  "name": "waterline-sequel",
+  "description": "A helper library for generating SQL queries from the Waterline Query Language.",
+  "version": "0.0.19",
+  "author": {
+    "name": "Cody Stoltman",
+    "email": "particlebanana@gmail.com"
+  },
+  "url": "http://github.com/balderdashy/waterline-sequel",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/balderdashy/waterline-sequel.git"
+  },
+  "dependencies": {
+    "lodash": "~2.4.1"
+  },
+  "devDependencies": {},
+  "scripts": {},
+  "main": "sequel/index",
+  "directories": {
+    "sequel": "./sequel"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/balderdashy/waterline-sequel/issues"
+  },
+  "readme": "Waterline-Sequel\n====================\n\nA helper library for generating SQL queries from the Waterline Query Language.\n",
+  "readmeFilename": "README.md",
+  "homepage": "https://github.com/balderdashy/waterline-sequel",
+  "_id": "waterline-sequel@0.0.19",
+  "_shasum": "d1fea090b7441a2ad6f286c002a99b7ff6de4420",
+  "_from": "waterline-sequel@~0.0.10",
+  "_resolved": "http://registry.npmjs.org/waterline-sequel/-/waterline-sequel-0.0.19.tgz"
+}

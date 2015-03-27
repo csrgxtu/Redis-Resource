@@ -1,0 +1,403 @@
+/*   left    */
+H1 {
+	font-size: 15px;
+	margin: 0px;
+	width: 182px;
+	cursor: pointer;
+	height: 30px;
+	line-height: 20px;	
+}
+
+
+h1 span{
+	display: block;
+	width: 182px;
+	color: #4491A7;
+	height: 30px;
+	text-decoration: none;
+	background: url(/images/task/menu_bgS.gif) no-repeat;
+	line-height: 30px;
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+
+}
+
+h1 span:hover{
+	color:red;
+}
+
+
+.MM {
+	width: 182px;
+	margin: 0px;
+	padding: 0px;
+	left: 0px;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	clip: rect(0px,0px,0px,0px);
+}
+
+
+.MM ul {
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+	display: block;
+}
+
+.MM li {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	line-height: 26px;
+	color: #333333;
+	list-style-type: none;
+	display: block;
+	text-decoration: none;
+	height: 26px;
+	width: 182px;
+	padding-left: 0px;
+}
+
+
+.MM span{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	line-height: 26px;
+	color: #333333;
+	background: url(/images/task/menu_bg1.gif) no-repeat;
+	height: 26px;
+	width: 182px;
+	display: block;
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+	overflow: hidden;
+	text-decoration: none;
+}
+
+.MM span:hover {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	line-height: 26px;
+	font-weight: bold;
+	color: #006600;
+	background-image: url(/images/task/menu_bg2.gif);
+	background-repeat: no-repeat;
+	text-align: center;
+	display: block;
+	margin: 0px;
+	padding: 0px;
+	height: 26px;
+	width: 182px;
+	text-decoration: none;
+	cursor:pointer;
+}
+
+/*      right       */
+
+.titlebt {
+	font-size: 12px;
+	line-height: 26px;
+	color: #353C44;
+	display: block;
+	text-indent: 5px;
+	background: url(/images/task/bg1.gif) repeat-x;
+}
+
+#taskB{
+	width:100%;
+	height:100%;
+	border:1px solid #D5DAFF;
+}
+
+#selTask{
+	padding-left:10px;
+	padding-right:10px;
+}
+
+
+
+/*   任务   */
+
+.left_1
+{	line-height: 35px;
+	font-size: 14px;
+        vertical-align: middle;
+        width: 80px;
+        height:34px;
+        text-align: right;
+        display: -moz-inline-box;
+        display: inline-block;
+        padding-bottom:5px;
+}
+.left_2
+{ line-height: 35px;
+  font-size: 14px;
+        vertical-align: middle;
+        width: 50px;
+        height:34px;
+        text-align: right;
+        display: -moz-inline-box;
+        display: inline-block;
+        padding-bottom:5px;
+}
+.txt1
+{
+        width: 215px;
+        height: 30px;
+        line-height: 30px;
+        overflow: hidden;
+        border: 0px;
+        padding-left: 3px;
+        margin-left:5px;        
+        background: url(/images/task/txt.gif) no-repeat left center;
+}
+
+.txt2
+{
+        width: 216px;
+        height: 30px;
+        line-height: 30px;
+        overflow: hidden;
+        border: 0px;
+        padding-left: 3px;
+        margin-left:5px;
+        background: url(/images/task/txt.gif) no-repeat left center;
+}
+
+.txt3
+{
+        width: 150px;
+        height: 30px;
+        line-height: 30px;
+        overflow: hidden;
+        border: 0px;
+        padding-left: 3px;
+        margin-left:5px;        
+        background: url(/images/task/txtinput.png) no-repeat left center;
+}
+
+.txt4{
+		width:80px;
+		height:20px;
+		line-height: 20px;     
+        padding-left: 3px;
+        margin-left:5px;        
+        color: #999999;
+}
+
+.txt5{
+		width:140px;
+		height:30px;   
+        padding-left: 3px;
+        margin-left:5px;        
+        color: #999999;
+}
+
+.txt6
+{
+        width: 150px;
+        height: 30px;
+        line-height: 30px;
+        overflow: hidden;
+        border: 0px;
+        padding-left: 3px;
+        margin-left:5px;        
+        background: url(/images/task/txtinput.png) no-repeat left center;
+}
+table{
+  font: normal 13px auto "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+  color: #000000;
+}
+.row {
+  font: normal 13px auto "Trebuchet MS", Verdana, Arial, Helvetica, sans-serif;
+}
+.area1
+{
+	width: 215px;
+    height: 88px;
+    line-height: 30px;
+    overflow-x: hidden;
+    border: 0px;
+    padding-left: 3px;
+    margin-left:15px;
+    background: url(/images/task/area.png) no-repeat left center;
+}
+
+
+.btnfile{ 
+	background-color:#FFF; 
+	border:1px solid #CDCDCD;
+	height:30px; 
+	width:50px;
+}
+
+.file{
+	height:30px;
+	width:50px;
+	filter:alpha(opacity:0);
+	opacity: 0;
+}
+
+.taskjoinmanDiv{	
+	margin-left:15px;
+	width: 213px;
+	height: 240px;
+	background-color: #FFFFFF;
+	overflow: scroll;
+	border:1px #79B5CE solid;
+}
+
+.showinfo{
+	width:100%;
+}
+
+.showinfo td{
+	padding:10px 1px;
+	text-align:right;	
+}
+#upTaskMemsTable td{
+  padding:5px 10px;
+  text-align:right;
+}
+.btnsub{
+	width:120px;
+	height:35px;
+}
+
+.manDiv{	
+	margin-left:6px;
+	width: 150px;
+	height: 220px;
+	background-color: #FFFFFF;
+	overflow: scroll;
+	overflow-x: hidden;
+	border:1px #79B5CE solid;
+}
+
+.manDiv p{
+	height:8px;
+	padding:0;
+}
+
+
+.fram1{
+	width: 320px;
+	height: 240px;
+	padding:5px;
+}
+
+.addman{
+	margin-left:20px;
+	width:80px;
+	height:30px;
+
+}
+
+.selinput{
+	color: #000000;
+	font-size: 13px;
+	height:40px;
+	width:1224px;
+	padding:7px;
+}
+
+.selTxt{
+	padding-left:5px;
+	padding-right:5px;
+	font-size:14px;
+
+}
+
+/*  表格   */
+
+.STYLE1 {
+	color: red;
+	font-size: 13px;
+}
+
+.STYLE6 {
+	color: #000000; 
+	font-size: 13px; 
+}
+
+.STYLE10 {
+	color: #000000;
+	font-size: 13px;
+}
+
+.STYLE19 {
+	color: #344b50;
+	font-size: 13px;
+}
+
+.STYLE21 {
+	font-size: 13px;
+	color: #3b6375;
+}
+.STYLE22 {
+	font-size: 13px;
+	color: #295568;
+}
+
+/* 弹层css */
+.black_overlay{
+display:none;
+position: absolute;
+top: 0%;
+left: 0%;
+width: 100%;
+height: 100%;
+background-color: black;
+z-index:1001;
+-moz-opacity: 0.5;
+opacity:0.2;
+filter: alpha(opacity=20);
+}
+.white_content {
+display:none;
+position: absolute;
+top: 15%;
+left: 15%;
+width: 930px;
+height: 500px;
+border: 2px solid lightblue;
+background-color: white;
+z-index:1002;
+overflow: auto;
+}
+
+.white_content2 {
+display:none;
+position: absolute;
+top: 25%;
+left: 30%;
+width: 600px;
+height: 450px;
+border: 2px solid lightblue;
+background-color: white;
+z-index:1002;
+overflow: auto;
+}
+.white_content3 {
+display:none;
+position: absolute;
+top: 15%;
+left: 30%;
+width: 450px;
+height: 500px;
+border: 2px solid lightblue;
+background-color: white;
+z-index:1002;
+overflow: auto;
+}
+.showinfo2{
+  width:100%;
+}
+
+.showinfo2 td{
+  padding:10px 1px;
+  text-align:right;
+}

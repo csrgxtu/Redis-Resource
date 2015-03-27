@@ -1,0 +1,73 @@
+
+<script src="/jwplayer_report/jwplayer.js"></script>
+<script type="text/javascript" src="/jwplayer_report/jwplayer.html5.js"></script>
+<!--<script src="/artDialog4.1.7/artDialog.source.js"></script>-->
+<audio id="chatAudio"><source src="/musics/notify.mp3"></audio>
+<audio id="chatAudio2"><source src="/musics/videoli.mp3"></audio>
+<script>
+ $(document).ready(function () {
+   
+  jwplayer('container').setup({
+          flashplayer:"/jwplayer_report/jwplayer.flash.swf",
+          file:'rtmp://220.168.31.76:1935/appname/stream',
+          width: '900',
+          height: '480',
+  });
+
+  var socketVideo = "http://220.168.31.76:1360";
+  var socketConnection = io.connect(socketVideo);
+  socketConnection.on('connect',function(socket){
+  socketConnection.emit('action',{roomName:'videoMsg'});
+     });
+  socketConnection.on('dialog_list',function(livevideos){
+    $('#liveUl li').remove();
+    if(livevideos.length > 0){
+      for(x in livevideos){
+        var createdTime = livevideos[x].createdTime.slice(5);
+        var encodedFileName =  livevideos[x].encodedFileName;
+        console.log('playLive('+encodedFileName+')');
+        $('#liveUl').append("<li><a href='javascript:void(0)' onclick='playLive(\""+encodedFileName+"\")'>灾情:"+livevideos[x].zaiQingName+"<br/>创建人:"+livevideos[x].orgName+"-"+livevideos[x].displayName+"<br/>时间:"+createdTime+"</a></li>");
+      }
+    }
+
+  })
+ })
+
+  function playLive(encodedFileName){
+    alert('sdfsfd');
+    jwplayer('container').setup({
+          flashplayer:"/jwplayer_report/jwplayer.flash.swf",
+          file:'rtmp://220.168.31.76:1935/appname/' + encodedFileName,
+          width: '1100',
+          height: '480',
+          autostart:true,
+    })
+  }
+</script>
+<hr/>
+<div id='liveDiv' data-options="region:'west',split:true,border:true,title:'直播视频'" style="width:350px;"><ul id='liveUl'>
+</ul></div>
+
+<div data-options="region:'center',split:true,border:true,title:'视频信息'">
+<div>
+<table>
+<tr>
+<td width = '70px'></td>
+<td>
+<div id="container">加载视频中</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+ 

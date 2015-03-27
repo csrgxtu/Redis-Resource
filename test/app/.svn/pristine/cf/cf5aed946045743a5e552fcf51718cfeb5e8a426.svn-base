@@ -1,0 +1,239 @@
+module.exports = {
+
+	getZYLY: function(req,res){
+		var zylySql = "select DMZ,DMMC from DM_SJZD where DM_SJZD_ID = '0D17DD95FC5643A6A2D2CA8E65602061' order by DMZ";
+		Nbzjxx.query(zylySql,function(err,zylySqlResult){
+			if(err)
+				return res.send({code: 500,msg: 'total databases query err',data: err});
+			if(zylySqlResult == null || zylySqlResult == '')
+				return res.send({code: 404,msg: 'data is null',data: ''});
+			var data = [];
+			var n = 0;
+			for(var i=0;i<zylySqlResult.length;i++){
+				if(zylySqlResult[i].DMZ.substring(2,4) == '00' && zylySqlResult[i].DMZ < '0500'){
+					data[n] = {};
+					//data[n][zylySqlResult[i].DMMC + '领域'] = [];
+					data[n]['DMZ'] = zylySqlResult[i].DMZ.substring(0,2);
+					data[n]['DMMC'] = zylySqlResult[i].DMMC + '领域';
+/*					var k = 0;
+					for(var j=0;j<zylySqlResult.length;j++){
+						if(zylySqlResult[j].DMZ.substring(0,2) == zylySqlResult[i].DMZ.substring(0,2) && zylySqlResult[j].DMZ.substring(2,4) != '00'){
+							data[n][zylySqlResult[i].DMMC + '领域'].push(zylySqlResult[j].DMMC);
+						}
+					}*/
+					n++;
+				}
+			}
+			data[n] = {};
+			data[n]['DMZ'] = "05";
+			data[n]['DMMC'] = "其他领域";
+/*			data[n] = {};
+			data[n]['其他领域'] = [];
+			for(var i=0;i<zylySqlResult.length;i++){
+				if(zylySqlResult[i].DMZ >= '0500'){
+					data[n]['其他领域'].push(zylySqlResult[i].DMMC);
+				}
+			}*/
+			return res.send({code: 200,msg: 'successfully',data: data});
+		})
+	},
+	getNBZJInfo: function(req,res){
+		var XM = req.param('NAME');
+		var LY = req.param('LY');
+		var JGJC = req.param('JGJC');
+		var pageIndex = req.param('pageIndex');
+		var pageSize = req.param('pageSize');
+		var retriJson = {};
+		if(pageIndex == null || pageIndex == '' || pageSize == '' || pageSize == null)
+			return res.send({code: 400,msg:'pageIndex or pageSize is not set right!',data:''});
+		var start = (parseInt(pageIndex) - 1) * parseInt(pageSize);
+		var end = start + parseInt(pageSize);
+		var data = [];
+		var total = sails.config.OffLineData.ryZJLY['total'];
+		for(var i = 0;i<pageSize;i++){
+			data[i] = sails.config.OffLineData.ryZJLY.get('zjxx')[start + i];
+		}
+		return res.send({code: 200,msg: 'success',total: total,data: data});
+/*		var nbzjSql = "select ry.ID,ry.XM,jg.JGJC,ry.ZWDM,ry.GWDM,ry.XBDM,zj.ZJLYDM,dh.BGDH from RYXX_RYJBXX ry inner join RYXX_ZJLY zj on zj.RYID = ry.ID "
+				  + "inner join JGXX_XFJG jg on jg.ID = ry.SJJGID left join RYXX_RYTXL dh on dh.RYID = ry.ID " 
+				  + "where (ry.SJJGID in (select JGXX_XFJG.ID from JGXX_XFJG "
+				  + "where ((JGXX_XFJG.JLZT = 1) and (((JGXX_XFJG.JGLB = '1') and (JGXX_XFJG.JGTREE like concat((select JGXX_XFJG.JGTREE "
+				  + "from JGXX_XFJG where (JGXX_XFJG.ID = 'ac688795e4694bde9016a02d2218a2c2')),'%'))) "
+				  + "or (JGXX_XFJG.ID = 'ac688795e4694bde9016a02d2218a2c2')))) and (ry.SFZJ = '1')) "
+				  + "order by jg.JGJC ";
+		var nbzjSqlTotal =  "select count(*) as total from RYXX_RYJBXX ry inner join RYXX_ZJLY zj on zj.RYID = ry.ID "
+				  + "inner join JGXX_XFJG jg on jg.ID = ry.SJJGID ";
+		console.log(nbzjSql);
+		XFJWT_CronTask.query(nbzjSqlTotal,function(err,nbzjSqlTotalResult){
+			if(err)
+				return res.send({code: 500,msg: 'database err',data: err});
+			if(nbzjSqlTotalResult == null || nbzjSqlTotalResult == '')
+				return res.send({code: 404,msg: 'no data',data: ''});
+			XFJWT_CronTask.query(nbzjSql,function(err,nbzjSqlResult){
+				if(err)
+					return res.send({code: 500,msg: 'database err',data: err});
+				if(nbzjSqlResult == null || nbzjSqlResult == '')
+					return res.send({code: 404,msg: 'nbzjSqlResult is null',data:''});
+				var tmpValues = [];
+				var n = 0;
+				nbzjSqlResult[0].ZW = sails.config.OffLineData.ryZJLY.get('zw')[nbzjSqlResult[0].ZWDM];
+				nbzjSqlResult[0].GW = sails.config.OffLineData.ryZJLY.get('gw')[nbzjSqlResult[0].GWDM];
+				nbzjSqlResult[0].XB = sails.config.OffLineData.ryZJLY.get('xb')[nbzjSqlResult[0].XBDM];
+				if(sails.config.OffLineData.ryZJLY.get('zjly')[nbzjSqlResult[0].ZJLYDM] !=null && sails.config.OffLineData.ryZJLY.get('zjly')[nbzjSqlResult[0].ZJLYDM] != ''){
+					nbzjSqlResult[0].LY = sails.config.OffLineData.ryZJLY.get('zjly')[nbzjSqlResult[0].ZJLYDM];					
+				}else{
+					nbzjSqlResult[0].LY = '';
+				}
+				tmpValues[0] = nbzjSqlResult[0];
+				for(var i = 1;i<nbzjSqlResult.length;i++){
+					nbzjSqlResult[i].ZW = sails.config.OffLineData.ryZJLY.get('zw')[nbzjSqlResult[i].ZWDM];
+					nbzjSqlResult[i].GW = sails.config.OffLineData.ryZJLY.get('gw')[nbzjSqlResult[i].GWDM];
+					nbzjSqlResult[i].XB = sails.config.OffLineData.ryZJLY.get('xb')[nbzjSqlResult[i].XBDM];
+					if(sails.config.OffLineData.ryZJLY.get('zjly')[nbzjSqlResult[i].ZJLYDM] !=null && sails.config.OffLineData.ryZJLY.get('zjly')[nbzjSqlResult[i].ZJLYDM] != ''){
+						nbzjSqlResult[i].LY = sails.config.OffLineData.ryZJLY.get('zjly')[nbzjSqlResult[i].ZJLYDM];					
+					}else{
+						nbzjSqlResult[i].LY = '';
+					}
+					if(nbzjSqlResult[i].ID == nbzjSqlResult[i-1].ID){
+						if(tmpValues[n].LY != null && tmpValues[n].LY != ''){
+							tmpValues[n].LY = tmpValues[n].LY  + "," + sails.config.OffLineData.ryZJLY.get('zjly')[nbzjSqlResult[i].ZJLYDM];
+						}else{
+							tmpValues[n].LY = sails.config.OffLineData.ryZJLY.get('zjly')[nbzjSqlResult[i].ZJLYDM];
+						}
+					}else{
+						n++;
+						tmpValues[n] = nbzjSqlResult[i];
+					}
+				}
+				console.log(sails.config.OffLineData.ryZJLY.get('zw'));
+				return res.send({code: 200,msg: 'success',total: nbzjSqlTotalResult[0].total,data: tmpValues});				
+			})
+		})*/
+/*		if(XM)
+			retriJson.XM = {'contains': XM};
+		if(LY)
+			retriJson.LY = {'contains': LY};
+		if (JGJC) 
+			retriJson.JGJC = {'contains': JGJC};
+		Nbzjxx.find(retriJson)
+		.skip(start)
+		.limit(pageSize)
+		.exec(function(err,result){
+			if(err)
+				return res.send({code: 500,msg: 'databases query err',data: err});
+			Nbzjxx.count(retriJson)
+			.exec(function(err,count){
+				if(err)
+					return res.send({code: 500,msg: 'databases query err',data: err});
+				return res.send({code: 200,msg: 'success',total: count,data: result});
+			})
+		})*/
+
+	},
+	//获取外部专家信息
+	getWBZJInfo: function(req,res){
+		var NAME = req.param('NAME');   //姓名
+		var DW = req.param('DW');		// 单位
+		var LY = req.param('LY');       //领域
+		var WHJG = req.param('WHJG');   //维护机构
+		var pageIndex = req.param('pageIndex');
+		var pageSize = req.param('pageSize');
+		if(pageIndex == null || pageIndex == '' || pageSize == '' || pageSize == null)
+			return res.send({code: 400,msg:'pageIndex or pageSize is not set right!',data:''});
+		var start = (pageIndex - 1) * pageSize;
+		//var rySql = "select ID from RYXX_SHZJ ";
+		
+
+	
+		var sql = "select ry.ID,ry.XM as NAME,GROUP_CONCAT(lydm.DMMC) as LY,ry.SSDW as SSDW,"
+				+ "zw.DMMC as ZW,ry.BGDH,xb.DMMC as XB,jg.JGJC as WHJG from RYXX_SHZJ ry "
+				+ "left join JGXX_XFJG jg on jg.ID = ry.WHJGID "
+				+ "left join RYXX_SHZJLY ly on ly.ZJID = ry.ID "
+				+ "left join ( select lydm.DMZ,lydm.DMMC  from DM_SJZD lydm "
+				+ "inner join DM_SJZDZB lydmzb on (lydmzb.ID = lydm.DM_SJZD_ID and lydmzb.ZDDM= 'ZYLY')) lydm "
+				+ "on (ly.ZJLYDM = lydm.DMZ) "
+				+ "left join ( select xbdm.DMZ,xbdm.DMMC  from DM_SJZD xbdm "
+				+ "inner join DM_SJZDZB xbzb on (xbzb.ID = xbdm.DM_SJZD_ID and xbzb.ZDDM= 'XB' and xbzb.JLZT=1 and xbdm.JLZT=1)) xb "
+				+ "on (ry.XB = xb.DMZ) "	
+				+ "left join ( select zwdm.DMZ,zwdm.DMMC  from DM_SJZD zwdm "
+				+ "inner join DM_SJZDZB zwzb on (zwzb.ID = zwdm.DM_SJZD_ID and zwzb.ZDDM= 'ZW')) zw  on (ry.ZW = zw.DMZ) "
+				+ "where 1=1 and ry.XM is not null ";
+		var sqlTotal = "select count(*) as total from RYXX_SHZJ ry "
+				+ "left join JGXX_XFJG jg on jg.ID = ry.WHJGID "
+				+ "left join RYXX_SHZJLY ly on ly.ZJID = ry.ID "
+				+ "left join ( select lydm.DMZ,lydm.DMMC  from DM_SJZD lydm "
+				+ "inner join DM_SJZDZB lydmzb on (lydmzb.ID = lydm.DM_SJZD_ID and lydmzb.ZDDM= 'ZYLY')) lydm "
+				+ "on (ly.ZJLYDM = lydm.DMZ) "
+				+ "left join ( select xbdm.DMZ,xbdm.DMMC  from DM_SJZD xbdm "
+				+ "inner join DM_SJZDZB xbzb on (xbzb.ID = xbdm.DM_SJZD_ID and xbzb.ZDDM= 'XB' and xbzb.JLZT=1 and xbdm.JLZT=1)) xb "
+				+ "on (ry.XB = xb.DMZ) "	
+				+ "left join ( select zwdm.DMZ,zwdm.DMMC  from DM_SJZD zwdm "
+				+ "inner join DM_SJZDZB zwzb on (zwzb.ID = zwdm.DM_SJZD_ID and zwzb.ZDDM= 'ZW')) zw  on (ry.ZW = zw.DMZ) "
+				+ "where 1=1 and ry.XM is not null ";
+		if(NAME){
+			sql += " and ry.XM like '%"+NAME+"%'";
+			sqlTotal += " and ry.XM like '%"+NAME+"%'";
+		}
+		if(DW){
+			sql += " and ry.SSDW like '%"+DW+"%'";
+			sqlTotal += " and ry.SSDW like '%"+DW+"%'";
+		}
+
+/*		if(LY){
+			sql += " and lydm.DMZ like '"+LY+"%'";
+			sqlTotal += " and lydm.DMZ like '"+LY+"%'";
+		}*/
+		if(WHJG){
+			sql += " and jg.JGJC like '%"+WHJG+"%' ";
+			sqlTotal += " and jg.JGJC like '%"+WHJG+"%' ";
+		}
+		if(LY){
+			var lyRySql = "select ry.ID from RYXX_SHZJ ry inner join RYXX_SHZJLY ly on ly.ZJID = ry.ID where ly.ZJLYDM like '"+LY+"%'";
+			Nbzjxx.query(lyRySql,function(err,lyRySqlResult){
+		  		if(err)
+					return res.send({code: 500,msg: 'total databases query err',data: err});
+				if(lyRySqlResult.length == 0)
+					return res.send({code: 403,msg: 'no people',data: ''});
+				var idList = [];
+				for(var i = 0;i < lyRySqlResult.length; i++){
+	      			idList.push("'"+lyRySqlResult[i].ID+"'");
+	   		 	}
+	   		 	var str_p = idList.join(",");
+	   		 	sql += " and ry.ID in ("+str_p+") ";
+	   		 	sqlTotal += " and ry.ID in ("+str_p+") ";
+				sql  +=	" GROUP BY ry.ID ";
+				sqlTotal += " GROUP BY ry.ID ";
+		  		sql  +=	" limit " +start+ ","+pageSize+"";
+		  		Nbzjxx.query(sqlTotal,function(err,total){
+		  			if(err)
+						return res.send({code: 500,msg: 'total databases query err',data: err});
+					if(total == null || total == '')
+						return res.send({code: 404,msg: 'total is 0',data: ''});
+					Nbzjxx.query(sql,function(err,result){
+						if(err)
+							return res.send({code: 500,msg: 'sql databases query err',data: err});
+						return res.send({code: 200,msg: 'success',total: total[0].total,data: result});
+					})
+		  		})   		 					
+			})
+		}else{
+			sql  +=	" GROUP BY ry.ID ";
+			sqlTotal += " GROUP BY ry.ID ";
+	  		sql  +=	" limit " +start+ ","+pageSize+"";
+	  		console.log(sql);
+	  		Nbzjxx.query(sqlTotal,function(err,total){
+	  			if(err)
+					return res.send({code: 500,msg: 'total databases query err',data: err});
+				if(total == null || total == '')
+					return res.send({code: 404,msg: 'total is 0',data: ''});
+				Nbzjxx.query(sql,function(err,result){
+					if(err)
+						return res.send({code: 500,msg: 'sql databases query err',data: err});
+					return res.send({code: 200,msg: 'success',total: total[0].total,data: result});
+				})
+	  		})
+  		}
+
+	},
+	
+}

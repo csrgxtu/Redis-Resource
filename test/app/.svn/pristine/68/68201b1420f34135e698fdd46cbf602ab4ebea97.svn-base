@@ -1,0 +1,84 @@
+<style>
+	input{
+		padding-left:4px;
+	}
+</style>
+
+
+<div data-options="region:'center',iconCls:'icon-ok'">
+	<div class="easyui-layout" data-options="fit:true">
+		<div data-options="region:'north',split:true,border:false" style="height:95px">
+			<table  class="easyui-datagrid" title="部署图详细信息"  id="imgInfoTable" data-options="				
+					singleSelect:true,
+					autoRowHeight:false,				
+					collapsible:false,				
+					remoteSort:false,
+					multiSort:true,
+					loadMsg:'正在加载数据，请稍等...',
+					striped:true,
+					fit:true,
+					fitColumns:true">
+				<thead>  	
+					<tr>
+						<th data-options="field:'taskName',width:120,sortable:true">灾情名称</th>
+						<th data-options="field:'imageType',width:90,sortable:true">部署图类型</th>
+						<th data-options="field:'address',width:150,sortable:true">地址</th>
+						<th data-options="field:'lon',width:90,sortable:true">经度</th>
+						<th data-options="field:'lat',width:90,sortable:true">纬度</th>
+						<th data-options="field:'createdBy',width:60,sortable:true">创建人</th>
+						<th data-options="field:'createdTime',width:90,sortable:true">创建时间</th>		
+					</tr>
+				</thead>  
+			</table>		
+		</div>		
+		<div data-options="region:'center',border:false">
+			<a href="javascript:void(0)" id="imgA"><img id="imgUrl" style="width:100%;height:100%" src="http://58.20.108.156:1337/files/XfImage/9bcbbc61b2e8eefe4c9010d27663c812.jpg"></a>		
+		</div>
+	</div>	
+</div>
+
+<div data-options="region:'west',split:true,border:true,title:'部署图信息列表'" style="width:350px;">
+	<table  class="easyui-datagrid"  id="imgListTable" data-options="
+				rownumbers:true, 
+				singleSelect:true,
+				pagination:true,
+				toolbar:'#imgTool',
+				autoRowHeight:false,				
+				collapsible:false,				
+				remoteSort:false,
+				multiSort:true,
+				loadMsg:'正在加载数据，请稍等...',
+				striped:true,
+				fit:true,
+				fitColumns:true">
+		<thead>  	
+			<tr>
+				<th data-options="field:'taskName',width:150,sortable:true">灾情名称</th>
+				<th data-options="field:'imageType',width:90,sortable:true">部署图类型</th>				
+				<th data-options="field:'address',width:110,sortable:true">地址</th>	
+			</tr>
+		</thead>  
+	</table>
+</div>
+
+
+<div id="imgTool">
+	<table border="0">
+		<tr>
+			<td>
+				 灾情:<input id="taskNameSea" class="textbox" style="height:28px;width:190px;">
+			</td>				
+			<td rowspan="2" align="center" width="70px">
+				<a href="javascript:void(0)" id="searchImg" style="height:30px;" class="easyui-linkbutton" iconCls="icon-search">搜 索&nbsp;&nbsp;</a>	
+			</td>
+		</tr>
+		<tr>
+			<td>
+				部署图类型:<select style="width:190px;height:28px;border:#95B8E7 1px solid" id="imgTypeSea">
+					<option value="">--请选择--</option>
+				</select>
+			</td>
+		</tr>
+	</table>			
+</div>
+  <script type="text/javascript" src="/js/imgDeploy.js"></script>

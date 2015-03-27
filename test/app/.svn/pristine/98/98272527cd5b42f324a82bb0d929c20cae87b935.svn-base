@@ -1,0 +1,417 @@
+var orgZDID = "ac688795e4694bde9016a02d2218a2c2";
+var orgYYID = "380c59ba34aa4e879f60d3fb228bb934";
+module.exports = {
+	/*
+		@param: id 
+	*/
+	
+	JGInfo: function(req,res){
+		var id = req.param('id');
+		var sql0 = "select ID,JGMC,JGJC from JGXX_XFJG where ID = SJJGID";
+		JGXX_XFJG.query(sql0,function(err,r0){
+			if(err)
+				return res.send({code: 500,msg: 'database err',data: err});
+			if(r0.length == 0)
+				return res.send({code: 404,msg: 'there is nothing',data:'nothing0'});
+			if(id == null || id == '')
+				id = r0[0].ID;
+			var sql1 = "select j1.ID,j1.JGMC,j1.JGJC,j2.JGMC as SJMC from JGXX_XFJG j1 "
+					 + "inner join JGXX_XFJG j2 on j2.ID = j1.SJJGID where j1.SJJGID = '"+id+"'" ;
+			JGXX_XFJG.query(sql1,function(err,r1){
+				if(err)
+					return res.send({code: 500,msg: 'database err',data: err});
+				if(r1.length == 0)
+					return res.send({code: 404,msg: 'there is nothing',data:'nothing1'});
+				return res.send({code: 200,msg: 'success',data:r1});
+			})
+		})
+	},
+	getHNJGInfo: function(req,res){
+		var organizationId = req.session.info.OrganiztionId;
+		var id = req.param('id');
+		var sql;
+		if(organizationId == orgZDID){
+			sql = "select * from xfjwt_Organization group by Level2ID";
+			JGXX_XFJG.query(sql,function(err,r){
+				if(err)
+					return res.send({code: 500,msg: 'database err',data: err});
+				if(r.length == 0)
+					return res.send({code: 404,msg: 'there is nothing',data:'nothing'});
+				var level2 = [];
+				for(var i = 0;i < r.length;i++){
+					var ceil = {ID:r[i].Level2ID,Name:r[i].Level2Name};
+					level2.push(ceil);
+				}
+				return res.send({code: 200,level: level2,levelMore:''});
+			})
+		}else if(organizationId == orgYYID){
+			//sql = "select * from xfjwt_Organization where Level2ID = '" +organizationId+ "'";
+
+			var sql = "select j1.ID,j1.JGMC,j1.JGJC,j2.JGMC as SJMC from JGXX_XFJG j1 "
+					 + "inner join JGXX_XFJG j2 on j2.ID = j1.SJJGID where j1.SJJGID = '"+organizationId+"'";
+			var sql0 = 'select OrganizationId,OrgName,Status,Cnt from xfjwt_ZhiQinRenYuan '
+					 + "where OrganizationId in (select j1.ID from JGXX_XFJG j1 "
+					 + "inner join JGXX_XFJG j2 on j2.ID = j1.SJJGID where j1.SJJGID = '"+organizationId+"')";
+			console.log(sql0);
+			JGXX_XFJG.query(sql0,function(err,r){
+				if(err)
+					return res.send({code: 500,msg: 'database err',data: err});
+				if(r.length == 0)
+					return res.send({code: 404,msg: 'there is nothing',data:'nothing'});
+				var level3 = [];
+				//for(var i = 0;i < r.length;i++){
+				//	var ceil = {ID:r[i].Level3ID,Name:r[i].Level3Name};
+				//	level3.push(ceil);
+				//}
+				return res.send({code: 200,level: '',levelMore:r});
+			})
+			//return res.send('ok')
+		}else{
+
+		}
+	},
+	//ren yuan zhang kuang tong ji
+	getRYANDJGINFO: function(req,res){
+		var permission = req.session.loginInfo.userInfo.Permission;
+		var organizationId = req.session.loginInfo.userInfo.OrganiztionId;
+		var orgName = req.session.loginInfo.userInfo.OrgName;
+		var sql = "select distinct Status from xfjwt_ZhiQinRenYuan";
+		var sql_S = "select distinct t.DMMC as Status " 
+				  +"from RYXX_RYJBXX ry "
+				  +"inner join ( select dm.DMMC, dm.DMZ from DM_SJZD dm "
+ 				  +"inner join DM_SJZDZB zb on zb.ID = dm.DM_SJZD_ID and zb.ZDDM = 'ZWQK' and zb.JLZT = 1 "
+                  +"where dm.JLZT = 1 "
+                  +") t on t.DMZ = ry.ZWQKDM "
+                  +"inner join JGXX_XFJG jg on ry.SJJGID=jg.ID "
+                  +"where ry.SJJGID in ( select a.ID from JGXX_XFJG a "
+                  +"where (  a.JGLB='1' and a.JGTREE like "
+                  +"(concat(( select b.JGTREE from JGXX_XFJG b where b.ID='ac688795e4694bde9016a02d2218a2c2'),'%' )) "
+                  +"or a.ID='ac688795e4694bde9016a02d2218a2c2')) "
+                  +"and ry.JLZT = 1 and (jg.JGXZDM like '03%' or jg.JGXZDM like '05%' or jg.JGXZDM like '09%')";
+    	
+		var data = {};
+		var permissionIDS = [];
+
+		for(var i = 0;i < permission.length; i++){
+			permissionIDS.push("'"+permission[i].ID+"'");
+		}
+        var str_p = permissionIDS.join(",");
+        var sql_P = "select jg.SJJGID,ry.SJJGID as OrganizationId,jg.JGJC OrgName, t.DMMC Status,count(1) Cnt "
+                  +"from RYXX_RYJBXX ry "
+                  +"inner join ( select dm.DMMC, dm.DMZ from DM_SJZD dm "
+                  +"inner join DM_SJZDZB zb on zb.ID = dm.DM_SJZD_ID and zb.ZDDM = 'ZWQK' and zb.JLZT = 1 "
+                  +"where dm.JLZT = 1 "
+                  +") t on t.DMZ = ry.ZWQKDM "
+                  +"inner join JGXX_XFJG jg on ry.SJJGID=jg.ID "
+                  +"where ry.SJJGID in (" + str_p + ") "
+                  +"group by ry.SJJGID ,jg.JGJC, t.DMMC "
+                  +"order by ry.SJJGID ,jg.JGJC, t.DMMC"; 
+		ZhiQinRenYuan.query(sql_S,function(err1,r){
+			if(err1)
+				return res.send({
+					code: 500,
+					msg: err1,
+					data: 'err1',
+				})
+			if(r.length == 0)
+				return res.send({code: 404,msg: 'there is nothing',data:'nothing'});
+			data.type = r;
+			data.defaultOrg = {organizationId: organizationId,orgName: orgName};
+			data.orgList = permission;
+			ZhiQinRenYuan.query(sql_P,function(err,r0){
+				if(err)
+					return res.send({code: 500,msg: 'database err',data: err});
+				if(r.length == 0)
+					return res.send({code: 404,msg: 'there is nothing',data:'nothing'});
+				var resultData = [];
+				var n = 0;
+				for(var j = 0;j < r0.length;j++){
+					if(j == 0){
+						resultData[n] = {};
+						resultData[n].organizationId = r0[j].OrganizationId;
+						resultData[n].orgName = r0[j].OrgName;
+						resultData[n].total = 0;
+						resultData[n].status = {};
+						for(var k = 0;k < r.length;k++){
+							resultData[n].status[r[k].Status] = 0;
+							if(r[k].Status == r0[j].Status){
+								resultData[n].status[r[k].Status] = r0[j].Cnt;
+								resultData[n].total += 	resultData[n].status[r[k].Status];
+							}						
+						}
+					}else{
+						if(resultData[n].organizationId == r0[j].OrganizationId){
+							for(var k = 0;k < r.length;k++){
+								if(r[k].Status == r0[j].Status){
+									resultData[n].status[r[k].Status] = r0[j].Cnt;
+									resultData[n].total += 	resultData[n].status[r[k].Status];	
+								}					
+							}
+						}else{
+							n = n + 1;
+							resultData[n] = {};
+							resultData[n].organizationId = r0[j].OrganizationId;
+							resultData[n].orgName = r0[j].OrgName;
+							resultData[n].total = 0;
+							resultData[n].status = {};
+							for(var k = 0;k < r.length;k++){
+								resultData[n].status[r[k].Status] = 0;
+								if(r[k].Status == r0[j].Status){
+									resultData[n].status[r[k].Status] = r0[j].Cnt;
+									resultData[n].total += 	resultData[n].status[r[k].Status];	
+								}					
+							}
+						}
+					}
+				}
+				data.resultData = resultData;
+				return res.send({code: 200,msg: '',data: data,n:n});
+			})
+		})
+	},
+//=====================================应急联动单位信息========================================================================
+	//应急联动单位信息
+	getYYLDDWInfo: function(req,res){
+		var DWMC = req.param('DWMC');        //单位名称
+		var YJFWNR = req.param('YJFWNR');    //应急服务内容
+		var DWDZ = req.param('DWDZ');         //单位地址
+		var DWLX = req.param('DWLX');
+		var JGTREE = req.param('JGTREE');         //单位类型
+		//var JGJC = req.param('JGJC');         //机构简称（消防辖区）
+		var pageIndex = req.param('pageIndex');
+		var pageSize = req.param('pageSize');
+		if(pageIndex == null || pageIndex == '' || pageSize == '' || pageSize == null)
+			return res.send({code: 400,msg:'pageIndex or pageSize is not set right!',data:''});
+		var start = (pageIndex - 1) * pageSize;
+		var retriJson = {};
+		if(DWMC)
+			retriJson.DWMC = {'contains': DWMC};
+		if(YJFWNR)
+			retriJson.YJFWNR = {'contains': YJFWNR};
+		if(DWDZ)
+			retriJson.DWDZ = {'contains': DWDZ};
+		if(DWLX)
+			retriJson.DWLX = {'contains': DWLX};
+		if(JGTREE)
+			retriJson.JGTREE = {'contains': JGTREE};
+		YYLDDW.find(retriJson)
+		.skip(start)
+		.limit(pageSize)
+		.exec(function(err,result){
+			if(err)
+				return res.send({code: 500,msg: 'databases query err',data: err});
+			YYLDDW.count(retriJson)
+			.exec(function(err,total){
+				if(err)
+					return res.send({code: 500,msg: 'total databases query err',data: err});
+				return res.send({code: 200,msg: 'success',total: total,data: result});
+			})
+		})
+	},
+	readYYLDDWLX: function(req,res){
+		var lxsql ="select DMZ,DMMC from DM_SJZD where DM_SJZD_ID = '372F6E19E8C94D898BC9943FA2A147D1' order by length(DMMC)";
+		YYLDDW.query(lxsql,function(err,lxsqlResult){
+			if(err)
+				return res.send({code: 500,msg: 'databases err',data: err});
+			return res.send({code: 200,msg: 'successfully',data: lxsqlResult});
+		})
+	},
+//=========================================战勤保障单位及保障能力==============================================================================
+	//战勤保障单位及保障能力
+	BZDWInfo: function(req,res){
+		var BZDW = req.param('BZDW');   //保障单位
+		var BZLB = req.param('BZLB');    //保障类别
+		var WHJG = req.param('WHJG');     //维护机构
+		var pageIndex = req.param('pageIndex');
+		var pageSize = req.param('pageSize');
+		if(pageIndex == null || pageIndex == '' || pageSize == '' || pageSize == null)
+			return res.send({code: 400,msg:'pageIndex or pageSize is not set right!',data:''});
+		var start = (pageIndex - 1) * pageSize;
+		var retriJson = {};
+		if(BZDW) 
+			retriJson.BZDW = {'contains': BZDW};
+		if(BZLB) 
+			retriJson.BZLB = {'contains': BZLB};
+		if(WHJG) 
+			retriJson.WHJG = {'contains': WHJG};
+		BZDWJNL.find(retriJson)
+		.skip(start)
+		.limit(pageSize)
+		.exec(function(err,result){
+			if(err)
+				return res.send({code: 500,msg: 'databases query err',data: err});
+			BZDWJNL.count(retriJson)
+			.exec(function(err,total){
+				if(err)
+					return res.send({code: 500,msg: 'databases query err',data: err});
+				return res.send({code: 200,msg: 'success',total: total,data: result});
+			})
+		})
+	},
+	readBZDWLX: function(req,res){
+		var lxsql = "select DMZ,DMMC from DM_SJZD where DM_SJZD_ID = '7FCF600DEBD14179B4205D095B47F89F' order by length(DMMC)";
+		BZDWJNL.query(lxsql,function(err,lxsqlResult){
+			if(err)
+				return res.send({code: 500,msg: 'databases query err',data: err});
+			return res.send({code: 200,msg: 'successfully',data: lxsqlResult});
+		})
+	},
+	//=========================================灭火药剂==================================================
+	getMHYJLX: function(req,res){
+		var lxsql = "select lb.DMZ,lb.DMMC from DM_SJZD lb inner join DM_SJZDZB zb on (zb.ID = lb.DM_SJZD_ID and zb.ZDDM = 'ZBQCLB') where lb.DMZ like '4%' order by lb.DMZ";
+		 BZDWJNL.query(lxsql,function(err,lxsqlResult){
+			if(err)
+				return res.send({code: 500,msg: 'databases query err',data: err});
+			if(lxsqlResult.length == 0)
+				return res.send({code: 403,msg: 'data is null',data: ''});
+			var node = [];
+			var n = 0;
+			for(var i = 0;i<lxsqlResult.length;i++){
+				if(lxsqlResult[i].DMZ.substring(1,8) == '0000000'){
+					node[n] = {};
+					node[n].DMZ = lxsqlResult[i].DMZ;
+					node[n].DMMC = lxsqlResult[i].DMMC;
+					node[n].CHILDREN = [];
+					var k = 0;
+					for(var j = 0;j<lxsqlResult.length;j++){
+						if(lxsqlResult[j].DMZ.substring(2,8) == '000000' && lxsqlResult[j].DMZ.substring(1,8) != '0000000'){
+							node[n].CHILDREN[k] = {};
+							node[n].CHILDREN[k].DMZ = lxsqlResult[j].DMZ;
+							node[n].CHILDREN[k].DMMC = lxsqlResult[j].DMMC;
+							k++;
+						}
+					}
+					n++;
+				}
+			}
+			return res.send({code: 200,msg: 'successfully',data: node});		 	
+		 })
+	},
+	getMHYJInfo: function(req,res){
+		var jgID = req.param('jgID');
+		var jgtree = req.param('jgtree');
+		var zblxdm = req.param('zblxdm');
+		var yjSql = "select yj.ZBQCMC,yj.ZBQCFLDM,FLOOR(yj.KCSL) as KCSL,jg.JGJC from WL_KCQC yj inner join JGXX_XFJG jg on jg.ID = yj.XFJGID where yj.JLZT = 1 ";
+		if(jgID != null && jgID != '')
+			yjSql += "and yj.XFJGID = '" +jgID+ "' ";
+		if(jgtree != null && jgtree)
+			yjSql += "and jg.JGTREE like '" +jgtree+"%' ";
+		if(zblxdm != null && zblxdm != ''){
+			yjSql += "and yj.ZBQCFLDM like '" +zblxdm+ "%' ";
+		}else{
+			yjSql += "and yj.ZBQCFLDM like '4%' ";
+		}
+		yjSql += "and FLOOR(yj.KCSL) > 0 order by jg.JGTREE,yj.ZBQCMC";
+		console.log("yjSql = " + yjSql);
+		BZDWJNL.query(yjSql,function(err,yjSqlResult){
+			if(err)
+				//console.log(err);
+				return res.send({code: 500,msg: 'databases query err',data: err});
+			if(yjSqlResult == null || yjSqlResult == '')
+				return res.send({code: 403,msg: 'no data',data: '',});
+			return res.send({code: 200,msg: 'successfully',data: yjSqlResult});
+
+		})
+	},
+	//==============================获取车辆信息============================================================
+	getXFCLX: function(req,res){
+		var lxsql = "select lx.DMZ,lx.DMMC from DM_SJZD lx inner join DM_SJZDZB zb on (zb.ZDDM = 'ZBQCLB' and zb.ID = lx.DM_SJZD_ID) where DMZ like '2101%' order by lx.DMZ";
+		BZDWJNL.query(lxsql,function(err,lxsqlResult){
+			if(err)
+				//console.log(err);
+				return res.send({code: 500,msg: 'databases query err',data: err});
+			if(lxsqlResult.length == 0)
+				return res.send({code: 403,msg: 'data is null',data: ''});
+			var node = [];
+			var n = 0;
+			for(var i = 0;i<lxsqlResult.length;i++){
+				if(lxsqlResult[i].DMZ.substring(4,8) == '0000'){
+					node[n] = {};
+					node[n].DMZ = lxsqlResult[i].DMZ;
+					node[n].DMMC = lxsqlResult[i].DMMC;
+					node[n].CHILDREN = [];
+					var k = 0;
+					for(var j = 0;j<lxsqlResult.length;j++){
+						if(lxsqlResult[j].DMZ.substring(6,8) == '00' && lxsqlResult[j].DMZ.substring(4,8) != '0000'){
+							node[n].CHILDREN[k] = {};
+							node[n].CHILDREN[k].DMZ = lxsqlResult[j].DMZ;
+							node[n].CHILDREN[k].DMMC = lxsqlResult[j].DMMC;
+							k++;
+						}
+					}
+					n++;
+				}
+			}
+			return res.send({code: 200,msg: 'successfully',data: node});			
+		})
+	},
+	//获取车辆信息
+	getCLZBInfo: function(req,res){
+		var pageIndex = req.param('pageIndex');
+		var pageSize = req.param('pageSize');
+		var jgtree = req.param('jgtree');
+		if(pageIndex == null || pageIndex == '' || pageSize == null || pageSize == '')
+			return res.send({code: 404,msg: 'pageIndex pageSize not set',data: ''})
+		var sql = "select jg.ID as JGID,jg.JGJC,cl.ID,cl.GGXH,zl.DMMC as CLZL,lx.DMMC as CLLX,cl.SB,cl.ZRRXM,cl.YS,cl.CPHM,cl.CCRQ,cl.ZBRQ,cl.BFRQ,cl.YXQZ,cl.LJYXSJ,cl.LJSYCS,cl.CLBH from WL_CLXX cl "
+				+ "inner join JGXX_XFJG jg on (jg.ID = cl.SSXFJGID and jg.JLZT = 1) "
+				+ "inner join DM_SJZD lx on (lx.DMZ = cl.ZBLXDM) "
+				+ "inner join DM_SJZDZB zb on (zb.ZDDM = 'ZBQCLB' and zb.ID = lx.DM_SJZD_ID) "
+				+ "inner join DM_SJZD zl on (zl.ID = lx.FDMID) "
+				+ "where cl.ZBLXDM like '2101%' ";
+		
+		var sqlTotal = "select count(*) as total from WL_CLXX cl "
+				+ "inner join JGXX_XFJG jg on (jg.ID = cl.SSXFJGID and jg.JLZT = 1) "
+				+ "inner join DM_SJZD lx on (lx.DMZ = cl.ZBLXDM) "
+				+ "inner join DM_SJZDZB zb on (zb.ZDDM = 'ZBQCLB' and zb.ID = lx.DM_SJZD_ID) "
+				+ "inner join DM_SJZD zl on (zl.ID = lx.FDMID) "
+				+ "where cl.ZBLXDM like '2101%' ";
+		if(jgtree == null || jgtree == ''){
+			sql	+= "and cl.SSXFJGID in (select ID from JGXX_XFJG where JGTREE like '0100000043000000%') ";
+			sqlTotal += "and cl.SSXFJGID in (select ID from JGXX_XFJG where JGTREE like '0100000043000000%') ";
+		}else{
+			sql	+= "and cl.SSXFJGID in (select ID from JGXX_XFJG where JGTREE like '"+jgtree+"%') ";
+			sqlTotal += "and cl.SSXFJGID in (select ID from JGXX_XFJG where JGTREE like '"+jgtree+"%') ";
+		}
+		var start = (pageIndex -1 ) * pageSize;
+		sql += " limit "+start+","+pageSize+"";
+		console.log("clZBsql = " + sql);
+		BZDWJNL.query(sqlTotal,function(err,totalResult){
+			if(err)
+				//console.log(err);
+				return res.send({code: 500,msg: 'databases query err',data: err});
+			if(totalResult.length == 0)
+				return res.send({code: 404,msg: 'no data',data: ''});	
+			BZDWJNL.query(sql,function(err,result){
+				if(err)
+					//console.log(err);
+					return res.send({code: 500,msg: 'databases query err',data: err});
+				return res.send({code: 200,total: totalResult[0].total,msg: 'success',data: result});
+			})					
+		})	
+
+	},
+	//===================================装备器材==================================
+	getZBQCLB: function(req,res){
+		var lbSql = "select lb.DMZ,lb.DMMC from DM_SJZD lb inner join DM_SJZDZB zb on (zb.ID = lb.DM_SJZD_ID and zb.ZDDM = 'ZBQCLB') order by lb.DMZ";
+		BZDWJNL.query(lbSql,function(err,lbSqlResult){
+			if(err)
+				//console.log(err);
+				return res.send({code: 500,msg: 'databases query err',data: err});
+			if(lbSqlResult.length == 0)
+				return res.send({code: 403,msg: 'no data',data: ''});
+			var node = [];
+			var n = 0;
+			for(var i = 0;i<lbSqlResult.length;i++){
+				if(lbSqlResult[i].DMZ.substring(1,8) == '0000000'){
+					node[n] = {};
+					node[n].DMZ = lbSqlResult[i].DMZ;
+					node[n].DMMC = lbSqlResult[i].DMMC;
+					n++
+				}
+			}
+			return res.send({code: 200,msg: 'successfully',data: node});
+		})
+	}
+
+}
+

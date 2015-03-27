@@ -1,0 +1,387 @@
+var rtmp = "rtmp://58.20.108.159:1935/appname/"; //直播流地址
+var socketVideo = "http://58.20.108.159:1360"; //视频监听地址
+/**
+ 输入校验
+*/
+function encodeHTML(val) {
+	return val.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+//把  2010-1-1  1:1:1格式转化为ie能解析的时间格式
+function toDate(str) {
+		if (str) {
+			var string = str.split(" ");
+			var date = string[0];
+			var time = string[1];
+			var dateStr = date.split("-");
+			var year = dateStr[0];
+			var month = dateStr[1] - 1;
+			var day = dateStr[2];
+			var timeStr = time.split(":");
+			var hour = timeStr[0];
+			var min = timeStr[1];
+			var sec = timeStr[2];
+
+			var dd = new Date();
+			dd.setFullYear(year);
+			dd.setMonth(month);
+			dd.setDate(day);
+			dd.setHours(hour);
+			dd.setMinutes(min);
+			dd.setSeconds(sec);
+
+			return dd;
+		} else {
+			return false;
+		}
+	}
+	//获取URL参数
+
+function getQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null) return unescape(r[2]);
+		return null;
+	}
+	//时间格式化
+Date.prototype.Format = function(fmt) { //author: meizz   
+	var o = {
+		"M+": this.getMonth() + 1, //月份   
+		"d+": this.getDate(), //日   
+		"HH+": this.getHours(), //小时   
+		"m+": this.getMinutes(), //分   
+		"s+": this.getSeconds(), //秒   
+		"q+": Math.floor((this.getMonth() + 3) / 3), //季度   
+		"S": this.getMilliseconds() //毫秒   
+	};
+	if (/(y+)/.test(fmt))
+		fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+	for (var k in o)
+		if (new RegExp("(" + k + ")").test(fmt))
+			fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+	return fmt;
+}
+String.prototype.trim = function() {
+	return this.replace(/(^\s*)|(\s*$)/g, "");
+}
+String.prototype.ltrim = function() {
+	return this.replace(/(^\s*)/g, "");
+}
+String.prototype.rtrim = function() {
+	return this.replace(/(\s*$)/g, "");
+}
+
+function myformatter(dateTime) {
+	var y = dateTime.getFullYear();
+	var m = dateTime.getMonth() + 1;
+	var d = dateTime.getDate();
+	var h = dateTime.getHours();
+	var s = dateTime.getSeconds();
+	var M = dateTime.getMinutes();
+	return y + '-' + (m < 10 ? ('0' + m) : m) + '-' + (d < 10 ? ('0' + d) : d) + ' ' + (h < 10 ? ('0' + h) : h) + ':' + (M < 10 ? ('0' + M) : M) + ':' + (s < 10 ? ('0' + s) : s);
+}
+
+function updatePassOfLayout() {
+	var userName = getCookie("DisplayName");
+	$("#userNameUpdatePassL").val(userName);
+	open5("updateUserPassOfLayout", 300, 200, "修改密码");
+	$("#oldPassUpdatePassL").focus();
+}
+
+function submitUpdatePassL() {
+	var oldPass = $("#oldPassUpdatePassL").val();
+	var newPass = $("#passUpdatePassL").val();
+	var newPassA = $("#passAgainUpdatePassL").val();
+	if (oldPass == "") {
+		openAlert("请输入旧密码", 300, 100);
+		return false;
+	}
+	if (newPass == "") {
+		openAlert("请输入新密码", 300, 100);
+		return false;
+	}
+	if (newPassA == "") {
+		openAlert("请确认密码", 300, 100);
+		return false;
+	}
+
+	if (newPass != newPassA) {
+		openAlert("密码输入不一致", 300, 100);
+		return false;
+	}
+
+	oldPass = oldPass.toUpperCase();
+	var oldpass = calcMD5(oldPass);
+
+	newPass = newPass.toUpperCase();
+	var newass = calcMD5(newPass);
+
+	$.ajax({
+		type: "post",
+		url: "/user/changePassword",
+		data: "oldPassword=" + oldpass + "&password=" + newass,
+		success: function(msg) {
+			console.log(msg);
+			if (msg.code == 200) {
+				closeDialog();
+				openAlert("修改成功", 300, 100);
+			} else if (msg.code == 203) {
+				openAlert("旧密码输入错误", 300, 100);
+			} else {
+				openAlert("修改失败", 300, 100);
+			}
+		}
+	});
+}
+
+function closeDialog() {
+	$("#oldPassUpdatePassL").val("");
+	$("#passUpdatePassL").val("");
+	$("#passAgainUpdatePassL").val("");
+	Dialog.close();
+}
+
+function toIndex() {
+	window.location.href = "/xfjwt/index";
+}
+
+function toDeployImage() {
+	window.location.href = "/XfImage/deployImage";
+}
+
+function toFireEvent() {
+	window.location.href = "/ZaiQing/index";
+}
+
+function toZaiQing() {
+	window.location.href = "/Zaiqing/zaiQingInfo";
+}
+
+function toRealTimeGps() {
+	window.location.href = "/gps/realTimeGps";
+}
+
+function toHistoryGps() {
+	window.location.href = "/gps/historyGps";
+}
+
+function toTaskGps() {
+	window.location.href = "/gps/realTimeGps";
+}
+
+function toHydrant() {
+	window.location.href = "/ShuiYuan/index";
+}
+
+function toCronTask() {
+	window.location.href = "/CronTask/index";
+}
+
+
+function toKeyUnit() {
+	window.location.href = "/FireKeyUnit/index";
+}
+
+function toVod() {
+	window.location.href = "/xfVideoInfo/index";
+}
+
+function toRealTimeVideo() {
+	window.location.href = "/xfVideoInfo/realTimeVideo";
+}
+
+function toVideoMultiplay() {
+	window.open("/xfVideoInfo/videoMultiplay");
+}
+
+function toXfResource() {
+	window.location.href = "/xfVideoInfo/xfResource";
+}
+
+function toUser() {
+	window.location.href = "/User/index";
+}
+
+function toRolepermissions() {
+	window.location.href = "/role/index";
+}
+
+function toResource() {
+	window.location.href = "/resource/index";
+}
+
+function toXfCode() {
+	window.location.href = "/syscode/index";
+}
+
+function toOrganization() {
+	window.location.href = "/organization/index";
+}
+
+function toContent() {
+	window.location.href = "/content/index";
+}
+
+function toZhanping() {
+	window.location.href = "/xfVideoInfo/xfResource";
+}
+
+function toWebApp() {
+		window.location.href = "/xfjwt/appindex";
+	}
+	//灭火药剂
+
+function tomhyj() {
+		window.location.href = "/xfjwt/mhyj";
+	}
+	//立案信息
+
+function toLianlist() {
+		window.location.href = "/xfjwt/lianlist";
+	}
+	//值班信息及出勤人员状况统计
+
+function toIndex2() {
+		window.location.href = "/xfjwt/index2";
+	}
+	//应急联动单位信息
+
+function toYjld() {
+		window.location.href = "/xfjwt/yjld";
+	}
+	//战勤保障单位及保障能力
+
+function toBznl() {
+		window.location.href = "/xfjwt/bznl";
+	}
+	//内部专家信息
+
+function toNbzj() {
+		window.location.href = "/xfjwt/nbzj";
+	}
+	//外部专家信息
+
+function toWbzj() {
+		window.location.href = "/xfjwt/wbzj";
+	}
+	//车辆作战功能及随车器材信息
+
+function toClzb() {
+	window.location.href = "/xfjwt/clzb";
+}
+
+
+function toLogs() {
+	window.location.href = "/SystemLog/index";
+}
+
+function toYYXFvideo() {
+
+	open5("dvVideo", 800, 450, "岳阳消防汇报片");
+}
+
+function setCookie(cname, cvalue, exdays) {
+	var d = new Date();
+	d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+	var expires = "expires=" + d.toGMTString();
+	document.cookie = cname + "=" + cvalue + "; " + expires + "; path=/";
+}
+
+function tolocalStorage(cname, cvalue) {
+	localStorage[cname] = cvalue;
+}
+
+function getOrganListBySearchPage() {
+	$.ajax({
+		type: 'post',
+		url: '/organization/readOrgTree',
+		success: function(msg) {
+			var last=JSON.stringify(msg.data);
+			tolocalStorage("OrganListBySearchPage", last);
+		}
+	});
+}
+
+function getCookie(cname) {
+	var name = cname + "=";
+	var ca = document.cookie.split(';');
+	for (var i = 0; i < ca.length; i++) {
+		var c = ca[i].trim();
+		if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+	}
+	return "";
+}
+
+function deleteCookie(cname) {
+	document.cookie = "userName=;expires=" + (new Date(0)).toGMTString() + "; path=/";
+	document.cookie = "DisplayName=;expires=" + (new Date(0)).toGMTString() + "; path=/";
+	document.cookie = "Title=;expires=" + (new Date(0)).toGMTString() + "; path=/";
+	document.cookie = "OrganizationId=;expires=" + (new Date(0)).toGMTString() + "; path=/";
+	document.cookie = "Imei=;expires=" + (new Date(0)).toGMTString() + "; path=/";
+	document.cookie = "SessionId=;expires=" + (new Date(0)).toGMTString() + "; path=/";
+	document.cookie = "userid=;expires=" + (new Date(0)).toGMTString() + "; path=/";
+	return true;
+}
+
+function slide(title, msg) {
+	$.messager.show({
+		title: title,
+		msg: msg,
+		timeout: 5000,
+		showType: 'slide'
+	});
+}
+
+function openDeployImg(title, url, ok) {
+	$("#deployImgShowImg").attr("src", url);
+	if (ok) {
+		$("#showMoreA").show();
+	} else {
+		$("#showMoreA").hide();
+	}
+
+	open5("deployImgShowDiv", 600, 640, title);
+}
+
+function imgToLeft() {
+	var temp = 0;
+	if ($("#deployImgShowImg").getRotateAngle().length < 1) {
+		temp = 0;
+	} else {
+		temp = $("#deployImgShowImg").getRotateAngle()[0];
+	}
+	$("#deployImgShowImg").rotate(temp - 90);
+}
+
+function imgToRight() {
+	var temp = 0;
+	if ($("#deployImgShowImg").getRotateAngle().length < 1) {
+		temp = 0;
+	} else {
+		temp = $("#deployImgShowImg").getRotateAngle()[0];
+	}
+	$("#deployImgShowImg").rotate(90 + temp);
+}
+
+/*权限校验灰掉按钮*/
+function toCheck(id, url) {
+	if (permissionStr.toLowerCase().indexOf(url.toLowerCase()) != -1) {
+		$('#' + id).linkbutton({
+			disabled: false
+		});
+		return true;
+	} else {
+		$('#' + id).linkbutton({
+			disabled: true
+		});
+		$('#' + id).unbind();
+		$('#' + id).click(function() {
+			openAlert('对不起，您暂无此操作权限，请联系系统管理员，谢谢！', 300, 100);
+		});
+		return false;
+	}
+}
+
+socket.on("realTimeImageDepoly", function(res) {
+	slide("新部署图提示", "您有新的部署图，<br/>请注意查收<a href='javascript:void(0)' onclick=openDeployImg('部署图查看','" + res.imageUrl + "',true)>点击查看>></a>");
+});

@@ -1,0 +1,57 @@
+<script src="/jwplayer_report/jwplayer.js"></script>
+<script type="text/javascript" src="/jwplayer_report/jwplayer.html5.js"></script>
+<script>
+   
+  $(document).ready(function(){
+      var url = location.search;
+	  var urlName = url.split("&");
+	  var videoname = document.getElementById('videoname');
+	  if(urlName.length == 5){
+	  var filename = decodeURI(urlName[0].slice(1));
+	  var taskName = decodeURI(urlName[1]);
+	  var level3Name = decodeURI(urlName[2]);
+	  var displayName = decodeURI(urlName[3]);
+	  var createdTime = decodeURI(urlName[4]);
+	  createdTime = createdTime.slice(5);
+      videoname.innerHTML ='任务:'+taskName+'&nbsp&nbsp创建人:'+level3Name+'-'+displayName+'&nbsp&nbsp时间:'+createdTime+'';
+     }else{
+	  var filename = decodeURI(urlName[0].slice(1));
+	  var taskName = decodeURI(urlName[1]);
+	  var displayName = decodeURI(urlName[2]);
+	  var createdTime = decodeURI(urlName[3]);
+	  createdTime = createdTime.slice(5);
+      videoname.innerHTML ='任务:'+taskName+'&nbsp&nbsp创建人:'+displayName+'&nbsp&nbsp时间:'+createdTime+'';
+	 
+	 }
+      
+   jwplayer('container').setup({
+          flashplayer:"/jwplayer_report/jwplayer.flash.swf",
+          file:'/files/vod/mp4s/'+filename+'.mp4',
+          // playlist:'sss',
+          width: '1100',
+          height: '480',
+         autostart:true
+  });
+ }) 
+
+  
+ 
+
+</script>
+<div data-options="region:'center'">
+<div>您现在观看的点播视频为：<span id='videoname'></div>
+<hr/>
+<table cellpadding=""  height="500">
+<tr>
+<td width="50" valign="top">
+</td>
+<td><div id="container">Loading the player ...</div></td>
+</tr>
+</table>
+
+
+
+
+
+
+ 

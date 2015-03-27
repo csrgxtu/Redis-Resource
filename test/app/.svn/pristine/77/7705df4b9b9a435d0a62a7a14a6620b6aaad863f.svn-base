@@ -1,0 +1,373 @@
+var fs = require('fs');
+var io = require('socket.io').listen(1360);
+var mqtt = require('mqtt');
+var client = mqtt.createClient(1883, 'localhost')
+var liveMsg = [];
+io.sockets.on('connection',function(socket){
+	console.log('=====socket=========connection');
+  	socket.on('action',function(data){
+  		console.log("=============socket=========action");
+     	socket.join(data.roomName);
+ /* var walker=walk.walk('/home/files/vod/test/',   { followLinks:false});
+      walker.on('file',function(root,stat,next){
+        files.push(new sort(stat.name,stat.size));
+         next();
+      });
+      socket.emit('jw_vod',files);*/
+     	io.sockets.in('videoMsg').emit('dialog_list', liveMsg);
+    })
+});
+
+function liveSort(orgName,displayName,zaiQingName,meetingNumber,encodedFileName,createdBy,createdTime){
+      this.orgName = orgName;
+      this.displayName = displayName;
+      this.zaiQingName = zaiQingName;
+      this.meetingNumber = meetingNumber;
+      this.encodedFileName = encodedFileName;
+      this.createdBy = createdBy;
+      this.createdTime = createdTime;
+    };
+
+module.exports = {
+	test: function(req,res){
+		var roomName = req.param('roomName');
+		XFJWT_User.find()
+		.exec(function(err,userResult){
+			if(err){
+				console.log('1err ' + err);
+				return res.send({code: 500,msg: 'database read err',data: err});
+			}
+			sails.sockets.join(req.socket,roomName);
+			
+			console.log(sails.sockets.rooms());
+		})
+	},
+	index: function(req,res){
+		var userId = req.session.loginInfo.userInfo.UserId;
+	    var viewUrl = 'xfjwt/videoVodList';
+	    var title = '视频列表';
+	    var menu = '用户管理';
+   		ReviewService.getViewPass(res,userId,viewUrl,title,menu);
+	},
+	xfResource: function(req,res){
+		var userId = req.session.loginInfo.userInfo.UserId;
+	    var viewUrl = 'xfjwt/imgAndVideoShow';
+	    var title = '战评资料';
+	    var menu = '战评资料';
+   		ReviewService.getViewPass(res,userId,viewUrl,title,menu);	
+	},
+	realTimeVideo: function(req,res){
+		var userId = req.session.loginInfo.userInfo.UserId;
+	    var viewUrl = 'xfjwt/videoVod';
+	    var title = '视频直播';
+	    var menu = '视频直播';
+   		ReviewService.getViewPass(res,userId,viewUrl,title,menu);
+	},
+	videoLive: function(req,res){
+		var userId = req.session.loginInfo.userInfo.UserId;
+		var viewUrl = 'xfjwt/videoLive';
+	    var title = '视频直播';
+	    var menu = 'video';
+   		ReviewService.getViewPass(res,userId,viewUrl,title,menu);
+	},
+	videoVodEg: function(req,res){
+		var userId = req.session.loginInfo.userInfo.UserId;
+	    var viewUrl = 'xfjwt/videoVodEg';
+	    var title = '视频点播';
+	    var menu = '视频点播';
+   		ReviewService.getViewPass(res,userId,viewUrl,title,menu);
+	},
+	videoMultiplay: function(req,res){
+		var userId = req.session.loginInfo.userInfo.UserId;
+	    var viewUrl = 'xfjwt/multiPlayPage';
+	    var title = '多路视频';
+	    var menu = '多路视频';
+	        var sql =  "select group_concat(r.ResourceUrl) from xfjwt_User u inner join xfjwt_resource_roles__role_resources p on u.RoleId=p.role_Resources"
+              +" inner join xfjwt_Resource r on r.ResourceId=p.resource_Roles"
+              +" where u.UserId='"+userId+"'";
+	    XFJWT_User.query(sql,function(err,result){
+	        if(err)
+	        return res.send({
+	             code: 500,
+	             msg: 'database error',
+	             data: err
+	          });
+	        var resu = result[0];
+	        var resu = resu["group_concat(r.ResourceUrl)"];
+	        return res.view(viewUrl,{data:resu,title:title,menu:menu,layout: null});
+	     });
+	},
+	getMinMeetingNumber: function(req,res){
+	    if(liveMsg == null || liveMsg == '')
+	      return res.send({
+	        code: 200,
+	        meetingNumber: 3000
+	      })
+	    var max = 2999;
+	    for(var i = 0;i < liveMsg.length; i++){
+	       if(max < liveMsg[i].meetingNumber)
+	        max = liveMsg[i].meetingNumber;
+	    }
+	    max = parseInt(max) + 1;
+	    if(max > 3499)
+	      max = 3000;
+	    return res.send({
+	      code: 200,
+	      meetingNumber: max,
+	      data:''
+	    });
+	},
+	save: function(req,res){
+		var enCodedFileName = req.param('name');
+		var zaiQingId = req.param('zaiQingId');
+		var organizationId = req.param('organizationId');
+		var videoType = req.param('videoType');
+		var meetingNumber = req.param('meetingNumber');
+		var createdBy = req.param('createdBy');
+ 		var createdTime = UtilityService.getCurrentTime();
+ 		var beginTime = createdTime;
+		var createValues = {};
+		console.log('enCodeFileName = ' + enCodedFileName + '  organizationId = ' + organizationId);
+		console.log('createdBy = ' + createdBy + '  videoType = ' + videoType);
+		console.log('zaiQingId = ' + zaiQingId + '' );
+		if(enCodedFileName == null || enCodedFileName == '' || organizationId == '' || organizationId == null
+		|| createdBy == null || createdBy == '' 
+		|| videoType == null || videoType == '' || zaiQingId == null || zaiQingId == '')
+		{
+			console.log('inner err');
+			return res.send(500);
+		}else{
+			res.send(200);
+			XFJWT_SysCode.find({SysCodeId: videoType})
+			.exec(function(err,videoTypeResult){
+				if(err)
+					return res.send({code: 500,msg: 'database read err',data: err});
+				if(videoTypeResult.length == 0)
+					return res.send({code: 404,msg: 'videoType is undefined',data: ''})
+				console.log("wo lai le ship ");
+				createValues.ZaiQingId = zaiQingId;
+				createValues.EncodedFileName = enCodedFileName;
+				createValues.OrganizationId = organizationId;
+				createValues.VideoType = videoTypeResult[0].CodeDisplayName;
+				createValues.CreatedBy = createdBy;
+				createValues.CreatedTime = createdTime;
+				createValues.BeginTime = createdTime;
+				createValues.Category = "视频类别";
+				createValues.ThumbnailUrl = sails.config.values.videoUrlPath + "thumbnailUrl/" + enCodedFileName + ".jpg";
+				createValues.VideoFlvUrl = sails.config.values.videoUrlPath + "flv/" + enCodedFileName + ".flv";
+				createValues.VideoMp4Url = sails.config.values.videoUrlPath + "videos/" + enCodedFileName + ".mp4";
+				if(meetingNumber == '' || meetingNumber == null)
+		        	meetingNumber = 0;
+				XFJWT_Video.create(createValues)
+				.exec(function(err,createdResult){
+					if(err){
+						console.log('1err ' + err);
+						return res.send({code: 500,msg: 'database create err',data: err});
+					}
+					XFJWT_User.find({UserName: createdBy})
+					.exec(function(err,userResult){
+						if(err)
+							return res.send({code: 500,msg: 'database read err',data: err});
+						JGXX_XFJG.find({ID: organizationId})
+						.exec(function(err,JGRESULT){
+							if(err)
+								return res.send({code: 500,msg: 'database JG read err',data: err});
+							if(JGRESULT.length == 0)
+								return res.send({code: 403,msg: 'JGRESULT is null',data: ''});
+							var orgName = JGRESULT[0].JGJC;
+							var zaiQingSql = "select zq.ZaiQingName,u.UserName,dp.* from xfjwt_ZaiQingDiaoPai dp inner join xfjwt_ZaiQing zq "
+										   + "on (zq.ZaiQingId = dp.ZaiQingId) "
+										   + "inner join xfjwt_User u on u.UserId = dp.DiaoPaiDuiXiangId "
+										   + "where dp.ZaiQingId = " + zaiQingId;
+							console.log('zaiQingSql = ' + zaiQingSql);
+							JGXX_XFJG.query(zaiQingSql,function(err,zaiQingResult){
+								if(err)
+									return res.send({code: 500,msg: 'database zaiqing read err',data: err});
+								if(zaiQingResult.length == 0)
+									return res.send({code: 403,msg: 'zaiQingName is null',data: ''});
+								var zaiQingName = zaiQingResult[0].ZaiQingName;
+								var oneLiveVideo = new liveSort(orgName,userResult[0].DisplayName,zaiQingName,meetingNumber,enCodedFileName,createdBy,createdTime);
+								liveMsg.push(oneLiveVideo);
+								io.sockets.in('videoMsg').emit('dialog_list', liveMsg);
+			                    io.sockets.in('videoPop').emit('dialog_pop',oneLiveVideo); 
+								for(var i = 0;i < zaiQingResult.length;i++){
+								client.publish(sails.config.values.videoTopicName+zaiQingResult[i].UserName, JSON.stringify(oneLiveVideo),{qos: 2},function(err){
+									if(err){
+										console.log("err="+err);
+									}else{
+										console.log("yes:"+i);
+									}
+								
+								})
+							}
+							})
+						})
+					})
+				})
+			})
+		}
+	},
+	update: function(req,res){
+		var videoId = req.param('videoId');
+		var videoType = req.param('videoType');
+		var address = req.param('address');
+		var description = req.param('description');
+		var updatedBy = req.session.loginInfo.userInfo.UserName;
+		var updatedTime = UtilityService.getCurrentTime();
+		if(videoId == null || videoId == '')
+			return res.send({code: 403,msg: 'videoId is null ',data: ''});
+		var updateVaules = {};
+		updateVaules.UpdatedBy = updatedBy;
+		updateVaules.UpdatedTime = updatedTime;
+		if(videoType != null && videoType != '')
+			updateVaules.VideoType = videoType;
+		if(address != null && address != '')
+			updateVaules.Address = address;
+		if(description != null && description != '')
+			updateVaules.Description = description;
+		XFJWT_Video.update({VideoId: videoId},updateVaules)
+		.exec(function(err,updateResult){
+			if(err)
+				return res.send({code: 500,msg: '',data: err});
+			return res.send({code: 200,msg: 'sucessfully',data: ''})
+		})
+	},
+	downloadVideo: function(req,res){
+		var videoId = req.param('videoId');
+		XFJWT_Video.find({VideoId: videoId})
+		.exec(function(err,downloadResult){
+			if(err)
+				return res.send({code: 500,msg: 'dataseserr',data: err});
+			if(downloadResult.length == 0)
+				return res.send({code: 403,msg: "视频不存在",data: ''});
+			var videoPath = sails.config.values.videoDownPath + downloadResult[0].EncodedFileName + '.mp4';
+			return res.download(videoPath);
+		})
+	},
+	read: function(req,res){
+		var organizationId = req.param('organizationId');
+		var videoType = req.param('videoType');
+		var category = req.param('category');
+		var beginTime = req.param('startTime');
+		var endTime = req.param('endTime');
+		var userName = req.param('userName');
+		var pageIndex = req.param('pageIndex');
+		var pageSize = req.param('pageSize');
+		if(pageIndex == null || pageIndex == '' || pageSize == null || pageSize == '')
+			return res.send({code: 403,msg: 'pageInfo null',data: ''});
+		var readValues = {};
+		var start = (pageIndex - 1) * pageSize;
+		var sql = "select jg.JGJC,u.DisplayName,zq.ZaiQingName,v.* from xfjwt_Video v inner join JGXX_XFJG jg on jg.ID = v.OrganizationId  "
+				+ " left join xfjwt_ZaiQing zq on zq.ZaiQingId = v.ZaiQingId "
+				+ " inner join xfjwt_User u on u.UserName = v.CreatedBy where 1 = 1 ";
+		var sqlTotal = "select count(*) as total from xfjwt_Video v inner join JGXX_XFJG jg on jg.ID = v.OrganizationId  "
+				+ " left join xfjwt_ZaiQing zq on zq.ZaiQingId = v.ZaiQingId "
+				+ " inner join xfjwt_User u on u.UserName = v.CreatedBy where 1 = 1 ";
+		if(userName != null && userName != ''){
+			sql += " and u.DisplayName like '"+userName+"' ";
+			sqlTotal += " and u.DisplayName like '"+userName+"' ";
+		}
+		if(organizationId != null && organizationId != ''){
+			sql += " and v.OrganizationId = '" + organizationId+"' ";
+			sqlTotal += " and v.OrganizationId = '" + organizationId+"' ";
+		}
+		if(videoType != null && videoType != ''){
+			sql += " and v.VideoType like '%"+videoType+"%'";
+			sqlTotal += " and v.VideoType like '%"+videoType+"%'";
+		}
+		if(beginTime != null && beginTime != ''){
+			sql += " and v.BeginTime >= '"+beginTime+"'";
+			sqlTotal += " and v.BeginTime >= '"+beginTime+"'";
+		}
+		if(endTime != null && endTime != ''){
+			sql += " and v.BeginTime <= '"+endTime+"' ";
+			sqlTotal += " and v.BeginTime <= '"+endTime+"' ";
+		}
+		sql += " and VideoLength is not null order by BeginTime desc limit "+start+","+pageSize+" ";
+		sqlTotal += " and VideoLength is not null";
+		//console.log("sql = " + sql);
+		//console.log("sqlTotal = " + sqlTotal);
+		XFJWT_Video.query(sql,function(err,readResult){
+			if(err)
+				return res.send({code: 500,msg: 'database read err',data: err});
+			XFJWT_Video.query(sqlTotal,function(err,readTotal){
+				if(err)
+					return res.send({code: 500,msg: 'database total err',data: err});
+				return res.send({code: 200,msg: 'sucessfully',total: readTotal[0].total,data: readResult});
+			})
+		})
+	},
+	liveEndUpdate: function(req,res){
+       var encodedFileName = req.param('name');
+       var response = res;
+       var path = sails.config.values.videoPath+"times/"+encodedFileName+".txt";
+       console.log('path = ' + path);
+       for(var i=0;i<liveMsg.length;i++){
+          if(liveMsg[i].encodedFileName == encodedFileName){
+             liveMsg.splice(i,1);
+             io.sockets.in('videoMsg').emit('dialog_list', liveMsg);
+          }
+        }
+	    setTimeout(function(){
+	        if (!fs.existsSync(path)){
+	               return res.send("file do not exist!");
+	            }
+            var  endTime =  UtilityService.getVideoDuration(path);
+             console.log('endTime====='+endTime);
+             console.log('path--------'+path);
+            if(endTime.length > 0){
+               endTime = endTime.substring(0,endTime.length - 3);
+            }else{endTime = ''}
+           	console.log('endTime = ' + endTime);
+          	XFJWT_Video.update({EncodedFileName:encodedFileName},{VideoLength:endTime})
+           	.exec(function(err,res1){	
+                if(err)
+               		return response.send({ code: 500, msg: 'xfvideoinfo endTIme function databases err', data: err, });
+                return response.send({ code: 200, msg: 'success',data: res1,})
+            });
+    	},1000);
+	 },
+	getLiveList: function(req,res){
+        if(liveMsg == '' || liveMsg == null)
+          return res.send({code: 400,msg:'',data:"现在没有直播视频！"});
+        return res.send({code: 200, msg:'',data:liveMsg});
+  	},
+  	truncateLiveList: function(){
+  		if(liveMsg == '' || liveMsg == null){
+  			return res.send({code: 400,msg:'',data:"现在没有直播视频！"});
+  		}else{
+  			liveMsg = [];
+  			io.sockets.in('videoMsg').emit('dialog_list', liveMsg);
+  			return res.send({code: 200,msg: '清空视频',data: ''});
+  		}
+  	},
+  	delete: function(req,res){
+        console.log(req.url);
+        var xfVideoInfoId = req.param('videoId');
+        if(xfVideoInfoId == null || xfVideoInfoId == ''){
+       		return res.send({
+               code: 403,
+               msg: 'Invalid Param',
+               description: 'Seems you XfvideoInfoId set parameters right',
+               data: null,
+            });
+       }
+       XFJWT_Video.destroy(
+       {VideoId:xfVideoInfoId}
+       ).exec(function(err,result){
+        if(err){
+          return res.send({
+            code: 500,
+            msg: 'Server Internal Error',
+            description: 'Seems Database Server Has An Internal Error',
+            data: null,
+          })}
+          return res.send({
+              code: 200,
+              msg: 'SUCCESSFUL',
+              description: 'successful destory record',
+              data: result,
+            });
+       });
+    },
+}
